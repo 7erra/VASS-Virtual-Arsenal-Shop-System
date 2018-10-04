@@ -4,7 +4,7 @@ This script turns the Arsenal into a shop where each item costs money. The whole
 ## Setup  
 1. Add the following line to your init.sqf: `[] execVM "arsenalShop\config.sqf";`  
 2. Move the arsenalShop folder to your mission folder  
-3. Modify the config.sqf to your liking  
+3. Modify the config.sqf to your likeing  
   
 ## Functions  
 There are some functions which the system uses. The most useful ones are documented in the config.sqf.  
