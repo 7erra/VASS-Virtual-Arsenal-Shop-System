@@ -1,7 +1,8 @@
 /* Config part, change to your liking */
-TER_moneyNameSpace = player;
-TER_moneyVariable = "TER_money";
-TER_moneyUnit = "$";
+TER_moneyNameSpace = player; // where the money variable is saved
+TER_moneyVariable = "TER_money"; // name of the money variable
+TER_moneyUnit = "$"; // added behind all numbers which represent currency (duh)
+//eg >player getVariable "TER_money";< will return the current amount of money the player has
 
 TER_costArray = [// add your entries in the format >"classname",cost<
 	"arifle_AK12_F",100,
@@ -10,8 +11,7 @@ TER_costArray = [// add your entries in the format >"classname",cost<
 	"hgun_P07_F",20,
 	"optic_DMS",10,
 	"optic_ACO_grn",5,
-	"B_AssaultPack_mcamo_Ammo",25,
-	"B_AssaultPack_mcamo_Ammo",10,
+	"B_AssaultPack_mcamo",25,
 	"U_B_CombatUniform_mcam",15,
 	"30Rnd_762x39_Mag_F",5,
 	"30Rnd_65x39_caseless_mag",13
@@ -37,7 +37,7 @@ TER_fnc_addArsenal = {
 
 		Parameter(s):
 		 0: Object - Object to add the arsenal to
-		 1: BOOLEAN - add for everyone
+		 1: BOOLEAN (optional) - add for everyone (default: true)
 
 		Returns:
 		Bool - True when done
@@ -86,5 +86,11 @@ TER_fnc_itemCostFromTable = {
 	_itemCost = [TER_costArray select (_costIndex +1), 0] select (_costIndex == -1); // if object is not registered then set cost to 0
 	_itemCost
 };
-
+/*
+if (!isNil "TER_ehID") then {
+	[missionNamespace, "arsenalOpened", TER_ehID] call BIS_fnc_removeScriptedEventHandler;
+} else {
+	TER_arsenal call TER_fnc_addArsenal;
+};
+*/
 [missionNamespace, "arsenalOpened", compile preprocessFileLineNumbers "arsenalShop\arsenalEHOpen.sqf"] call BIS_fnc_addScriptedEventHandler;

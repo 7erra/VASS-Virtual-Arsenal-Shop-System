@@ -49,7 +49,7 @@ _stxtMoney ctrlSetBackgroundColor [0,0,0,0.5];
 
 TER_fnc_updateMoneyText = {
 	STXT_MONEY ctrlSetStructuredText parseText format [
-		"Current Money: %1 %3 %6%2<br/>Cost: %1 %4 %6%2<br/>Balance: %1 %5 %6%2",
+		"<t size='0.8'>Current Money: %1 %3 %6%2<br/>Cost: %1 %4 %6%2<br/>Balance: %1 %5 %6%2%2",
 		"<t align='right'>",
 		"</t>",
 		_PLAYER_MONEY,
@@ -85,40 +85,33 @@ TER_fnc_setLBPrice = {
 };
 
 // detect new selections
+{
+	_x setVariable ["_isInit",true];
+} forEach ATTACHMENT_LBS;
+
 _forIlbLoop = {
 	_control = ARSENAL_CTRL(_lb_idc);
 	_startClass = _control lbData lbCurSel _control;
-	if (lbCurSel _control == -1) then {
-		[_control] spawn {
-			params ["_control"];
-			waitUntil {lbCurSel _control != -1};
-			_startClass = _control lbData lbCurSel _control;
-			_control setVariable ["startData",_startClass];
-		};
-	} else {
+	if (lbCurSel _control != -1) then {
 		_control setVariable ["startData",_startClass];
 	};
 
-	//--- TODO: opening arsenal and selecting weapons costs money the first time for owned attachments
 	_control ctrlAddEventHandler ["LBSelChanged", {
 		params ["_control","_index"];
-
+		if (_index == -1) exitWith {};
 		_costTable = +TER_costArray;
 		_lbData = _control lbData _index;
-		// set cost of current gear to 0
-		_startData = _control getVariable ["startData",""];
-		_startDataIndex = _costTable find _startData;
-		_ownedPrice = 0;
-		if (_startDataIndex > -1) then {
-			_ownedPrice = _costTable select (_startDataIndex +1);
-			_costTable set [_startDataIndex +1, 0];
+		_varCheckInitArray = ["_isInit",false];
+		if (_control getVariable _varCheckInitArray) then {
+			_control setVariable ["startData",_lbData];
+			_control setVariable _varCheckInitArray;
 		};
+		_startData = _control getVariable ["startData",""];
 		// readd money from previous calculation
 		_prevItemCost = _control getVariable ["prevCost",0];
-		// new cost
 		_itemCost = [
 			[_lbData] call TER_fnc_itemCostFromTable,
-			0
+			0 // set cost of current gear to 0
 		] select (_startData == _lbData);
 		_newCost = _CURRENTCOST +_itemCost -_prevItemCost;
 		ARSENAL_DISPLAY setVariable ["TER_cost",_newCost];
@@ -129,7 +122,6 @@ _forIlbLoop = {
 	}];
 
 	[_control] spawn TER_fnc_setLBPrice;
-
 };
 
 for "_lb_idc" from 960/*974*/ to /*974*/980 do _forIlbLoop;
@@ -143,9 +135,8 @@ for "_idc_weapon" from 960 to 962 do {
 		{
 			[_x] spawn TER_fnc_setLBPrice;
 		} forEach ATTACHMENT_LBS;
-
 	}];
-	_control lbSetCurSel (lbCurSel _control);
+	//_control lbSetCurSel (lbCurSel _control);
 };
 for "_idc_weaponTab" from 930 to 932 do {// add eh to button tabs to set lb prices
 	_control = ARSENAL_CTRL(_idc_weaponTab);
@@ -192,7 +183,7 @@ TER_fnc_updateItemCostText = {
 	}];
 	_x ctrlAddEventHandler ["KillFocus",{
 		STXT_ITEMCOST ctrlSetFade 1;
-		STXT_ITEMCOST ctrlCommit 0.5;
+		STXT_ITEMCOST ctrlCommit 0.15;
 	}];
 	_x ctrlAddEventHandler ["SetFocus",{
 		STXT_ITEMCOST ctrlSetFade 0;
@@ -220,6 +211,10 @@ TER_fnc_updateItemCostText = {
 
 			ctrlParent _activeLB setVariable ["TER_cost",_newCost];
 			[] call TER_fnc_updateMoneyText;
+
+			// update magazine array
+			_prevMags = magazines player;
+			ctrlParent _activeLB setVariable ["_prevMags",_prevMags];
 
 		};
 	}];
