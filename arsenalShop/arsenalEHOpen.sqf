@@ -3,7 +3,65 @@
 #define _CURRENTCOST (ARSENAL_DISPLAY getVariable ["TER_cost",0])
 params ["_display","_toggleSpace"];
 _costTable = +TER_costArray;
-TER_loadoutOpen = getUnitLoadout player;
+
+// some general ui functions
+TER_fnc_updateItemCostText = {
+	params ["_price"];
+	_stxtItemCost = STXT_ITEMCOST;
+	_stxtItemCost ctrlSetStructuredText parseText format [
+		"%1 %2",
+		_price,
+		TER_moneyUnit
+	];
+	_stxtItemCost ctrlSetPosition [0,0,1,1];
+	_stxtItemCost ctrlCommit 0;
+	ctrlPosition (LBNS_RIGHT select 0) params ["_lbX","_lbY","_lbW","_lbH"];
+	_stxtItemCost ctrlSetPosition [
+		_lbX - ctrlTextWidth _stxtItemCost - (0.1 * GUI_GRID_W),
+		_lbY,
+		ctrlTextWidth _stxtItemCost,
+		ctrlTextHeight _stxtItemCost
+	];
+	_stxtItemCost ctrlCommit 0;
+};
+
+TER_fnc_updateMoneyText = {
+	STXT_MONEY ctrlSetStructuredText parseText format [
+		"<t size='0.8'>Current Money: %1 %3 %6%2<br/>Cost: %1 %4 %6%2<br/>Balance: %1 %5 %6%2%2",
+		"<t align='right'>",
+		"</t>",
+		_PLAYER_MONEY,
+		_CURRENTCOST,
+		_PLAYER_MONEY - _CURRENTCOST,
+		TER_moneyUnit
+	];
+	STXT_MONEY ctrlSetPosition [0,0,1,1];
+	STXT_MONEY ctrlCommit 0;
+	ctrlPosition LB_LIST_WEAPONS params ["_lbX","_lbY","_lbW","_lbH"];
+	STXT_MONEY ctrlSetPosition [
+		_lbX + _lbW + (0.1 * GUI_GRID_W),
+		_lbY + _lbH - ctrlTextHeight STXT_MONEY,
+		ctrlTextWidth STXT_MONEY,
+		ctrlTextHeight STXT_MONEY
+	];
+	STXT_MONEY ctrlCommit 0;
+};
+
+TER_fnc_setLBPrice = {
+	params ["_listbox"];
+	//if (canSuspend) then {uiSleep 0.001};
+	for "_index" from 1 to lbSize _listbox do {
+		_lbData = _listbox lbData _index;
+		_costIndex = TER_costArray find _lbData;
+		_itemCost = [_lbData] call TER_fnc_itemCostFromTable;
+		if (_listbox lbPictureRight _index == "") then {
+			_listbox lbSetPictureRight [_index,"#(rgb,8,8,3)color(1,0,0,0)"];
+		};
+		_listbox lbSetTextRight [_index,format ["%1 %2",_itemCost,TER_moneyUnit]];
+	};
+};
+
+// save starting loadout
 _display setVariable ["loadoutOwned",getUnitLoadout player];
 _display displayAddEventHandler ["Unload",{
 	params ["_display","_exitCode"];
@@ -47,42 +105,7 @@ BTN_OK ctrlEnable false;
 _stxtMoney = _display ctrlCreate ["RscStructuredText",7301];
 _stxtMoney ctrlSetBackgroundColor [0,0,0,0.5];
 
-TER_fnc_updateMoneyText = {
-	STXT_MONEY ctrlSetStructuredText parseText format [
-		"<t size='0.8'>Current Money: %1 %3 %6%2<br/>Cost: %1 %4 %6%2<br/>Balance: %1 %5 %6%2%2",
-		"<t align='right'>",
-		"</t>",
-		_PLAYER_MONEY,
-		_CURRENTCOST,
-		_PLAYER_MONEY - _CURRENTCOST,
-		TER_moneyUnit
-	];
-	STXT_MONEY ctrlSetPosition [0,0,1,1];
-	STXT_MONEY ctrlCommit 0;
-	ctrlPosition LB_LIST_WEAPONS params ["_lbX","_lbY","_lbW","_lbH"];
-	STXT_MONEY ctrlSetPosition [
-		_lbX + _lbW + (0.1 * GUI_GRID_W),
-		_lbY + _lbH - ctrlTextHeight STXT_MONEY,
-		ctrlTextWidth STXT_MONEY,
-		ctrlTextHeight STXT_MONEY
-	];
-	STXT_MONEY ctrlCommit 0;
-};
 call TER_fnc_updateMoneyText;
-
-TER_fnc_setLBPrice = {
-	params ["_listbox"];
-	//if (canSuspend) then {uiSleep 0.001};
-	for "_index" from 1 to lbSize _listbox do {
-		_lbData = _listbox lbData _index;
-		_costIndex = TER_costArray find _lbData;
-		_itemCost = [_lbData] call TER_fnc_itemCostFromTable;
-		if (_listbox lbPictureRight _index == "") then {
-			_listbox lbSetPictureRight [_index,"#(rgb,8,8,3)color(1,0,0,0)"];
-		};
-		_listbox lbSetTextRight [_index,format ["%1 %2",_itemCost,TER_moneyUnit]];
-	};
-};
 
 // detect new selections
 {
@@ -91,40 +114,61 @@ TER_fnc_setLBPrice = {
 
 _forIlbLoop = {
 	_control = ARSENAL_CTRL(_lb_idc);
-	_startClass = _control lbData lbCurSel _control;
 	if (lbCurSel _control != -1) then {
+		_startClass = _control lbData lbCurSel _control;
 		_control setVariable ["startData",_startClass];
+		_control setVariable ["_prevData",_startClass];
 	};
 
 	_control ctrlAddEventHandler ["LBSelChanged", {
 		params ["_control","_index"];
 		if (_index == -1) exitWith {};
-		_costTable = +TER_costArray;
 		_lbData = _control lbData _index;
 		_varCheckInitArray = ["_isInit",false];
-		if (_control getVariable _varCheckInitArray) then {
+		if (_control getVariable _varCheckInitArray) exitWith {
 			_control setVariable ["startData",_lbData];
 			_control setVariable _varCheckInitArray;
+			_control setVariable ["_prevData",_lbData];
 		};
-		_startData = _control getVariable ["startData",""];
-		// readd money from previous calculation
-		_prevItemCost = _control getVariable ["prevCost",0];
-		_itemCost = [
-			[_lbData] call TER_fnc_itemCostFromTable,
-			0 // set cost of current gear to 0
-		] select (_startData == _lbData);
-		_newCost = _CURRENTCOST +_itemCost -_prevItemCost;
-		ARSENAL_DISPLAY setVariable ["TER_cost",_newCost];
-		_control setVariable ["prevCost",_itemCost];
-		[] call TER_fnc_updateMoneyText;
+		_prevData = _control getVariable ["_prevData",""];
+		if (_prevData == _lbData) exitWith {};// no new selection
 
-		//systemChat str [_prevItemCost,_itemCost,_startDataIndex,_lbData,_startData];
+		_startData = _control getVariable ["startData",""];
+		_startCost = [_startData] call TER_fnc_itemCostFromTable;
+		_prevItemCost = [
+			[_prevData] call TER_fnc_itemCostFromTable,
+			0
+		] select (_startData == _prevData);
+		_newCost = _CURRENTCOST;
+		_refundDone = _control getVariable ["_refundDone",false];
+		_itemCost = if (_lbData == _startData) then {// already owned
+			if (_refundDone) then {
+				_newCost = _newCost +_startCost;
+				_control setVariable ["_refundDone",false];
+			};
+			0
+		} else {// new entry
+			_itemCost = [_lbData] call TER_fnc_itemCostFromTable;
+			_itemCost
+		};
+		_newCost = _newCost +_itemCost -_prevItemCost;
+		if (!_refundDone) then {
+			_control setVariable ["_refundDone",true];
+			_newCost = _newCost -_startCost;
+		};
+
+		ARSENAL_DISPLAY setVariable ["TER_cost",_newCost];
+		_control setVariable ["_prevData",_lbData];
+		[] call TER_fnc_updateMoneyText;
 	}];
 
 	[_control] spawn TER_fnc_setLBPrice;
 };
-
-for "_lb_idc" from 960/*974*/ to /*974*/980 do _forIlbLoop;
+//960: lb weapons
+//-974 +left lbs
+//-980 +rightlbs
+// 985: lb bipod
+for "_lb_idc" from 960/*974*/ to /*960*/980 do _forIlbLoop;
 for "_lb_idc" from 985/*974*/ to /*974*/985 do _forIlbLoop; // bipod idc was added later so the rsclistnboxes are in between
 
 // lb weapon slots need some extra attention to handle the attachments
@@ -153,26 +197,6 @@ _stxtItemCost ctrlSetBackgroundColor [0,0,0,0.5];
 _stxtItemCost ctrlSetPosition [0,0,0,0];
 _stxtItemCost ctrlCommit 0;
 
-TER_fnc_updateItemCostText = {
-	params ["_price"];
-	_stxtItemCost = STXT_ITEMCOST;
-	_stxtItemCost ctrlSetStructuredText parseText format [
-		"%1 %2",
-		_price,
-		TER_moneyUnit
-	];
-	_stxtItemCost ctrlSetPosition [0,0,1,1];
-	_stxtItemCost ctrlCommit 0;
-	ctrlPosition (LBNS_RIGHT select 0) params ["_lbX","_lbY","_lbW","_lbH"];
-	_stxtItemCost ctrlSetPosition [
-		_lbX - ctrlTextWidth _stxtItemCost - (0.1 * GUI_GRID_W),
-		_lbY,
-		ctrlTextWidth _stxtItemCost,
-		ctrlTextHeight _stxtItemCost
-	];
-	_stxtItemCost ctrlCommit 0;
-};
-
 {
 	_x ctrlAddEventHandler ["LBSelChanged",{
 		params ["_control","_index"];
@@ -191,7 +215,6 @@ TER_fnc_updateItemCostText = {
 	}];
 
 } forEach LBNS_RIGHT;
-
 
 {
 	_x ctrlAddEventHandler ["ButtonClick",{

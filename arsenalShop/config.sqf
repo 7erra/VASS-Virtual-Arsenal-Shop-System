@@ -37,32 +37,57 @@ TER_fnc_addArsenal = {
 
 		Parameter(s):
 		 0: Object - Object to add the arsenal to
-		 1: BOOLEAN (optional) - add for everyone (default: true)
+
+		 Optional:
+		 1: STRING or ARRAY OF STRINGS - Only add specific item types (Categories from https://community.bistudio.com/wiki/BIS_fnc_itemType)
+		 	default: []
+		 2: STRING - "add" or "remove" arsenal items
+		 	default: "add"
+		 3: BOOLEAN - add for everyone
+		 	default: true
 
 		Returns:
 		Bool - True when done
 
 		Example:
-		[this,true] call TER_fnc_addArsenal;
+		 [this,[],true] call TER_fnc_addArsenal; <- Full shop
+		 [this,["Weapon"]] call TER_fnc_addArsenal; <- Weapon shop
+		 [this,["Magazine"],"remove"] call TER_fnc_addArsenal; <- remove magazines from shop
 	*/
 
-	params ["_box",["_global",true]];
+	params [
+		"_box",
+		["_shopTypes",[]],
+		["_addOrRemove","add"],
+		["_global",true]
+	];
+	_shopItems = TER_costArray select {_x isEqualType "STRING"};
+	if (_shopTypes isEqualType "") then {_shopTypes = [_shopTypes]};
+	_all = false;
+	if (count _shopTypes == 0) then {_all = true};
+	_shopTypes = _shopTypes apply {toLower _x};
 	{
 		_itemType = _x call BIS_fnc_itemType;
 		_itemType params ["_category","_type"];
 		// possible categorys:
 		// Weapon, Item, Equipment, Magazine, Mine
-		_typeFnc = switch _category do {
-			case "Equipment": {["Item","Backpack"] select (_type == "Backpack")};
-			case "Mine": {"Item"};
-			default {_category};
+		if (
+			toLower _category in _shopTypes OR
+			toLower _type in _shopTypes OR
+			_all
+		) then {
+			_typeFnc = switch _category do {
+				case "Equipment": {["Item","Backpack"] select (_type == "Backpack")};
+				case "Mine": {"Item"};
+				default {_category};
+			};
+			_fncAdd = format ["BIS_fnc_%1Virtual%2Cargo",_addOrRemove,_typeFnc];
+			if (!isNil _fncAdd) then {
+				_fncAdd = call compile _fncAdd;
+				_return = [_box, _x, _global, true] call _fncAdd;
+			};
 		};
-		_fncAdd = format ["BIS_fnc_addVirtual%1Cargo",_typeFnc];
-		if (!isNil _fncAdd) then {
-			_fncAdd = call compile _fncAdd;
-			_return = [_box, _x, _global, true] call _fncAdd;
-		};
-	} forEach (TER_costArray select {_x isEqualType "STRING"});
+	} forEach _shopItems;
 
 	true
 };
@@ -86,11 +111,6 @@ TER_fnc_itemCostFromTable = {
 	_itemCost = [TER_costArray select (_costIndex +1), 0] select (_costIndex == -1); // if object is not registered then set cost to 0
 	_itemCost
 };
-/*
-if (!isNil "TER_ehID") then {
-	[missionNamespace, "arsenalOpened", TER_ehID] call BIS_fnc_removeScriptedEventHandler;
-} else {
-	TER_arsenal call TER_fnc_addArsenal;
-};
-*/
-[missionNamespace, "arsenalOpened", compile preprocessFileLineNumbers "arsenalShop\arsenalEHOpen.sqf"] call BIS_fnc_addScriptedEventHandler;
+
+// this is where the magic happens:
+TER_arsenalOpenedEHID = [missionNamespace, "arsenalOpened", compile preprocessFileLineNumbers "arsenalShop\arsenalEHOpen.sqf"] call BIS_fnc_addScriptedEventHandler;
