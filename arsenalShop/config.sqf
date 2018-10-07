@@ -16,11 +16,13 @@ TER_costArray = [// add your entries in the format >"classname",cost<
 	"30Rnd_762x39_Mag_F",5,
 	"30Rnd_65x39_caseless_mag",13
 ];
+
 /* end of config */
 
   ///////////////////////////////////////////////////////////////////////////////
  ////			 		Set up system, pls dont change 						////
 ///////////////////////////////////////////////////////////////////////////////
+// adjust the cost table
 TER_costArray = TER_costArray +["",0];
 TER_costArray = TER_costArray apply {
 	if (_x isEqualType "STRING") then {
@@ -113,4 +115,5 @@ TER_fnc_itemCostFromTable = {
 };
 
 // this is where the magic happens:
-TER_arsenalOpenedEHID = [missionNamespace, "arsenalOpened", compile preprocessFileLineNumbers "arsenalShop\arsenalEHOpen.sqf"] call BIS_fnc_addScriptedEventHandler;
+TER_fnc_arsenalEH = compile preprocessFileLineNumbers "arsenalShop\arsenalEH.sqf";
+TER_arsenalOpenedEHID = [missionNamespace, "arsenalOpened", TER_fnc_arsenalEH] call BIS_fnc_addScriptedEventHandler;
