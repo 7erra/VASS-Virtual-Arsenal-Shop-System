@@ -1,153 +1,18 @@
 #include "controls.sqf"
+#include "\A3\ui_f\hpp\defineDIKCodes.inc"
 #define _PLAYER_MONEY (TER_moneyNameSpace getVariable [TER_moneyVariable,0])
 #define _CURRENTCOST (_display getVariable ["TER_cost",0])
 #define _SELFEH(ehname) {[ehname,_this] call TER_fnc_arsenalEH;}
 
-// ui functions
-_fncItemText = {
-	params ["_price"];
-	_stxtItemCost = ARSENAL_CTRL(7302);
-	_stxtItemCost ctrlSetStructuredText parseText format [
-		"%1 %2",
-		_price,
-		TER_moneyUnit
-	];
-	_stxtItemCost ctrlSetPosition [0,0,1,1];
-	_stxtItemCost ctrlCommit 0;
-	ctrlPosition (_rightLBs select 0) params ["_lbX","_lbY","_lbW","_lbH"];
-	_stxtItemCost ctrlSetPosition [
-		_lbX - ctrlTextWidth _stxtItemCost - (0.1 * _wGrid),
-		_lbY,
-		ctrlTextWidth _stxtItemCost,
-		ctrlTextHeight _stxtItemCost
-	];
-	_stxtItemCost ctrlCommit 0;
-};
-_fnclbPrice = {
-	params ["_listbox"];
-	//if (canSuspend) then {uiSleep 0.001};
-	for "_index" from 1 to lbSize _listbox do {
-		_lbData = _listbox lbData _index;
-		_itemCost = [_lbData] call TER_fnc_itemCostFromTable;
-		if (_listbox lbPictureRight _index == "") then {
-			_listbox lbSetPictureRight [_index,"#(rgb,8,8,3)color(1,0,0,0)"];
-		};
-		_listbox lbSetTextRight [_index,format ["%1 %2",_itemCost,TER_moneyUnit]];
-	};
-};
+if (isNull _display) exitWith {};// arsenal isn't open, can happen when a script is spawned and arsenal was closed
 /* start init */
 _isInit = _display getVariable ["_isInit",true];
 if (_isInit) exitWith {// display hasn't been initialized yet
-	_display setVariable ["_isInit",false];
-
-	// global ui function
-	TER_fnc_moneyText = {
-		_stxtMoney ctrlSetStructuredText parseText format [
-			"<t size='0.8'>Current Money: %1 %3 %6%2<br/>Cost: %1 %4 %6%2<br/>Balance: %1 %5 %6%2%2",
-			"<t align='right'>",
-			"</t>",
-			_PLAYER_MONEY,
-			_CURRENTCOST,
-			_PLAYER_MONEY - _CURRENTCOST,
-			TER_moneyUnit
-		];
-		_stxtMoney ctrlSetPosition [0,0,1,1];
-		_stxtMoney ctrlCommit 0;
-		ctrlPosition _lbPrimary params ["_lbX","_lbY","_lbW","_lbH"];
-		_stxtMoney ctrlSetPosition [
-			_lbX + _lbW + (0.1 * _wGrid),
-			_lbY + _lbH - ctrlTextHeight _stxtMoney,
-			ctrlTextWidth _stxtMoney,
-			ctrlTextHeight _stxtMoney
-		];
-		_stxtMoney ctrlCommit 0;
-	};
-	_display setVariable ["_fncSelectItemEH",compile preprocessFileLineNumbers "arsenalShop\selectItemEH.sqf"];
-
-	// handle loadout
-	_display setVariable ["loadoutOwned",getUnitLoadout player];
-	_display displayAddEventHandler ["unload",_SELFEH("unload")];
-
-	// disable saving, loading, randomizing, export, import
-	{
-		(_display displayCtrl _x) ctrlEnable false;
-	} forEach [
-		IDC_RSCDISPLAYARSENAL_CONTROLSBAR_BUTTONSAVE,
-		IDC_RSCDISPLAYARSENAL_CONTROLSBAR_BUTTONLOAD,
-		IDC_RSCDISPLAYARSENAL_CONTROLSBAR_BUTTONEXPORT,
-		IDC_RSCDISPLAYARSENAL_CONTROLSBAR_BUTTONIMPORT,
-		IDC_RSCDISPLAYARSENAL_CONTROLSBAR_BUTTONRANDOM
-	];
-
-	// create buy button
-	_btnBuy = _display ctrlCreate ["RscButtonMenu",7300,_grpControlsBar];
-	_btnBuy ctrlSetText "BUY";
-	_btnBuy ctrlSetPosition ctrlPosition _btnOk;
-	_btnBuy ctrlAddEventHandler ["ButtonClick",_SELFEH("buy")];
-	_btnBuy ctrlCommit 0;
-	_btnOk ctrlShow false;
-	_btnOk ctrlEnable false;
-
-	// create cost text
-	_stxtMoney = _display ctrlCreate ["RscStructuredText",7301];
-	_stxtMoney ctrlSetBackgroundColor [0,0,0,0.5];
-	call TER_fnc_moneyText;
-
-	// handle listboxes
-	// weapons and containers need some extra attention
-	// remove standard ehs and add own ones
-	{
-		_x ctrlRemoveAllEventHandlers "LBSelChanged";
-		_x ctrlAddEventHandler ["LBSelChanged",_SELFEH("selectItem")];
-	} forEach [_lbPrimary,_lbSecondary,_lbHandgun,_lbUniform,_lbVest,_lbBackpack];
-
-	// handle all other listboxes
-	{
-		_x setVariable ["_isInit",true];
-	} forEach _attachementLBs;
-
-	_forIlbLoop = {
-		_control = ARSENAL_CTRL(_lb_idc);
-		if (lbCurSel _control != -1) then {
-			_startClass = _control lbData lbCurSel _control;
-			_control setVariable ["startData",_startClass];
-			_control setVariable ["_prevData",_startClass];
-		};
-		_control ctrlAddEventHandler ["LBSelChanged", _SELFEH("lbchanged")];
-		[_control] spawn _fnclbPrice;
-	};
-	//960: lb weapons; 960-974 left lbs; 974-980 right lbs; 985: lb bipod
-	for "_lb_idc" from 960/*974*/ to /*960*/980 do _forIlbLoop;
-	for "_lb_idc" from 985/*974*/ to /*974*/985 do _forIlbLoop; // bipod idc was added later so the rsclistnboxes are in between
-
-	// lb weapon slots need some extra attention to handle the attachments
-	for "_idc_weapon" from 960 to 962 do {
-		_control = ARSENAL_CTRL(_idc_weapon);
-		_control ctrlAddEventHandler ["LBSelChanged",_SELFEH("updateAttachementPrices")];
-	};
-	for "_idc_weaponTab" from 930 to 932 do {// add eh to button tabs to set lb prices
-		_control = ARSENAL_CTRL(_idc_weaponTab);
-		_control ctrlAddEventHandler ["ButtonClick",_SELFEH("updateAttachementPrices")];
-	};
-
-	// rsc listnboxes: magazines items and stuff
-	_stxtItemCost = _display ctrlCreate ["RscStructuredText",7302];
-	_stxtItemCost ctrlSetBackgroundColor [0,0,0,0.5];
-	_stxtItemCost ctrlSetPosition [0,0,0,0];
-	_stxtItemCost ctrlCommit 0;
-
-	{
-		_x ctrlAddEventHandler ["LBSelChanged",_SELFEH("listnboxlbchanged")];
-		_x ctrlAddEventHandler ["KillFocus",_SELFEH("killLNBFocus")];
-		_x ctrlAddEventHandler ["SetFocus",_SELFEH("setLNBFocus")];
-	} forEach _rightLBs;
-
-	{
-		_x ctrlAddEventHandler ["ButtonClick",_SELFEH("btnPlusMinus")];
-	} forEach [_btnMinus, _btnPlus];
+	[] execVM "arsenalShop\initArsenal.sqf";
 };
 /* end init */
 /* start switch eh */
+#include "localFunctions.sqf"
 params ["_ehCase","_ehArgs"];
 switch (toLower _ehCase) do {
 
@@ -166,7 +31,7 @@ case "buy":{
 		_display setVariable ["loadoutOwned",getUnitLoadout player];
 		_display closeDisplay 2;
 		["#(argb,8,8,3)color(0,0,0,1)",false,nil,0,[0,0.5]] call BIS_fnc_textTiles;
-		hint "Transaction successful";
+		hint format ["Transaction successful\nYour new balance is %1 %2",_newBalance,TER_moneyUnit];
 	} else {
 		// not enough money, do nothing
 		systemChat "Not enough money";
@@ -216,19 +81,20 @@ case "lbchanged":{
 	[] call TER_fnc_moneyText;
 };
 
-case "updateattachementprices":{//update the lb price texts of the attachement lbs
+case "weaponchanged":{//update the lb price texts of the attachement lbs
 	{
 		[_x] spawn _fnclbPrice;
 	} forEach _attachementLBs;
+	[_rightLBs select 0] spawn _SELFEH("lnbPrice");//update comp mags lnb
 };
 
+/*
 case "listnboxlbchanged":{// set cost text of the lnb info text
 	_ehArgs params ["_control","_index"];
 	_lbData = _control lnbData [_index,0];
 	_itemCost = [_lbData] call TER_fnc_itemCostFromTable;
 	[_itemCost] call _fncItemText;
 };
-
 case "killlnbfocus":{// hide the lnb price tag
 	_stxtItemCost ctrlSetFade 1;
 	_stxtItemCost ctrlCommit 0.15;
@@ -238,7 +104,7 @@ case "setlnbfocus":{// show the lnb price tag
 	_stxtItemCost ctrlSetFade 0;
 	_stxtItemCost ctrlCommit 0.15;
 };
-
+*/
 case "btnplusminus":{// handle the +/- buttons
 	_ehArgs params ["_button"];
 	_activeLB = _rightLBs select {ctrlEnabled _x} select 0;
@@ -246,14 +112,13 @@ case "btnplusminus":{// handle the +/- buttons
 
 	// change to check with item in XXX and canAddItemToXXX, remove spawn scope
 	// has to be spawned bc this eh fires before any change to the loadout is done
-	[_activeLB,_itemCount,_button,_fncItemText] spawn {
-		#include "controls.sqf";
-		params ["_activeLB","_itemCount","_button","_fncItemText"];
+	[_activeLB,_itemCount,_button] spawn {
+		#include "controls.sqf"
+		params ["_activeLB","_itemCount","_button"];
 		// no changed items, do nothing
 		if (_itemCount == _activeLB lnbText [lbCurSel _activeLB,2]) exitWith {};
 		_lbData = _activeLB lnbData [lbCurSel _activeLB,0];
 		_itemCost = [_lbData] call TER_fnc_itemCostFromTable;
-		[_itemCost] call _fncItemText;
 		// button is remove, substract cost instead of adding
 		if (ctrlText _button == "-") then {_itemCost = -_itemCost};
 		_newCost = _CURRENTCOST +_itemCost;
@@ -265,6 +130,92 @@ case "btnplusminus":{// handle the +/- buttons
 case "selectitem":{
 	_ehArgs params ["_control","_index"];
 	[_display,_control,ctrlIDC _control -IDC_RSCDISPLAYARSENAL_LIST] call (_display getVariable "_fncSelectItemEH");
+};
+
+case "hidecontrolsbar":{
+	_ehArgs params ["", "_key", "_shift", "_ctrl", "_alt"];
+	if (_key == DIK_BACKSPACE OR _key == 1) then {
+		call _fncShowControlsbar;
+	};
+	_stxtCredit ctrlSetFade ([0,1] select (ctrlShown _grpControlsBar));
+	_stxtCredit ctrlCommit 0;
+};
+
+case "buydetails":{
+	_ehArgs	params [["_control",controlNull]];
+	// hide
+	if (ctrlFade _grpDetails < 1) exitWith {
+		_setPosition = ctrlPosition _grpDetails;
+		_setPosition set [1,(_setPosition select 1)+(_setPosition select 3)];
+		_setPosition set [3,0];
+		_grpDetails ctrlSetPosition _setPosition;
+		_grpDetails ctrlSetFade 1;
+		_grpDetails ctrlEnable false;
+		_commitTime = [0.15,0] select (_grpDetails getVariable ["_isInit",true]);
+		_grpDetails setVariable ["_isInit",false];
+		_grpDetails ctrlCommit _commitTime;
+	};
+	// set position
+	_grpDetails ctrlSetPosition (_grpDetails getVariable "_startPos");
+	_grpDetails ctrlSetFade 0;
+	_grpDetails ctrlEnable true;
+	_grpDetails ctrlCommit 0.15;
+};
+
+case "updatedetails":{
+	_ehArgs params ["_control"];
+	// fill lnb
+	_ownedLoadout = _display getVariable "loadoutOwned";
+	_selectLoadout = getUnitLoadout player;
+	_loadoutDiff = [_ownedLoadout,_selectLoadout] call TER_fnc_compareLoadout;
+	_lostLoadout = [_selectLoadout,_ownedLoadout] call TER_fnc_compareLoadout;
+	_handledItems = [];
+	lnbClear _lnbDetailsList;
+	_lnbDetailsList lnbAddRow ["","Item","Amount","Cost (single)","Cost (total)"];
+	_absCost = 0;
+	{
+		_loadoutArray = _x;
+		_sell = _loadoutArray isEqualTo _lostLoadout;
+		{
+			_item = _x;
+			if !(_item in _handledItems) then {
+				_handledItems pushBack _item;
+				_config = format ["configFile >> ""%1"" >> ""%2""","%1",_item];
+				_itemCfg = {
+					_itemCfg = call compile format [_config,_x];
+					if (isClass _itemCfg) exitWith {_itemCfg};
+					configNull
+				} forEach ["CfgWeapons","CfgMagazines"];
+				_displayName = _itemCfg call BIS_fnc_displayName;
+				_itemPicture = getText (_itemCfg >> "picture");
+				_amount = {_x == _item} count _loadoutArray;
+				_itemCost = _item call TER_fnc_itemCostFromTable;
+				_itemCostMP = [1,-1] select _sell;
+				_totalCost = _itemCost * _amount * _itemCostMP;
+				_absCost = _absCost +_totalCost;
+				_indexRow = _lnbDetailsList lnbAddRow [
+					"",
+					_displayName,
+					str _amount,
+					format ["%1 %2",_itemCost,TER_moneyUnit],
+					format ["%1 %2",_totalCost,TER_moneyUnit]
+				];
+				_lnbDetailsList lnbSetPicture [[_indexRow,0],_itemPicture];
+			};
+		} forEach _loadoutArray;
+		_lnbDetailsList lnbAddRow ["","","","",""];
+	} forEach [_loadoutDiff,_lostLoadout];
+
+	_lnbDetailsList lnbAddRow ["","","","",format ["Sum: %1 %2",_absCost,TER_moneyUnit]];
+};
+
+case "lnbprice":{
+	_ehArgs params ["_control"];
+	for "_i" from 0 to ((lnbSize _control) select 0) do {
+		_indexLNB = [_i,3];
+		_cost = [_control lnbData [_i,0]] call TER_fnc_itemCostFromTable;
+		_control lnbSetText [_indexLNB,format ["%1 %2",_cost,TER_moneyUnit]];
+	};
 };
 
 default {};

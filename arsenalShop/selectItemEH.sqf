@@ -147,15 +147,14 @@ _ctrlListHandgun = _display displayctrl (IDC_RSCDISPLAYARSENAL_LIST + IDC_RSCDIS
 
 _fncRefundLostItems = {
 	params ["_prevItems","_afterItems"];
+	_missingItems = _this call TER_fnc_arrayChange;
+	_newCost = _CURRENTCOST;
 	{
-		_removedItem = _afterItems deleteAt (_prevItems find _x);
-		if (isNil "_removedItem") then {//refund
-			_xPrice = _x call TER_fnc_itemCostFromTable;
-			_display setVariable ["TER_cost",_CURRENTCOST -_xPrice];
-			[] call TER_fnc_moneyText;
-		};
-	} forEach _prevItems;
-	_prevItems
+		_xPrice = _x call TER_fnc_itemCostFromTable;
+		_newCost = _newCost -_xPrice;
+	} forEach _missingItems;
+	_display setVariable ["TER_cost",_newCost];
+	[] call TER_fnc_moneyText;
 };
 _fncHandleLoadedMagazine = {
 	params ["_magazines"];
@@ -312,7 +311,8 @@ if (
 						_magazines set [count _magazines,_mag];
 						_value = {_x == _mag} count _itemsCurrent;
 						_displayName = gettext (configfile >> "cfgmagazines" >> _mag >> "displayName");
-						_lbAdd = _ctrlList lnbaddrow ["",_displayName,str _value];
+						_itemCost = _mag call TER_fnc_itemCostFromTable;
+						_lbAdd = _ctrlList lnbaddrow ["",_displayName,str _value,format ["%1 %2",_itemCost,TER_moneyUnit]];
 						_ctrlList lnbsetdata [[_lbAdd,0],_mag];
 						_ctrlList lnbsetvalue [[_lbAdd,0],getnumber (configfile >> "cfgmagazines" >> _mag >> "mass")];
 						_ctrlList lnbsetpicture [[_lbAdd,0],gettext (configfile >> "cfgmagazines" >> _mag >> "picture")];
