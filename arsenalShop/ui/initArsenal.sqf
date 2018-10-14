@@ -16,9 +16,11 @@ TER_fnc_moneyText = {
 	];
 	//update lnb detail
 	["updatedetails",[]] spawn TER_fnc_arsenalEH;
+	//update lnb texts
+	//{["lnbprice",[_x]] spawn TER_fnc_arsenalEH;} forEach _rightLBs;
 };
 
-_display setVariable ["_fncSelectItemEH",compile preprocessFileLineNumbers "arsenalShop\selectItemEH.sqf"];
+_display setVariable ["_fncSelectItemEH",compile preprocessFileLineNumbers "arsenalShop\ui\selectItemEH.sqf"];
 
 // handle loadout
 _display setVariable ["loadoutOwned",getUnitLoadout player];
@@ -29,11 +31,12 @@ call _fncShowControlsbar;
 _display displayaddeventhandler ["keydown",{["hidecontrolsbar",_this] spawn TER_fnc_arsenalEH;}];
 _ctrlMouseArea ctrlAddEventHandler ["mousebuttonclick",{["hidecontrolsbar",_this] spawn TER_fnc_arsenalEH;}];
 
-// create buy button
-_btnBuy = _display ctrlCreate ["RscButtonMenu",7300,_grpControlsBar];
-_btnBuy ctrlSetText "BUY";
+// create blank right space
+_btnBuy = _display ctrlCreate ["RscText",-1,_grpControlsBar];
+_btnBuy ctrlSetBackgroundColor [0,0,0,0.8];
+//_btnBuy ctrlSetText "BUY";
 _btnBuy ctrlSetPosition ctrlPosition _btnOk;
-_btnBuy ctrlAddEventHandler ["ButtonClick",_SELFEH("buy")];
+//_btnBuy ctrlAddEventHandler ["ButtonClick",_SELFEH("buy")];
 _btnBuy ctrlCommit 0;
 _btnOk ctrlShow false;
 _btnOk ctrlEnable false;
@@ -78,9 +81,12 @@ for "_idc_weaponTab" from 930 to 932 do {// add eh to button tabs to set lb pric
 // rsc listnboxes: magazines items and stuff
 {
 	// add price column
-	_x lnbSetColumnsPos [0.07,0.15,0.725];
+	_x lnbSetColumnsPos [0.07,0.15,0.715];
 	_column = _x lnbAddColumn 0.78;
 	[_x] spawn _SELFEH("lnbPrice");
+
+	// eh to disable if undefined item
+	_x ctrlAddEventHandler ["LBSelChanged",_SELFEH("lnbchanged")];
 } forEach _rightLBs;
 
 // add eh to uniform vest backpack controls to keep lnbprice up to date
@@ -96,10 +102,13 @@ for "_idc_weaponTab" from 930 to 932 do {// add eh to button tabs to set lb pric
 	} forEach [IDC_RSCDISPLAYARSENAL_ICON,IDC_RSCDISPLAYARSENAL_TAB];
 } forEach [IDC_RSCDISPLAYARSENAL_TAB_UNIFORM,IDC_RSCDISPLAYARSENAL_TAB_VEST,IDC_RSCDISPLAYARSENAL_TAB_BACKPACK];
 
-
-{
-	_x ctrlAddEventHandler ["ButtonClick",_SELFEH("btnPlusMinus")];
-} forEach [_btnMinus, _btnPlus];
+// handle the item add and remove buttons
+[_btnMinus, _btnPlus] spawn {
+	{
+		_x ctrlRemoveAllEventHandlers "ButtonClick";
+		//_x ctrlAddEventHandler ["ButtonClick",_SELFEH("btnPlusMinus")];
+	} forEach _this;
+};
 
 // create cost text
 _btnMoneyNew = _display ctrlCreate ["RscButtonMenu",7303,_grpControlsBar];
@@ -146,7 +155,7 @@ _grpDetails setVariable ["_startPos",ctrlPosition _grpDetails];
 		_grpInX,
 		_grpInY,
 		_grpInW,
-		_grpInH -(0.1 * _hGrid)
+		_grpInH -(2.1 * _hGrid)
 	];
 	_lnbDetail ctrlCommit 0;
 	_lnbDetail ctrlSetBackgroundColor [1,0,0,0];
@@ -162,6 +171,17 @@ _grpDetails setVariable ["_startPos",ctrlPosition _grpDetails];
 		0.85// cost total
 	];
 	_lnbDetail ctrlEnable false;
+
+	_btnBuyNew = _display ctrlCreate ["RscButtonMenu",7300,_grpDetails];
+	_btnBuyNew ctrlSetStructuredText parseText "<t align='center'>BUY</t>";
+	_btnBuyNew ctrlSetPosition [
+		_grpInX,
+		_grpInH -_hGrid,
+		_grpInW,
+		_hGrid
+	];
+	_btnBuyNew ctrlCommit 0;
+	_btnBuyNew ctrlAddEventHandler ["ButtonClick",_SELFEH("buy")];
 /*
 	_btnDetailClose = _display ctrlCreate ["RscButtonMenu",7307,_grpDetails];
 	_btnDetailClose ctrlSetPosition [

@@ -8,7 +8,7 @@ if (isNull _display) exitWith {};// arsenal isn't open, can happen when a script
 /* start init */
 _isInit = _display getVariable ["_isInit",true];
 if (_isInit) exitWith {// display hasn't been initialized yet
-	[] execVM "arsenalShop\initArsenal.sqf";
+	[] execVM "arsenalShop\ui\initArsenal.sqf";
 };
 /* end init */
 /* start switch eh */
@@ -26,7 +26,7 @@ case "buy":{
 	_ehArgs params ["_control"];
 	_newBalance = _PLAYER_MONEY -_CURRENTCOST;
 	if (_newBalance >= 0) then {
-		// add new loadout and close arsenal to reaload values
+		// add new loadout and close arsenal to reload values
 		TER_moneyNameSpace setVariable [TER_moneyVariable,_newBalance];
 		_display setVariable ["loadoutOwned",getUnitLoadout player];
 		_display closeDisplay 2;
@@ -85,7 +85,7 @@ case "weaponchanged":{//update the lb price texts of the attachement lbs
 	{
 		[_x] spawn _fnclbPrice;
 	} forEach _attachementLBs;
-	[_rightLBs select 0] spawn _SELFEH("lnbPrice");//update comp mags lnb
+	//[_rightLBs select 0] spawn _SELFEH("lnbPrice");//update comp mags lnb
 };
 
 /*
@@ -105,27 +105,6 @@ case "setlnbfocus":{// show the lnb price tag
 	_stxtItemCost ctrlCommit 0.15;
 };
 */
-case "btnplusminus":{// handle the +/- buttons
-	_ehArgs params ["_button"];
-	_activeLB = _rightLBs select {ctrlEnabled _x} select 0;
-	_itemCount = _activeLB lnbText [lbCurSel _activeLB,2];
-
-	// change to check with item in XXX and canAddItemToXXX, remove spawn scope
-	// has to be spawned bc this eh fires before any change to the loadout is done
-	[_activeLB,_itemCount,_button] spawn {
-		#include "controls.sqf"
-		params ["_activeLB","_itemCount","_button"];
-		// no changed items, do nothing
-		if (_itemCount == _activeLB lnbText [lbCurSel _activeLB,2]) exitWith {};
-		_lbData = _activeLB lnbData [lbCurSel _activeLB,0];
-		_itemCost = [_lbData] call TER_fnc_itemCostFromTable;
-		// button is remove, substract cost instead of adding
-		if (ctrlText _button == "-") then {_itemCost = -_itemCost};
-		_newCost = _CURRENTCOST +_itemCost;
-		ctrlParent _activeLB setVariable ["TER_cost",_newCost];
-		[] call TER_fnc_moneyText;
-	};
-};
 
 case "selectitem":{
 	_ehArgs params ["_control","_index"];
@@ -185,7 +164,7 @@ case "updatedetails":{
 					_itemCfg = call compile format [_config,_x];
 					if (isClass _itemCfg) exitWith {_itemCfg};
 					configNull
-				} forEach ["CfgWeapons","CfgMagazines"];
+				} forEach ["CfgWeapons","CfgMagazines","CfgVehicles"];
 				_displayName = _itemCfg call BIS_fnc_displayName;
 				_itemPicture = getText (_itemCfg >> "picture");
 				_amount = {_x == _item} count _loadoutArray;
@@ -211,11 +190,93 @@ case "updatedetails":{
 
 case "lnbprice":{
 	_ehArgs params ["_control"];
-	for "_i" from 0 to ((lnbSize _control) select 0) do {
+	_vaBox = missionNamespace getVariable ["BIS_fnc_arsenal_cargo",objNull];
+	_virtualCargo = [];
+	{
+		_cargo = _vaBox call _x;
+		_virtualCargo append _cargo;
+	} forEach [
+		BIS_fnc_getVirtualBackpackCargo,
+		BIS_fnc_getVirtualItemCargo,
+		BIS_fnc_getVirtualWeaponCargo,
+		BIS_fnc_getVirtualMagazineCargo
+	];
+	_virtualCargo = _virtualCargo apply {tolower _x};
+	for "_i" from 0 to ((lbSize _control)) do {
+		_item = _control lnbData [_i,0];
 		_indexLNB = [_i,3];
-		_cost = [_control lnbData [_i,0]] call TER_fnc_itemCostFromTable;
-		_control lnbSetText [_indexLNB,format ["%1 %2",_cost,TER_moneyUnit]];
+		_enable = (toLower _item in (call TER_costArray)) AND (toLower _item in _virtualCargo);
+		if (_enable) then {
+			_cost = [_item] call TER_fnc_itemCostFromTable;
+			_control lnbSetText [_indexLNB,format ["%1 %2",_cost,TER_moneyUnit]];
+			_control lnbSetColor [_indexLNB,[0,0.5,0,1]];
+		} else {
+			_control lnbSetText [_indexLNB,"X"];
+			_control lnbSetColor [_indexLNB,[1,0,0,1]];
+		};
 	};
+};
+
+case "lnbchanged":{
+	_ehArgs params ["_control","_index"];
+	_item = _control lnbData [_index,0];
+	_vaBox = missionNamespace getVariable ["BIS_fnc_arsenal_cargo",objNull];
+	_virtualCargo = [];
+	{
+		_cargo = _vaBox call _x;
+		_virtualCargo append _cargo;
+	} forEach [
+		BIS_fnc_getVirtualBackpackCargo,
+		BIS_fnc_getVirtualItemCargo,
+		BIS_fnc_getVirtualWeaponCargo,
+		BIS_fnc_getVirtualMagazineCargo
+	];
+	_virtualCargo = _virtualCargo apply {tolower _x};
+	_enable = (toLower _item in (call TER_costArray)) AND (toLower _item in _virtualCargo);
+	{
+		_btn = _display displayCtrl _x;
+		if (_enable) then {
+			_btn ctrlSetTextColor [1,1,1,1];
+			_btn ctrlSetEventHandler ["buttonclick","[""btnplusminus"",_this] call TER_fnc_arsenalEH;"];
+		} else {
+			_btn ctrlSetTextColor [1,0,0,1];
+			_btn ctrlSetEventHandler ["buttonclick",""];
+		};
+	} forEach [IDC_RSCDISPLAYARSENAL_ARROWLEFT,IDC_RSCDISPLAYARSENAL_ARROWRIGHT];
+};
+
+case "btnplusminus":{// handle the +/- buttons
+	_ehArgs params ["_control"];
+	_change = [1,-1] select (_control == _btnMinus);
+	// calculate cost
+	_activeLNB = _rightLBs select {ctrlEnabled _x} select 0;
+	private _item = _activeLNB lnbData [lnbCurSelRow _activeLNB, 0];
+	_activeContainer = _lbsContainer select {ctrlEnabled _x} select 0;
+	_container = switch (ctrlIDC _activeContainer -IDC_RSCDISPLAYARSENAL_LIST) do {
+		case IDC_RSCDISPLAYARSENAL_TAB_UNIFORM: {"uniform"};
+		case IDC_RSCDISPLAYARSENAL_TAB_VEST: {"vest"};
+		case IDC_RSCDISPLAYARSENAL_TAB_BACKPACK: {"backpack"};
+		default {""};
+	};
+	if (_container == "") exitWith {};//error no container selected, shouldnt happen though
+	_canAdd = call compile format ["player canAddItemTo%1 ""%2""",_container,_item];
+	//_canAdd2 = player canAddItemToBackpack _item;
+	/*_maxAdd = 0;
+	_condition = compile format ["player canAddItemTo%1 [_item,_maxAdd]",_container];
+	while _condition do {_maxAdd = _maxAdd +1};
+	_canAdd = _maxAdd > 0;*/
+	_hasItem = call compile format ["toLower _item in (%1Items player apply {toLower _x})",_container];
+	_doMoney = [_canAdd, _hasItem] select (_change == -1);
+	if (_doMoney) then {
+		_cost = _item call TER_fnc_itemCostFromTable;
+		_cost = _cost * _change;
+		_newCost = _CURRENTCOST +_cost;
+		ctrlParent _control setVariable ["TER_cost",_newCost];
+		[] call TER_fnc_moneyText;
+	};
+
+	// default behaviour
+	with uinamespace do {['buttonCargo',[ctrlparent _control,_change]] call bis_fnc_arsenal;};
 };
 
 default {};

@@ -1,11 +1,13 @@
 /*
+	Author: 7erra <https://forums.bohemia.net/profile/1139559-7erra/>
+
 	Description:
-	Add an arsenal with all things of which the cost is defined
+	 Add an arsenal with all things of which the cost is defined
 
 	Parameter(s):
 	 0: Object - Object to add the arsenal to
 
-	 Optional:
+	Optional:
 	 1: STRING or ARRAY OF STRINGS - Only add specific item types (Categories from https://community.bistudio.com/wiki/BIS_fnc_itemType)
 	 	default: []
 	 2: STRING - "add" or "remove" arsenal items
@@ -14,9 +16,9 @@
 	 	default: true
 
 	Returns:
-	Bool - True when done
+	 Bool - True when done
 
-	Example:
+	Examples:
 	 [this,[],true] call TER_fnc_addArsenal; <- Full shop
 	 [this,["Weapon"]] call TER_fnc_addArsenal; <- Weapon shop
 	 [this,["Magazine"],"remove"] call TER_fnc_addArsenal; <- remove magazines from shop

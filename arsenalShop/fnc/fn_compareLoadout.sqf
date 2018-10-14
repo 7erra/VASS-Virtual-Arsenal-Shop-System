@@ -14,6 +14,7 @@
 
 params ["_previousLoadout","_newLoadout"];
 _KK_fnc_arrayFlatten = {
+	/* Author: KillzoneKid */
     private ["_res", "_fnc"];
     _res = [];
     _fnc = {

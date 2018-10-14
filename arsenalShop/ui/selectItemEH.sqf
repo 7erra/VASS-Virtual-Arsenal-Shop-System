@@ -150,8 +150,12 @@ _fncRefundLostItems = {
 	_missingItems = _this call TER_fnc_arrayChange;
 	_newCost = _CURRENTCOST;
 	{
-		_xPrice = _x call TER_fnc_itemCostFromTable;
-		_newCost = _newCost -_xPrice;
+		if !(_x in (call TER_costArray)) then {
+			player addItem _x;
+		} else {
+			_xPrice = _x call TER_fnc_itemCostFromTable;
+			_newCost = _newCost -_xPrice;
+		};
 	} forEach _missingItems;
 	_display setVariable ["TER_cost",_newCost];
 	[] call TER_fnc_moneyText;
@@ -159,17 +163,29 @@ _fncRefundLostItems = {
 _fncHandleLoadedMagazine = {
 	params ["_magazines"];
 	{
-		if (
-			_center canAddItemToUniform _x OR
-			_center canAddItemToVest _x OR
-			_center canAddItemToBackpack _x
-		) then {//move magazine to container
-			_center addMagazine _x;
+		if (_center canAdd _x) then {//move magazine to container
+			_center addItem _x;
 		} else {//refund magazine
 			_magCost = _x call TER_fnc_itemCostFromTable;
 			_display setVariable ["TER_cost",_CURRENTCOST -_magCost];
 		};
 	} forEach _magazines;
+};
+_fncHandleAccessories = {
+	params ["_accessories","_compatibleItems"];
+	{
+		_acc = _x;
+		if ({_x == _acc} count _compatibleItems > 0) then {//add item to weapon
+			_center addprimaryweaponitem _acc;
+		} else {//add item to inventory
+			if (false && _center canAdd _acc) then {//add item to inventory, wip
+				_center additem _acc;
+			} else {// refund
+				_refund = _acc call TER_fnc_itemCostFromTable;
+				_display setVariable ["TER_cost",_CURRENTCOST -_refund];
+			};
+		};
+	} foreach _accessories;
 };
 
 switch _index do {
@@ -213,51 +229,42 @@ switch _index do {
 		_isDifferentWeapon = (primaryweapon _center call bis_fnc_baseWeapon) != _item;
 		if (_isDifferentWeapon) then {
 			[primaryWeaponMagazine _center] call _fncHandleLoadedMagazine;
+			_compatibleItems = _item call bis_fnc_compatibleItems;
+			_weaponAccessories = primaryweaponitems _center - [""];
 			if (_item == "") then {
 				_center removeweapon primaryweapon _center;
 			} else {
-				_compatibleItems = _item call bis_fnc_compatibleItems;
-				_weaponAccessories = primaryweaponitems _center - [""];
 				[_center,_item,0] call bis_fnc_addweapon;
-				{
-					_acc = _x;
-					if ({_x == _acc} count _compatibleItems > 0) then {_center addprimaryweaponitem _acc;};
-				} foreach _weaponAccessories;
 			};
+			[_weaponAccessories,_compatibleItems] call _fncHandleAccessories;
 		};
 	};
 	case IDC_RSCDISPLAYARSENAL_TAB_SECONDARYWEAPON: {
 		_isDifferentWeapon = (secondaryweapon _center call bis_fnc_baseWeapon) != _item;
 		if (_isDifferentWeapon) then {
 			[secondaryWeaponMagazine _center] call _fncHandleLoadedMagazine;
+			_compatibleItems = _item call bis_fnc_compatibleItems;
+			_weaponAccessories = secondaryweaponitems _center - [""];
 			if (_item == "") then {
 				_center removeweapon secondaryweapon _center;
 			} else {
-				_compatibleItems = _item call bis_fnc_compatibleItems;
-				_weaponAccessories = secondaryweaponitems _center - [""];
 				[_center,_item,0] call bis_fnc_addweapon;
-				{
-					_acc = _x;
-					if ({_x == _acc} count _compatibleItems > 0) then {_center addsecondaryweaponitem _acc;};
-				} foreach _weaponAccessories;
 			};
+			[_weaponAccessories,_compatibleItems] call _fncHandleAccessories;
 		};
 	};
 	case IDC_RSCDISPLAYARSENAL_TAB_HANDGUN: {
 		_isDifferentWeapon = (handgunweapon _center call bis_fnc_baseWeapon) != _item;
 		if (_isDifferentWeapon) then {
 			[handgunMagazine _center] call _fncHandleLoadedMagazine;
+			_compatibleItems = _item call bis_fnc_compatibleItems;
+			_weaponAccessories = handgunitems _center - [""];
 			if (_item == "") then {
 				_center removeweapon handgunweapon _center;
 			} else {
-				_compatibleItems = _item call bis_fnc_compatibleItems;
-				_weaponAccessories = handgunitems _center - [""];
 				[_center,_item,0] call bis_fnc_addweapon;
-				{
-					_acc = _x;
-					if ({_x == _acc} count _compatibleItems > 0) then {_center addhandgunitem _acc;};
-				} foreach _weaponAccessories;
 			};
+			[_weaponAccessories,_compatibleItems] call _fncHandleAccessories;
 		};
 	};
 };
@@ -334,6 +341,8 @@ if (
 			};
 			["SelectItemRight",[_display,_ctrlList,_index]] call bis_fnc_arsenal;
 		};
+		// update lnbprice
+		["lnbprice",[_ctrlList]] call TER_fnc_arsenalEH;
 	} foreach [
 		IDC_RSCDISPLAYARSENAL_TAB_CARGOMAG,
 		IDC_RSCDISPLAYARSENAL_TAB_CARGOMAGALL,
@@ -341,6 +350,7 @@ if (
 		IDC_RSCDISPLAYARSENAL_TAB_CARGOPUT,
 		IDC_RSCDISPLAYARSENAL_TAB_CARGOMISC
 	];
+
 };
 
 //--- Weapon attachments

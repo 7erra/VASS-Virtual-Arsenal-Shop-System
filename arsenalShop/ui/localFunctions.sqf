@@ -2,13 +2,14 @@
 _fnclbPrice = {
 	params ["_listbox"];
 	//if (canSuspend) then {uiSleep 0.001};
-	for "_index" from 1 to lbSize _listbox do {
+	for "_index" from 1 to (lbSize _listbox -1) do {
 		_lbData = _listbox lbData _index;
 		_itemCost = [_lbData] call TER_fnc_itemCostFromTable;
 		if (_listbox lbPictureRight _index == "") then {
 			_listbox lbSetPictureRight [_index,"#(rgb,8,8,3)color(1,0,0,0)"];
 		};
 		_listbox lbSetTextRight [_index,format ["%1 %2",_itemCost,TER_moneyUnit]];
+		_listbox lbSetColorRight [_index, [0,0.5,0,1]];
 	};
 };
 _fncShowControlsbar = {
