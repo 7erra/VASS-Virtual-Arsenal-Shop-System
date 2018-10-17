@@ -7,8 +7,10 @@ if (_typeInit == "postInit") exitWith {
 	//eg >player getVariable "TER_money";< will return the current amount of money the (local) player has
 	//>TER_moneyNameSpace getVariable TER_moneyVariable;< will do the same
 };
-_costArray = [// add your entries in the format >"classname",cost<
-	"arifle_AK12_F",100,
+_costArray = [
+// add your entries in the format >"classname",cost<
+// alternative: add your classnames and set _autoCalc = true
+/*	"arifle_AK12_F",100,
 	"arifle_AKM_F",50,
 	"arifle_MX_F",75,
 	"hgun_P07_F",20,
@@ -18,13 +20,22 @@ _costArray = [// add your entries in the format >"classname",cost<
 	"U_B_CombatUniform_mcam",15,
 	"30Rnd_762x39_Mag_F",5,
 	"30Rnd_65x39_caseless_mag",13
+*/
 ];
+_autoCalc = true; //if you want to automatically calculate the cost of the table set this to true
+// take a look into "arsenalShop\fnc\fn_autoCostTable.sqf" too. There you can adjust the cost of item groups.
+
+_lockArray = false; //determine wether the cost array can be changed during the mission
 
 /* end of config */
 
   ///////////////////////////////////////////////////////////////////////////////
  ////			 		Set up system, pls dont change 						////
 ///////////////////////////////////////////////////////////////////////////////
+// automatic cost calculation
+if (_autoCalc) then {
+	_costArray = [_costArray] call compile preprocessFileLineNumbers "arsenalShop\fnc\fn_autoCostTable.sqf";
+};
 // adjust the cost table so you can find items regardless of capitalization
 _costArray = _costArray +["",0];
 _costArray = _costArray apply {
@@ -34,7 +45,11 @@ _costArray = _costArray apply {
 		_x
 	};
 };
-TER_costArray = compileFinal str _costArray;//make unchangeable
+TER_costArray = if (_lockArray) then {
+	compileFinal str _costArray;//make unchangeable
+} else {
+	compile str _costArray;// keep changeable
+};
 // this is where the magic happens:
 TER_fnc_arsenalEH = compile preprocessFileLineNumbers "arsenalShop\ui\arsenalEH.sqf";
 TER_arsenalOpenedEHID = [missionNamespace, "arsenalOpened", TER_fnc_arsenalEH] call BIS_fnc_addScriptedEventHandler;

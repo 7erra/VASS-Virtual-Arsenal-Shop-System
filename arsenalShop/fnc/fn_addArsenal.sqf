@@ -48,7 +48,7 @@ _shopTypes = _shopTypes apply {toLower _x};
 	) then {
 		_typeFnc = switch _category do {
 			case "Equipment": {["Item","Backpack"] select (_type == "Backpack")};
-			case "Mine": {"Item"};
+			case "Mine": {"Magazine"};
 			default {_category};
 		};
 		_fncAdd = format ["BIS_fnc_%1Virtual%2Cargo",_addOrRemove,_typeFnc];
