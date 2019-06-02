@@ -1,0 +1,35 @@
+[
+	["arifle_MX_ACO_pointer_F","","acc_pointer_IR","optic_Aco",["30Rnd_65x39_caseless_mag",30],[],""],
+	[],
+	["hgun_P07_F","","","",["16Rnd_9x21_Mag",16],[],""],
+	[
+		"U_B_CombatUniform_mcam",
+		[["FirstAidKit",1],["30Rnd_65x39_caseless_mag",2,30],["Chemlight_green",1,1]]
+	],
+	[
+		"V_PlateCarrier1_rgr",
+		[["30Rnd_65x39_caseless_mag",9,30],["16Rnd_9x21_Mag",2,16],["HandGrenade",2,1],["SmokeShell",1,1],["SmokeShellGreen",1,1],["Chemlight_green",1,1]]
+	],
+	[
+		"B_AssaultPack_mcamo_Ammo",
+		[["FirstAidKit",4],["30Rnd_65x39_caseless_mag",6,30],["100Rnd_65x39_caseless_mag",1,100],["NLAW_F",1,1],["HandGrenade",2,1],["MiniGrenade",2,1],["1Rnd_HE_Grenade_shell",3,1],["3Rnd_HE_Grenade_shell",1,3],["10Rnd_338_Mag",2,10],["20Rnd_762x51_Mag",2,20]]
+	],
+	"H_HelmetB_grass",
+	"",
+	[],
+	["ItemMap","","ItemRadio","ItemCompass","ItemWatch","NVGoggles"]
+]
+
+// EX 2
+[
+	["arifle_MX_F","muzzle_snds_H","acc_pointer_IR","optic_Aco",["30Rnd_65x39_caseless_mag",30],[],"bipod_01_F_blk"],
+	["launch_NLAW_F","","","",[],[],""],
+	["hgun_Pistol_heavy_01_F","muzzle_snds_acp","acc_flashlight_pistol","",[],[],""],
+	["U_B_CombatUniform_mcam",[["FirstAidKit",1],["30Rnd_65x39_caseless_mag",2,30],["Chemlight_green",1,1],["16Rnd_9x21_Mag",1,16]]],
+	["V_PlateCarrier1_rgr",[["30Rnd_65x39_caseless_mag",9,30],["16Rnd_9x21_Mag",2,16],["HandGrenade",2,1],["SmokeShell",1,1],["SmokeShellGreen",1,1],["Chemlight_green",1,1]]],
+	["B_Bergen_mcamo_F",[]],
+	"H_HelmetB_grass",
+	"G_Aviator",
+	["Rangefinder","","","",[],[],""],
+	["ItemMap","ItemGPS","ItemRadio","ItemCompass","ItemWatch","NVGoggles"]
+]
