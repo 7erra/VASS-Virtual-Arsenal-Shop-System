@@ -1,0 +1,6 @@
+#include "VASS\gui\cfgGUI.hpp"
+
+class cfgFunctions
+{
+	#include "VASS\cfgFunctions.hpp"
+};
