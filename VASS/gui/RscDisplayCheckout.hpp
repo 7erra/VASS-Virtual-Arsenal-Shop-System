@@ -61,7 +61,7 @@ class TER_VASS_RscCheckout: VASS_RscControlsGroupNoScrollbars
 			idc = IDC_RSCDISPLAYCHECKOUT_LNBHEADERITEMS;
 			disableOverflow = true;
 			x = -10.5 * GUI_GRID_W + 0.5 * safeZoneW;
-			y = -9.4 * GUI_GRID_H + 0.5 * safeZoneH
+			y = -9.4 * GUI_GRID_H + 0.5 * safeZoneH;
 			w = 21 * GUI_GRID_W;
 			h = 1 * GUI_GRID_H;
 			columns[] = {-0.01, 0.08, 0.15, 0.65, 0.8};
@@ -69,7 +69,7 @@ class TER_VASS_RscCheckout: VASS_RscControlsGroupNoScrollbars
 		class LnbItemsAdded: LnbItemsAddedHeader
 		{
 			idc = IDC_RSCDISPLAYCHECKOUT_LNBITEMSADDED;
-			y = -8.4 * GUI_GRID_H + 0.5 * safeZoneH
+			y = -8.4 * GUI_GRID_H + 0.5 * safeZoneH;
 			h = 15.8 * GUI_GRID_H;
 		};
 		class LnbItemsRemoved: LnbItemsAdded
@@ -82,7 +82,7 @@ class TER_VASS_RscCheckout: VASS_RscControlsGroupNoScrollbars
 			idc = IDC_RSCDISPLAYCHECKOUT_BTNBUY;
 			text = "BUY"; //--- ToDo: Localize;
 			x = -10.5 * GUI_GRID_W + 0.5 * safeZoneW;
-			y = 9.6 * GUI_GRID_H + 0.5 * safeZoneH
+			y = 9.6 * GUI_GRID_H + 0.5 * safeZoneH;
 			w = 9.5 * GUI_GRID_W;
 			h = 1 * GUI_GRID_H;
 		};
@@ -91,7 +91,7 @@ class TER_VASS_RscCheckout: VASS_RscControlsGroupNoScrollbars
 			idc = IDC_RSCDISPLAYCHECKOUT_BTNRETURN;
 			text = "RETURN"; //--- ToDo: Localize;
 			x = 1 * GUI_GRID_W + 0.5 * safeZoneW;
-			y = 9.6 * GUI_GRID_H + 0.5 * safeZoneH
+			y = 9.6 * GUI_GRID_H + 0.5 * safeZoneH;
 			w = 9.5 * GUI_GRID_W;
 			h = 1 * GUI_GRID_H;
 		};
@@ -99,7 +99,7 @@ class TER_VASS_RscCheckout: VASS_RscControlsGroupNoScrollbars
 		{
 			idc = IDC_RSCDISPLAYCHECKOUT_STXTMONEY;
 			x = -10.5 * GUI_GRID_W + 0.5 * safeZoneW;
-			y = 7.5 * GUI_GRID_H + 0.5 * safeZoneH
+			y = 7.5 * GUI_GRID_H + 0.5 * safeZoneH;
 			w = 21 * GUI_GRID_W;
 			h = 2 * GUI_GRID_H;
 		};
