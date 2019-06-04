@@ -1,0 +1,14 @@
+name = "Virtual Arsenal Shop System - 3den Editor";
+picture = "VASS.paa";
+actionName = "BI Forum";
+action = "https://forums.bohemia.net/forums/topic/219677-release-virtual-arsenal-shop-system/";
+description = "Bugtracker: https://github.com/CBATeam/CBA_A3/issues<br />Documentation: https://cbateam.github.io/CBA_A3/docs/files/overview-txt.html";
+logo = "VASS.paa";
+logoOver = "VASS.paa";
+tooltip = "Virtual Arsenal Shop System";
+tooltipOwned = "Virtual Arsenal Shop System";
+overview = "The script converts the arsenal into a shop with prices and money handling. This addon enables you to create your own mission with this system without the need for script knowledge.";
+author = "7erra";
+overviewPicture = "VASS.paa";
+overviewText = "";
+overviewFootnote = "";
