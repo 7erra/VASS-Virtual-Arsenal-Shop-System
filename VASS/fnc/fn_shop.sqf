@@ -291,7 +291,7 @@ switch _mode do {
 					_ctrlList lnbSetValue [[_row, COL_COUNT], 0];
 					_ctrlList lnbSetValue [[_row, COL_STARTCOUNT], _startAmount];*/
 					//_ctrlList lnbSetText [[_row, COL_COUNT], format ["%1/%2", _startAmount, _startAmount + _itemMax]];
-					_ctrlList lnbSetText [[_row, _newColumn], format ["%1$", _itemCost]];
+					_ctrlList lnbSetText [[_row, _newColumn], format ["%1$", [_itemCost] call BIS_fnc_numberText]];
 					_ctrlList lnbSetColor [[_row,_newColumn], MONEYGREEN];
 				};
 			} else {
@@ -307,7 +307,7 @@ switch _mode do {
 						_curText = _ctrlList lbText _row;
 						_text = [format ["%2", _itemAmount, _curText], _curText] select (_itemAmount isEqualTo true);// TODO: Find way to display item amount
 						_ctrlList lbSettext [_row, _text];
-						_ctrlList lbSetTextRight [_row,format ["%1$", _itemCost]];
+						_ctrlList lbSetTextRight [_row,format ["%1$", [_itemCost] call BIS_fnc_numberText]];
 						_ctrlList lbSetColorRight [_row, MONEYGREEN];
 						_ctrlList lbsetvalue [_row, _itemCost];
 					} else {
@@ -1032,7 +1032,7 @@ switch _mode do {
 								_displayName = gettext (_cfgMag >> "displayName");
 								([TER_VASS_shopObject, _mag] call TER_fnc_getItemValues) params ["","_itemCost","_itemMax"];
 								_text = if (_itemMax isEqualType true) then {str _value} else { format ["%1|%2", _value, _itemMax - ([_mag] call _fncCurAdd)] };
-								_lbAdd = _ctrlList lnbaddrow ["", _displayName, _text, format ["%1$", _itemCost]];
+								_lbAdd = _ctrlList lnbaddrow ["", _displayName, _text, format ["%1$", [_itemCost] call BIS_fnc_numberText]];
 								_ctrlList lnbSetColor [[_lbAdd,3],MONEYGREEN];
 								_ctrlList lnbsetdata [[_lbAdd,0],_mag];
 								_ctrlList lnbsetvalue [[_lbAdd,0],getnumber (_cfgMag >> "mass")];
@@ -1057,7 +1057,7 @@ switch _mode do {
 										_displayName = gettext (_cfgMag >> "displayName");
 										([TER_VASS_shopObject, _mag] call TER_fnc_getItemValues) params ["","_itemCost","_itemMax"];
 										_text = if (_itemMax isEqualType true) then {str _value} else { format ["%1|%2", _value, _itemMax - ([_mag] call _fncCurAdd)] };
-										_lbAdd = _ctrlList lnbaddrow ["", _displayName, _text, format ["%1$", _itemCost]];
+										_lbAdd = _ctrlList lnbaddrow ["", _displayName, _text, format ["%1$", [_itemCost] call BIS_fnc_numberText]];
 										_ctrlList lnbSetColor [[_lbAdd,3],MONEYGREEN];
 										_ctrlList lnbsetdata [[_lbAdd,0],_mag];
 										_ctrlList lnbsetvalue [[_lbAdd,0],getnumber (_cfgMag >> "mass")];
@@ -1147,7 +1147,7 @@ switch _mode do {
 					if (_ctrlList lbPictureRight _lbAdd == "") then {
 						_ctrlList lbSetPictureRight [_lbAdd,"\a3\ui_f\data\igui\cfg\targeting\empty_ca.paa"];
 					};
-					_ctrlList lbSetTextRight [_lbAdd,format ["%1$", _itemCost]];
+					_ctrlList lbSetTextRight [_lbAdd,format ["%1$", [_itemCost] call BIS_fnc_numberText]];
 					_ctrlList lbSetColorRight [_lbAdd, MONEYGREEN];
 					// MODDED*/
 				};
@@ -1450,7 +1450,7 @@ switch _mode do {
 		_tWhite = "#FFFFFF"; // respect
 		//--- Funds
 		_funds = with missionnamespace do {["getMoney",[_center]] call TER_fnc_VASShandler};
-		_fundsText = format ["<t align='left' color='#00FF00'>%1$</t>",_funds];
+		_fundsText = format ["<t align='left' color='#00FF00'>%1$</t>",[_funds] call BIS_fnc_numberText];
 		//--- Costs
 		_cost = _display getVariable ["shop_cost",0];
 		_cost = _cost +_addCost;
@@ -1458,13 +1458,13 @@ switch _mode do {
 		_tColor = [_tGreen,_tRed] select (_cost > 0);
 		_sign = ["+","-"] select (_cost > 0);
 		if (_cost == 0) then {_tColor = _tWhite; _sign = "";};
-		_costText = format ["<t align='center' color='%2'>%3%1$</t>",abs _cost,_tColor,_sign];
+		_costText = format ["<t align='center' color='%2'>%3%1$</t>",[abs _cost] call BIS_fnc_numberText,_tColor,_sign];
 		//--- Difference
 		_diff = _funds -_cost;
 		_tColor = [_tGreen,_tRed] select (_diff < 0);
 		_sign = ["+","-"] select (_diff < 0);
 		if (_diff == 0) then {_tColor = _tWhite; _sign = "";};
-		_diffText = format ["<t align='right' color='%2'>%3%1$",abs _diff,_tColor,_sign];
+		_diffText = format ["<t align='right' color='%2'>%3%1$",[abs _diff] call BIS_fnc_numberText,_tColor,_sign];
 
 		_ctrlButtonInterface = _display displayCtrl IDC_RSCDISPLAYARSENAL_CONTROLSBAR_BUTTONINTERFACE;
 		_ctrlButtonInterface ctrlSetStructuredText parseText ([_fundsText,_costText,_diffText] joinString "");

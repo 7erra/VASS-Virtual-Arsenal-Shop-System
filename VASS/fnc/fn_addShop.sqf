@@ -63,5 +63,11 @@ _actionID = _object addAction [_title,{
 	["Open",[nil,_object,_caller]] call bis_fnc_arsenal;
 }, [], _priority, true, true, "", _condition, _radius];
 _object setVariable ["TER_VASS_actionID",_actionId];
+//--- Update shops array but only if the shop hasnt been added yet
+if (isNil "TER_VASS_allShops") then {
+	TER_VASS_allShops = [];
+};
+_newInd = TER_VASS_allShops pushBackUnique _object;
+if (_newInd >= 0) then {publicVariable "TER_VASS_allShops";};
 _actionID
 

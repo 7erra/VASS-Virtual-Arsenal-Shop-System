@@ -67,7 +67,7 @@ for "_i" from 2 to (count _newCargo -1) step 3 do {
 };
 
 if (isNil {_object getVariable "TER_VASS_cargo_default"}) then {
-	_object setVariable ["TER_VASS_cargo_default",_returnCargo];
+	_object setVariable ["TER_VASS_cargo_default",_returnCargo, _global];
 };
-_object setVariable ["TER_VASS_cargo",_returnCargo];
+_object setVariable ["TER_VASS_cargo",_returnCargo, _global];
 _returnCargo
