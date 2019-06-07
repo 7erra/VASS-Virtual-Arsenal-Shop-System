@@ -29,7 +29,7 @@ switch _mode do {
 		*/
 		params ["_unit"];
 		/* EXAMPLE */
-		_unit getVariable ["TER_money", 0]
+		rating _unit
 	};
 	case "setMoney":{
 		/*
@@ -45,7 +45,6 @@ switch _mode do {
 		*/
 		params ["_unit", "_change"];
 		/* EXAMPLE */
-		private _curMoney = _unit getVariable ["TER_money", 0];
-		_unit setVariable ["TER_money", _curMoney + _change];
+		_unit addRating _change;
 	};
 };
