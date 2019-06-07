@@ -19,7 +19,7 @@
 	NUMBER - ID of the action, alos saved as "TER_VASS_actionID" on the object.
 */
 
-params [ "_object", ["_title","Shop"], ["_priority",1.5], ["_condition","alive _this && alive _object"], ["_radius",5] ];
+params [ "_object", ["_title","Shop"], ["_priority",1.5], ["_condition","alive _this && alive _target"], ["_radius",5] ];
 _actionID = _object getVariable ["TER_VASS_actionID",-1];
 if (_actionID > -1) then {_object removeAction _actionID};
 _actionID = _object addAction [_title,{
