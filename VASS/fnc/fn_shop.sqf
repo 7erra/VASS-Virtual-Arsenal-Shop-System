@@ -250,6 +250,13 @@ switch _mode do {
 		//--- New checkout controlsgroup
 		_ctrlCheckout = _display ctrlCreate ["TER_VASS_RscCheckout", IDC_RSCDISPLAYCHECKOUT_CHECKOUT];
 		_ctrlCheckout ctrlEnable false;
+		/*
+		//--- Credit button
+		_ctrlCredit = _display displayCtrl IDC_RSCDISPLAYARSENAL_CONTROLSBAR_BUTTONOK;
+		_ctrlCredit ctrlSetStructuredText parseText "<t align='right'>VASS</t>";
+		_ctrlCredit ctrlEnable true;
+		_ctrlCredit ctrlRemoveAllEventHandlers "buttonclick";
+		*/
 
 		//--- Control EHs
 		_ctrlArrowLeft = _display displayctrl IDC_RSCDISPLAYARSENAL_ARROWLEFT;
@@ -360,7 +367,7 @@ switch _mode do {
 		_item = _ctrlList lnbdata [_lbcursel,0];
 		if !(tolower _item in (TER_VASS_shopObject getVariable ["TER_VASS_cargo",[]])) exitWith {
 			playSound "addItemFailed";
-			["showMessage", [_display, "The shop does not buy this item."]] call bis_fnc_arsenal;
+			["showMessage", [_display, "The shop does not have this item."]] call bis_fnc_arsenal;
 		};
 		_load = 0;
 		_items = [uniformItems _center, vestItems _center, backpackitems _center] select (_selected - IDC_RSCDISPLAYARSENAL_TAB_UNIFORM);
@@ -1445,26 +1452,31 @@ switch _mode do {
 		if (count _changedItems != 0) then {
 			_changedItems apply {_addCost = _addCost + _mp * ([TER_VASS_shopObject, _x, 1] call TER_fnc_getItemValues)};
 		};
-		_tRed = "#FF0000";
-		_tGreen = "#00FF00";
-		_tWhite = "#FFFFFF"; // respect
+		_fncTparams = {
+			// Okay story time. I was trying to figure out why the minus sign wasnt getting displayed even though every other symbol did. This was especially weird since the same code would work on another display and also worked just yesterday. I tried different approaches for nearly half an hour. End of the story: The resolution in windowed mode was so low that the "-" symbol didn't take up one single pixel in height... FML
+			params ["_money", "_align"];
+			_tMoney = [abs _money] call BIS_fnc_numberText;
+			_tRed = "#FF0000";
+			_tGreen = "#00FF00";
+			_tWhite = "#FFFFFF"; // respect
+			_tCond = _money < 0;
+			_tColor = [_tGreen, _tRed] select _tCond;
+			_tSign = ["+","-"] select _tCond;
+			if (_money == 0) then {_tColor = _tWhite; _tSign = "";};
+			_tReturn = format ["<t align='%1' color='%2'>%3%4$</t>", _align, _tColor, _tSign, _tMoney];
+			_tReturn
+		};
 		//--- Funds
 		_funds = with missionnamespace do {["getMoney",[_center]] call TER_fnc_VASShandler};
-		_fundsText = format ["<t align='left' color='#00FF00'>%1$</t>",[_funds] call BIS_fnc_numberText];
+		_fundsText = [_funds, "left"] call _fncTparams;
 		//--- Costs
 		_cost = _display getVariable ["shop_cost",0];
 		_cost = _cost +_addCost;
 		_display setVariable ["shop_cost",_cost];
-		_tColor = [_tGreen,_tRed] select (_cost > 0);
-		_sign = ["+","-"] select (_cost > 0);
-		if (_cost == 0) then {_tColor = _tWhite; _sign = "";};
-		_costText = format ["<t align='center' color='%2'>%3%1$</t>",[abs _cost] call BIS_fnc_numberText,_tColor,_sign];
+		_costText = [-_cost, "center"] call _fncTparams;
 		//--- Difference
-		_diff = _funds -_cost;
-		_tColor = [_tGreen,_tRed] select (_diff < 0);
-		_sign = ["+","-"] select (_diff < 0);
-		if (_diff == 0) then {_tColor = _tWhite; _sign = "";};
-		_diffText = format ["<t align='right' color='%2'>%3%1$",[abs _diff] call BIS_fnc_numberText,_tColor,_sign];
+		_diff = _funds -_cost;Text = format ["<t align='right' color='%2'>%3%1$", _tCost, _tColor, _sign];
+		_diffText = [_diff, "right"] call _fncTparams;
 
 		_ctrlButtonInterface = _display displayCtrl IDC_RSCDISPLAYARSENAL_CONTROLSBAR_BUTTONINTERFACE;
 		_ctrlButtonInterface ctrlSetStructuredText parseText ([_fundsText,_costText,_diffText] joinString "");

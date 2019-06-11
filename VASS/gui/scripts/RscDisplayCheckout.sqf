@@ -78,25 +78,29 @@ switch _mode do {
 
 		//--- Money info
 		_stxtMoney = _grpCheckout controlsGroupCtrl IDC_RSCDISPLAYCHECKOUT_STXTMONEY;
-		_tRed = "#FF0000";
-		_tGreen = "#00FF00";
-		_tWhite = "#FFFFFF"; // respect
+		_fncTparams = {
+			params ["_money", "_align"];
+			_tMoney = [abs _money] call BIS_fnc_numberText;
+			_tRed = "#FF0000";
+			_tGreen = "#00FF00";
+			_tWhite = "#FFFFFF"; // respect
+			_tCond = _money < 0;
+			_tColor = [_tGreen, _tRed] select _tCond;
+			//_tSign = ["+","-"] select _tCond;// for some fucking reason the minus sign doesnt get displayed EVERY OTHER WORKS!!!
+			_tSign = "";
+			if (_money == 0) then {_tColor = _tWhite; _tSign = "";};
+			//if (_money > 0) then {_tSign = "+"};
+			format ["<t align='%1' color='%2'>%3%4$</t>", _align, _tColor, _tSign, _tMoney]
+		};
 		//--- Funds
 		_funds = with missionnamespace do {["getMoney",[_center]] call TER_fnc_VASShandler};
-		_fundsText = format ["<t align='left' color='#00FF00'>%1$</t>",_funds];
+		_fundsText = [_funds, "left"] call _fncTparams;
 		//--- Costs
 		_cost = _displayArsenal getVariable ["shop_cost",0];
-		_grpCheckout setVariable ["shop_cost",_cost];
-		_tColor = [_tGreen,_tRed] select (_cost > 0);
-		_sign = ["+","-"] select (_cost > 0);
-		if (_cost == 0) then {_tColor = _tWhite; _sign = "";};
-		_costText = format ["<t align='center' color='%2'>%3%1$</t>",abs _cost,_tColor,_sign];
+		_costText = [-_cost, "center"] call _fncTparams;
 		//--- Difference
 		_diff = _funds -_cost;
-		_tColor = [_tGreen,_tRed] select (_diff < 0);
-		_sign = ["+","-"] select (_diff < 0);
-		if (_diff == 0) then {_tColor = _tWhite; _sign = "";};
-		_diffText = format ["<t align='right' color='%2'>%3%1$",abs _diff,_tColor,_sign];
+		_diffText = [_diff, "right"] call _fncTparams;
 
 		_topLine = "<t align='left'>Current</t><t align='center'>Cost</t><t align='right'>Difference</t>";
 		_stxtMoney ctrlSetStructuredText composeText [parsetext _topLine,lineBreak,parsetext _fundsText,parsetext _costText,parsetext _diffText];
@@ -129,11 +133,12 @@ switch _mode do {
 	};
 	case "btnBuy":{
 		params ["_btnBuy"];
+		_center = (missionnamespace getvariable ["BIS_fnc_arsenal_center",player]);
 		_grpCheckout = ctrlParentControlsGroup _btnBuy;
 		_displayArsenal = ctrlParent _grpCheckout;
 		_cost = _displayArsenal getVariable "shop_cost";
 		//--- Update player's money
-		with missionnamespace do {["setMoney",[_center]] call TER_fnc_VASShandler};
+		with missionnamespace do {["setMoney",[_center, -_cost]] call TER_fnc_VASShandler};
 		//--- Update shop inventory
 		_cargo = TER_VASS_shopObject getVariable ["TER_VASS_cargo",[]];
 		_cargo = [0,-1] + _cargo;// if an item is not in the cargo these values will be used
