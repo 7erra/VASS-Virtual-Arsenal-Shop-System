@@ -1475,7 +1475,7 @@ switch _mode do {
 		_display setVariable ["shop_cost",_cost];
 		_costText = [-_cost, "center"] call _fncTparams;
 		//--- Difference
-		_diff = _funds -_cost;Text = format ["<t align='right' color='%2'>%3%1$", _tCost, _tColor, _sign];
+		_diff = _funds -_cost;
 		_diffText = [_diff, "right"] call _fncTparams;
 
 		_ctrlButtonInterface = _display displayCtrl IDC_RSCDISPLAYARSENAL_CONTROLSBAR_BUTTONINTERFACE;
