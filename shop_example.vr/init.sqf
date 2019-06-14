@@ -1,6 +1,6 @@
 // This script can be ignored its only purpose is to clarifiy things ingame
 waituntil {time > 1};
-if (isclass (configfile >> "CfgPatches" >> "TER_VASS")) then {
+if !(isclass (configfile >> "CfgPatches" >> "TER_VASS")) then {
     hintc "You don't have the @VASS mod loaded! The mission just got compromised and is not functional anymore because all 3den attributes were deleted. Please load the mod and download the mission again.";
 };
 [missionnamespace, "arsenalOpened",{
