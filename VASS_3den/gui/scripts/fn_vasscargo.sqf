@@ -18,14 +18,22 @@
 #define SELF TER_fnc_vasscargo
 
 _fncSetCargo = {
-	private _findInd = TER_VASS_3den_tempCargo findIf {_x isEqualTo (_this#0)};
-	if (_findInd < 0) then {_findInd = count TER_VASS_3den_tempCargo};
-	if ((_this#2) isEqualTo false) then {_this = [nil,nil,nil]};
-	for "_i" from 0 to 2 do {
-		TER_VASS_3den_tempCargo set [_findInd+_i, _this#_i];
+	params ["_grp","_class","_price","_amount"];
+	_edCargoArray = _grp controlsgroupctrl IDC_VASSCARGO_EDCARGOARRAY;
+	private _cargo = if (ctrltext _edCargoArray == "") then {[]} else {call compile ctrltext _edCargoArray};
+	private _findInd = _cargo findIf {_x isEqualTo _class};
+	if (_findInd < 0) then {_findInd = count _cargo};
+	if (_amount isEqualTo false) then {
+		_class = nil;
+		_price = nil;
+		_amount = nil;
 	};
-	TER_VASS_3den_tempCargo = TER_VASS_3den_tempCargo select {!isNil "_x"};
-	TER_VASS_3den_tempCargo = TER_VASS_3den_tempCargo apply {if (_x isEqualType "") then {toLower _x} else {_x}};
+	_cargo set [_findInd+0, _class];
+	_cargo set [_findInd+1, _price];
+	_cargo set [_findInd+2, _amount];
+	_cargo = _cargo select {!isNil "_x"};
+	_cargo = _cargo apply {if (_x isEqualType "") then {toLower _x} else {_x}};
+	["attributeLoad",[_grp, str _cargo]] call SELF;
 };
 params ["_mode","_this"];
 _box = get3DENSelected "object" param [0,objNull];
@@ -37,9 +45,14 @@ switch _mode do {
 			uiNamespace setVariable ["TER_fnc_vasscargo", TER_fnc_vasscargo];
 		};
 		//--- Init UI
+		_toolView = _grp controlsgroupctrl IDC_VASSCARGO_TOOLVIEW;
+		_btnImport = _grp controlsgroupctrl IDC_VASSCARGO_BTNIMPORT;
 		_btnExport = _grp controlsGroupCtrl IDC_VASSCARGO_BTNEXPORT;
+		_edCargoArray = _grp controlsgroupctrl IDC_VASSCARGO_EDCARGOARRAY;
 		_toolFilter = _grp controlsGroupCtrl IDC_VASSCARGO_TOOLFILTER;
 		_lnbCargo = _grp controlsGroupCtrl IDC_VASSCARGO_LNBCARGO;
+		_txtValidate = _grp controlsgroupctrl IDC_VASSCARGO_TXTVALIDATE;
+		_btnValidate = _grp controlsgroupctrl IDC_VASSCARGO_BTNVALIDATE;
 		_btnClear = _grp controlsGroupCtrl IDC_VASSCARGO_BTNCLEAR;
 		_edPrice = _grp controlsGroupCtrl IDC_VASSCARGO_EDPRICE;
 		_btnMinus = _grp controlsGroupCtrl IDC_VASSCARGO_BTNMINUS;
@@ -51,15 +64,19 @@ switch _mode do {
 		//--- Get current cargo
 		_3denCargo = (_box get3DENAttribute "TER_VASS_cargo") param [0,"[]"];
 		if (_3denCargo isEqualType true) then {_3denCargo = "[]";};
-		uiNamespace setVariable ["TER_VASS_3den_tempCargo",parseSimpleArray _3denCargo];
+		//uiNamespace setVariable ["TER_VASS_3den_tempCargo",parseSimpleArray _3denCargo];
 		//--- Preload arsenal for items
 		if (isNil {uiNamespace getVariable "TER_VASS_preloadCargo"}) then {
 			["Preload"] call BIS_fnc_arsenal;
 			uiNamespace setVariable ["TER_VASS_preloadCargo",bis_fnc_arsenal_data];
 		};
-		//--- Export button
-		_btnExport ctrlAddEventHandler ["ButtonClick",{
-			with uiNamespace do {["export",_this] call SELF};
+		//--- View toolbox
+		_toolView ctrladdeventhandler ["ToolBoxSelChanged",{
+			with uinamespace do {["changeView",_this] call SELF};
+		}];
+		//--- Array editbox
+		_edCargoArray ctrladdeventhandler ["KeyDown",{
+			with uinamespace do {["keyCargoArray",_this] call SELF};
 		}];
 		//--- Toolbox filter
 		_toolFilter ctrlAddEventHandler ["ToolBoxSelChanged",{
@@ -72,6 +89,10 @@ switch _mode do {
 		}];
 		(ctrlParent _grp) displayAddEventHandler ["KeyDown",{// Prevent control from getting unfocused when using the arrow keys
 			with uiNamespace do {["keylnb",[vasscargo_grp] +_this] call SELF};
+		}];
+		//--- Validate button
+		_btnValidate ctrladdeventhandler ["ButtonClick",{
+			with uinamespace do {["validate",_this] call SELF};
 		}];
 		//--- Clear button
 		_btnClear ctrlAddEventHandler ["ButtonClick",{
@@ -88,83 +109,45 @@ switch _mode do {
 		_btnMinus ctrlAddEventHandler ["ButtonClick",{
 			with uiNamespace do {["amount",[ctrlParentControlsGroup (_this#0),-1]] call SELF;};
 		}];
-		//--- Preset combo
-		//--- Go through all units to get the gear and faction
-		_factionFilter = uinamespace getVariable ["TER_VASS_factionFilter",[]];
-		if (count _factionFilter == 0) then {
-			_allUnitsCfg = "
-				getnumber (_x >> 'scope') == 2 &&
-				configname _x iskindof 'Man'
-			" configclasses (configfile >> "CfgVehicles");
-			//--- Faction filter will have format ["faction0", [classes0], "faction1", [classes1], ...]
-			{
-				_unitCfg = _x;
-				_unitClass = configname _x;
-				_unitFaction = tolower gettext(_x >> "faction");
-
-				private ["_curFilter","_indFilter"];
-				_factionInd = _factionFilter find _unitFaction;
-				if (_factionInd == -1) then {
-					_newInd = _factionFilter pushback _unitFaction;
-					_indFilter = _newInd +1;
-					_curFilter = [];
-				} else {
-					_indFilter = _factionInd +1;
-					_curFilter = _factionFilter select _indFilter;
-				};
-
-				_loadout = getunitloadout _unitCfg;
-				//--- _wXXX = weapon, _cXXX = container
-				_loadout params ["_wPrimary","_wSecondary","_wHandgun","_cUniform","_cVest","_cBackpack","_helmet","_facewear","_wBinocular","_itemsAssigned"];
-				_weapons = [_wPrimary, _wSecondary, _wHandgun, _wBinocular];
-				_weaponClasses = _weapons apply {[_x#0] call BIS_fnc_baseWeapon};
-				_accClasses = [];
-				_weapons apply {_accClasses append [_x param [1,""], _x param [2,""], _x param [3,""], _x param [6,""]]};
-				_cBackpack set [0, _cBackpack#0 call BIS_fnc_basicBackpack];
-				_containers = [_cUniform, _cVest, _cBackpack];
-				_containerClasses = _containers apply {_x param [0, ""]};
-				_itemClasses = [];
-				_containers apply {_itemClasses append (_x param [1,[]])};
-				_itemClasses = _itemClasses apply {_x param [0,""]};
-				_itemClasses = _itemClasses -[nil]; // no magazines
-				_otherClasses = [_helmet, _facewear] +_itemsAssigned;
-
-				{
-					if (_x isequaltype "") then {_curFilter pushbackunique tolower _x};
-				} foreach (_weaponClasses + _accClasses + _containerClasses + _itemClasses + _otherClasses);
-				_curFilter = _curFilter -[""];
-				_factionFilter set [_indFilter, _curFilter];
-			} foreach _allUnitsCfg;
-			uinamespace setVariable ["TER_VASS_factionFilter",_factionFilter];
-		};
-
-		_factionCfgs = [];
-		for "_i" from 0 to (count _factionFilter -1) step 2 do {
-			if (count (_factionFilter#(_i+1)) > 0) then {
-				_factionCfgs pushback (configfile >> "CfgFactionClasses" >> (_factionFilter#_i));
-			};
-		};
-		_comboPreset lbadd " NO FILTER";
-		_comboPreset lbsetcursel 0;
-		{
-			_sideID = getnumber (_x >> "side");
-			private _ind = _comboPreset lbadd format ["%1 (Cfg: %2, side: %3)", gettext (_x >> "displayname"),configname _x, _sideID call BIS_fnc_sideType];
-			_comboPreset lbsetvalue [_ind, _sideID];
-			_comboPreset lbsetdata [_ind, tolower configname _x];
-		} forEach _factionCfgs;
-		lbsortbyvalue _comboPreset;
-		_comboPreset ctrlAddEventHandler ["LBSelChanged",{
-			with uiNamespace do {["presetChange",_this] call SELF;};
-		}];
 	};
-	case "export":{
-		//_att = (_box get3DENAttribute "TER_VASS_cargo")#0;
-		copyToClipboard str TER_VASS_3den_tempCargo;
+	case "changeView":{
+		params ["_toolView", "_ind"];
+		_grp = ctrlparentcontrolsgroup _toolView;
+		_toolFilter = _grp controlsgroupctrl IDC_VASSCARGO_TOOLFILTER;
+		_guiIDCs = [IDC_VASSCARGO_TOOLFILTER, IDC_VASSCARGO_LNBCARGO, IDC_VASSCARGO_EDPRICE, IDC_VASSCARGO_BTNCLEAR, IDC_VASSCARGO_STATICLISTBACKGROUND, IDC_VASSCARGO_TITLEPRICE];
+		_arrayIDCs = [IDC_VASSCARGO_GRPCARGOARRAY,IDC_VASSCARGO_TXTVALIDATE,IDC_VASSCARGO_BTNVALIDATE];
+		_guiFade = _ind == 1;
+		_arrayFade = _ind == 0;
+		{
+			_x apply {
+				_enable = [_guiFade, _arrayFade] select _foreachindex;
+				_ctrl = _grp controlsgroupctrl _x;
+				_ctrl ctrlenable !_enable;
+				_ctrl ctrlsetfade parseNumber _enable;
+				_ctrl ctrlcommit 0;
+			};
+		} forEach [_guiIDCs, _arrayIDCs];
+
+		if (_arrayFade) then {
+			//--- Return to gui editing, update
+			["filterChanged",[_toolFilter, lbcursel _toolFilter]] call SELF;
+		};
+	};
+	case "keyCargoArray":{
+		params ["_edCargoArray", "_key", "_shift", "_ctrl", "_alt"];
+		_text = ctrltext _edCargoArray;
+		_lasttext = _edCargoArray getVariable ["lasttext",""];
+		if (_lasttext == _text) exitWith {};
+		_edCargoArray setVariable ["lasttext",_text];
+		["scaleEdit",[_edCargoArray]] call SELF;
 	};
 	case "filterChanged":{
 		params ["_toolFilter","_ind"];
 		_grp = ctrlparentcontrolsgroup _toolFilter;
 		_comboPreset = _grp controlsgroupctrl IDC_VASSCARGO_COMBOPRESETS;
+		_edCargoArray = _grp controlsgroupctrl IDC_VASSCARGO_EDCARGOARRAY;
+		private _cargo = ctrltext _edCargoArray;
+		if (count _cargo == 0) then {_cargo = []} else {_cargo = call compile _cargo};
 		_itemsLNB = [];
 		_tab = 0;
 		_types = [];
@@ -225,7 +208,7 @@ switch _mode do {
 			};
 			default {
 				//--- Get currently loaded items
-				_itemsLNB = TER_VASS_3den_tempCargo select {_x isEqualType ""};
+				_itemsLNB = _cargo select {_x isEqualType ""};
 			};
 		};
 		if (count _itemsLNB == 0) then {
@@ -252,6 +235,7 @@ switch _mode do {
 		};
 		_itemsLNB = (_itemsLNB +_mags) apply {tolower _x};
 		//--- Apply filter which was set in the combobox
+		/*
 		if (_ind != 0) then {
 			_filterFaction = _comboPreset lbdata (lbcursel _comboPreset);
 			_factionInd = TER_VASS_factionFilter find _filterFaction;
@@ -260,7 +244,8 @@ switch _mode do {
 				_itemsLNB = _itemsLNB select {_x in _filterFaction};
 			};
 		};
-		_findCargo = [0,-2] +TER_VASS_3den_tempCargo;
+		*/
+		_findCargo = [0,-2] +_cargo;
 		// EXPLANATION: The price and amount of the item comes always +1 (+2) after the items class name. If the item is not in the array the "findIf" command returns -1. Adding 1 leads to 0 (+2 = 1). Setting the first two array items as 0 and -1 therefore assigns default values
 		{
 			_class = _x;
@@ -272,7 +257,8 @@ switch _mode do {
 				if (isClass (_testCfg >> _class)) exitWith {_testCfg >> _class};
 				configNull
 			} forEach ["CfgWeapons","CfgMagazines","CfgGlasses","CfgVehicles"];
-			_displayName = getText (_cfg>>"displayName");
+			_displayName = [_cfg] call BIS_fnc_displayName;
+			if (_displayName == "") then {_displayName = _class};
 			_pic = gettext (_cfg >> "picture");
 			//_symbol = [str _amount, "-", SYMBOL_VIRTUAL_1] select ([0,-1,-2] findIf {_amount > _x});
 			_symbol = if (_amount isEqualTo true) then {
@@ -310,23 +296,46 @@ switch _mode do {
 			case DIK_RIGHTARROW: {+1};
 			default {0};
 		};
-		if (_change == 0) exitWith {false};
+		if (_change == 0 OR !ctrlenabled _lnbCargo) exitWith {false};
 		if (_ctrl) then {_change = _change * 5};
 		["amount",[_grp, _change]] call SELF;
 		true
+	};
+	case "validate":{
+		params ["_btnValidate"];
+		_grp = ctrlparentcontrolsgroup _btnValidate;
+		_txtValidate = _grp controlsgroupctrl IDC_VASSCARGO_TXTVALIDATE;
+		_edCargoArray = _grp controlsgroupctrl IDC_VASSCARGO_EDCARGOARRAY;
+		//--- Go through array and compare format:
+		_cargo = call compile ctrlText _edCargoArray;
+		if !(_cargo isequaltype [] OR isNil "_cargo") exitwith {_txtValidate ctrlsetstructuredtext parsetext "<t color='#CC0000'>ERROR: Not an array"};
+		_message = "<t color='#00CC00'>Array is valid";
+		for "_i" from 0 to (count _cargo -1) step 3 do {
+			_class = _cargo param [_i+0, nil];
+			_price = _cargo param [_i+1, nil];
+			_amount = _cargo param [_i+2, nil];
+			if !(_class isequaltype "") exitwith {_message = format ["<t color='#CC0000'>Class is not a string (Position: %1, %2)",_i,str _class]};
+			if (isnil "_price") exitwith {_message = format ["<t color='#CC0000'>(%1) Price not defined",_class]};
+			if !(_price isequaltype 0) exitwith {_message = format ["<t color='#CC0000'>%1: Price not a number (%2)",_class,str _price]};
+			if (isnil "_amount") exitwith {_message = format ["<t color='#CC0000'>(%1) Amount not defined",_class]};
+			if !(_amount isequaltypeany [0,true]) exitwith {_message = format ["<t color='#CC0000'>ERROR: %1: Amount not a number/boolean (%2)",_class,str _amount]};
+		};
+		_txtValidate ctrlsetstructuredtext parsetext _message;
 	};
 	case "clear":{
 		params ["_btnClear"];
 		_grp = ctrlParentControlsGroup _btnClear;
 		_toolFilter = _grp controlsGroupCtrl IDC_VASSCARGO_TOOLFILTER;
-		TER_VASS_3den_tempCargo = [];
+		_edCargoArray = _grp controlsgroupctrl IDC_VASSCARGO_EDCARGOARRAY;
+		_edCargoArray ctrlsettext "[]";
 		["filterChanged",[_toolFilter, lbCurSel _toolFilter]] call SELF;
 	};
 	case "priceChange":{
 		params ["_edPrice", "_key", "_shift", "_ctrl", "_alt"];
+		_grp = ctrlparentcontrolsgroup _edPrice;
 		if (_edPrice getVariable ["lastText",""] == ctrlText _edPrice) exitWith {};
 		_edPrice setVariable ["lastText",ctrlText _edPrice];
-		_lnbCargo = (ctrlParentControlsGroup _edPrice) controlsGroupCtrl IDC_VASSCARGO_LNBCARGO;
+		_lnbCargo = _grp controlsGroupCtrl IDC_VASSCARGO_LNBCARGO;
 		_class = _lnbCargo lnbData [lnbCurSelRow _lnbCargo, 0];
 		_price = parseNumber ctrltext _edPrice;
 		_amount = _lnbCargo lnbValue [lnbCurSelRow _lnbCargo, 3];
@@ -334,7 +343,7 @@ switch _mode do {
 		_colPrice = [lnbCurSelRow _lnbCargo, 2];
 		_lnbCargo lnbSetText [_colPrice, format ["%1$",_price]];
 		_lnbCargo lnbSetValue [_colPrice, _price];
-		[_class,_price,_amount] call _fncSetCargo;
+		[_grp,_class,_price,_amount] call _fncSetCargo;
 	};
 	case "amount":{
 		params ["_grp","_change"];
@@ -356,7 +365,7 @@ switch _mode do {
 		_lnbCargo lnbsettext [_colAmount, _text];
 		_price = _lnbCargo lnbValue [lnbCurSelRow _lnbCargo, 2];
 
-		[_class,_price,_newAmount] call _fncSetCargo;
+		[_grp,_class,_price,_newAmount] call _fncSetCargo;
 	};
 	case "presetChange":{
 		params ["_comboPreset","_ind"];
@@ -364,15 +373,48 @@ switch _mode do {
 		_toolFilter = _grp controlsgroupctrl IDC_VASSCARGO_TOOLFILTER;
 		["filterChanged",[_toolFilter, lbCurSel _toolFilter]] call SELF;
 	};
+	case "scaleEdit":{
+		params ["_ed"];
+		_parentGrp = ctrlparentcontrolsgroup _ed;
+		_hMin = ctrlposition _parentGrp select 3;
+		_hText = ctrltextheight _ed + 1 * 5 * (pixelH * pixelGrid * 0.50);
+		_ed ctrlsetpositionh (_hText max _hMin);
+		_ed ctrlcommit 0;
+	};
 	case "attributeLoad":{
+		params ["_grp","_value",["_from3den",false]];
+		_edCargoArray = _grp controlsgroupctrl IDC_VASSCARGO_EDCARGOARRAY;
+		_grpCargoArray = _grp controlsgroupctrl IDC_VASSCARGO_GRPCARGOARRAY;
+		_toolFilter = _grp controlsgroupctrl IDC_VASSCARGO_TOOLFILTER;
+		//_value = _value select [1, count _value -2];
+		_cargo = call compile _value;
+		_text = format ["[%1", str (_cargo deleteat 0)];
+		{
+			if (_x isequaltype "") then {
+				_text = format ["%1,%2%3",_text,endl,str _x];
+			} else {
+				_text = format ["%1, %2",_text,_x];
+			};
+		} forEach _cargo;
+		_text = format ["%1]",_text];
+		_edCargoArray ctrlsettext _text;
+		with uinamespace do {
+			["scaleEdit",[_edCargoArray]] call SELF;
+		};
+		if (_from3den) then {
+			["filterChanged",[_toolFilter, lbcursel _toolFilter]] call SELF;
+		};
 	};
 	case "3denExpression":{
 		params ["_box","_cargo"];
-		_cargo = parseSimpleArray _cargo;
+		_cargo = call compile _cargo;
 		_box setVariable ["TER_VASS_cargo",_cargo];
 	};
 	case "attributeSave":{
-		_saveCargo = uiNamespace getVariable ["TER_VASS_3den_tempCargo",[]];
+		params ["_grp"];
+		_edCargoArray = _grp controlsgroupctrl IDC_VASSCARGO_EDCARGOARRAY;
+		_saveCargo = if (ctrltext _edCargoArray == "") then {[]} else {call compile ctrltext _edCargoArray};
+		_saveCargo = _saveCargo apply {if (_x isequaltype "") then {tolower _x} else {_x}};
 		str(_saveCargo)
 	};
 	default {};

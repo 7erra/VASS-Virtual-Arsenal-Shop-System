@@ -7,8 +7,40 @@ class ctrlToolbox;
 class ctrlEdit;
 class ctrlCheckboxBaseline;
 class ctrlCombo;
+class ctrlControlsGroup;
+class ctrlStructuredText;
 class Cfg3den
 {
+	class Mission
+	{
+		class Scenario
+		{
+			class AttributeCategories
+			{
+				class VASS_moneySystem
+				{
+					displayName = "VASS - Money System";
+					class Attributes
+					{
+						class VASS_mission_money
+						{
+							displayName = "Enable VASS Money System";
+							tooltip = "Enable or disable the use of the money system.";
+							property = "VASS_moneyEnable";
+							control = "Checkbox";
+							expression = "\
+								if (_value && !is3den) then {\
+									if (isnil 'vass_db') then {vass_db = []};\
+									[vass_db, ['settings', 'money', 'enable'], true] call BIS_fnc_dbValueSet;\
+								};\
+							";
+							defaultValue = "false";
+						};
+					};
+				};
+			};
+		};
+	};
 	class Object
 	{
 		class AttributeCategories
@@ -193,16 +225,57 @@ class Cfg3den
 		__EXEC(_y = 0)
 		class VASS_AmmoBox: TitleWide
 		{
-			onLoad="[""onLoad"",_this] call TER_fnc_vasscargo;";
-			attributeLoad="[""attributeLoad"",[_this,_value]] call TER_fnc_vasscargo;";
-			attributeSave="[""attributeSave"",[_this]] call TER_fnc_vasscargo;";
-			h = (18 * ATTRIBUTE_CONTENT_H + 1) * GRID_H;
+			// DEBUG
+			//onLoad = "[""onLoad"",_this] call compile preprocessfilelinenumbers ""gui\scripts\vasscargo.sqf"";";
+			//attributeLoad="[""attributeLoad"",[_this,_value,true]] call compile preprocessfilelinenumbers ""gui\scripts\vasscargo.sqf"";";
+			//attributeSave="[""attributeSave"",[_this]] call compile preprocessfilelinenumbers ""gui\scripts\vasscargo.sqf"";";
+			// MOD
+			onLoad = "[""onLoad"",_this] call TER_fnc_vasscargo;";
+			attributeLoad = "[""attributeLoad"",[_this,_value,true]] call TER_fnc_vasscargo;";
+			attributeSave = "[""attributeSave"",[_this]] call TER_fnc_vasscargo;";
+			h = (17 * ATTRIBUTE_CONTENT_H + 1) * GRID_H;
 			class Controls: Controls
 			{
 				class Title: Title
 				{
-					text="Content";
+					//text="Content";
+					w = (ATTRIBUTE_TITLE_W + ATTRIBUTE_CONTENT_W - ATTRIBUTE_CONTENT_H - 51) * GRID_W;
 				};
+				class toggleView: ctrlToolbox
+				{
+					idc = IDC_VASSCARGO_TOOLVIEW;
+					x = (ATTRIBUTE_TITLE_W + ATTRIBUTE_CONTENT_W - 25) * GRID_W;
+					w = 25 * GRID_W;
+					h = ATTRIBUTE_CONTENT_H * GRID_H;
+					rows = 1;
+					columns = 2;
+					strings[] = {"GUI", "Array"};
+				};
+				_YADD(1)
+				class grpArrayEdit: ctrlControlsGroup
+				{
+					idc = IDC_VASSCARGO_GRPCARGOARRAY;
+					fade = 1;
+					x = ATTRIBUTE_CONTENT_H * GRID_W;
+					y = _Y * ATTRIBUTE_CONTENT_H * GRID_H;
+					w = (ATTRIBUTE_TITLE_W + ATTRIBUTE_CONTENT_W - ATTRIBUTE_CONTENT_H) * GRID_W;
+					h = (2 + 13 - 0.1) * ATTRIBUTE_CONTENT_H * GRID_H;
+					class controls
+					{
+						class arrayEdit: ctrlEdit
+						{
+							idc = IDC_VASSCARGO_EDCARGOARRAY;
+							style = "0x00 + 0x10";
+							font="EtelkaMonospacePro";
+							sizeEx="3.41 * (1 / (getResolution select 3)) * pixelGrid * 0.5";
+							x = 0;
+							y = 0;
+							w = (ATTRIBUTE_TITLE_W + ATTRIBUTE_CONTENT_W - ATTRIBUTE_CONTENT_H) * GRID_W;
+							h = (2 + 13 - 0.1) * ATTRIBUTE_CONTENT_H * GRID_H;
+						};
+					};
+				};
+				/*
 				class exportCargo: ctrlButton
 				{
 					idc = IDC_VASSCARGO_BTNEXPORT;
@@ -211,7 +284,16 @@ class Cfg3den
 					x = (ATTRIBUTE_TITLE_W + ATTRIBUTE_CONTENT_W - 25) * GRID_W;
 					w = 25 * GRID_W;
 					h = ATTRIBUTE_CONTENT_H * GRID_H;
-				}; _YADD(0.9)
+				}; 
+				class importCargo: exportCargo
+				{
+					idc = IDC_VASSCARGO_BTNIMPORT;
+					text = "Import";
+					tooltip = "Import a cargo array from the clipboard.";
+					x = (ATTRIBUTE_TITLE_W + ATTRIBUTE_CONTENT_W - 51) * GRID_W;
+				};
+				*/
+				
 				class Filter: ctrlToolbox
 				{
 					idc=IDC_VASSCARGO_TOOLFILTER;
@@ -239,8 +321,9 @@ class Cfg3den
 						"\a3\Ui_F_Curator\Data\RscCommon\RscAttributeInventory\filter_12_ca.paa"
 					};
 				}; _YADD(1.9)
-				class ListBackground: ctrlStatic
+				class ListBackground: Title
 				{
+					idc = IDC_VASSCARGO_STATICLISTBACKGROUND;
 					x = ATTRIBUTE_CONTENT_H * GRID_W;
 					y = _Y * ATTRIBUTE_CONTENT_H * GRID_H;
 					w = (ATTRIBUTE_TITLE_W + ATTRIBUTE_CONTENT_W - ATTRIBUTE_CONTENT_H) * GRID_W;
@@ -250,6 +333,7 @@ class Cfg3den
 				class List: ctrlListNBox
 				{
 					idc=IDC_VASSCARGO_LNBCARGO;
+					//style = 32;
 					x = ATTRIBUTE_CONTENT_H * GRID_W;
 					y = _Y * ATTRIBUTE_CONTENT_H * GRID_H;
 					w = (ATTRIBUTE_TITLE_W + ATTRIBUTE_CONTENT_W - ATTRIBUTE_CONTENT_H) * GRID_W;
@@ -260,8 +344,26 @@ class Cfg3den
 					columns[]={0.050000001,0.15000001,0.7,0.85000002};
 					disableOverflow=1;
 				}; _YADD(12.9)
+				class Validate: ctrlStructuredText
+				{
+					idc = IDC_VASSCARGO_TXTVALIDATE;
+					x = ATTRIBUTE_CONTENT_H * GRID_W;
+					y = _Y * ATTRIBUTE_CONTENT_H * GRID_H;
+					w = (ATTRIBUTE_TITLE_W + ATTRIBUTE_CONTENT_W - ATTRIBUTE_CONTENT_H) * GRID_W;
+					h = 1 * ATTRIBUTE_CONTENT_H * GRID_H;
+				};
+				class BtnValidate: ctrlButton
+				{
+					idc = IDC_VASSCARGO_BTNVALIDATE;
+					text = "Validate";
+					x = (ATTRIBUTE_TITLE_W + ATTRIBUTE_CONTENT_W - 25) * GRID_W;
+					y = _Y * ATTRIBUTE_CONTENT_H * GRID_H;
+					w = 25 * GRID_W;
+					h = ATTRIBUTE_CONTENT_H * GRID_H;
+				};
 				class TextPrice: Title
 				{
+					idc = IDC_VASSCARGO_TITLEPRICE;
 					text = "Price:";
 					style=0;
 					x = ATTRIBUTE_CONTENT_H * GRID_W;
@@ -284,7 +386,8 @@ class Cfg3den
 					y = _Y * ATTRIBUTE_CONTENT_H * GRID_H;
 					w = 25 * GRID_W;
 					h = ATTRIBUTE_CONTENT_H * GRID_H;
-				}; _YADD(1)
+				};/* _YADD(1)
+				
 				class TextFactionFilter: Title
 				{
 					text = "Filter by faction";
@@ -303,6 +406,7 @@ class Cfg3den
 					w = ATTRIBUTE_CONTENT_W * GRID_W;
 					h = ATTRIBUTE_CONTENT_H * GRID_H;
 				};
+				*/
 				class ArrowLeft: ctrlButton
 				{
 					idc=IDC_VASSCARGO_BTNMINUS;
