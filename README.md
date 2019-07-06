@@ -1,6 +1,6 @@
 <p align="center">
 	<h1>VASS - Virtual Arsenal Shop System </h1><br>
-	<img src="https://steamuserimages-a.akamaihd.net/ugc/781851522412288117/E784304A9D2A187524BFC5568D8CAF673584977F/" height="200">
+	<img src="https://steamuserimages-a.akamaihd.net/ugc/775099159911731110/F86551B593493C320A8C3E91EFE0D21768BED165/" height="200">
 </p>
 
 ## System  
