@@ -11,6 +11,7 @@ class ctrlControlsGroup;
 class ctrlStructuredText;
 class Cfg3den
 {
+	/*
 	class Mission
 	{
 		class Scenario
