@@ -41,6 +41,7 @@ class Cfg3den
 			};
 		};
 	};
+	*/
 	class Object
 	{
 		class AttributeCategories
@@ -226,13 +227,17 @@ class Cfg3den
 		class VASS_AmmoBox: TitleWide
 		{
 			// DEBUG
-			//onLoad = "[""onLoad"",_this] call compile preprocessfilelinenumbers ""gui\scripts\vasscargo.sqf"";";
-			//attributeLoad="[""attributeLoad"",[_this,_value,true]] call compile preprocessfilelinenumbers ""gui\scripts\vasscargo.sqf"";";
-			//attributeSave="[""attributeSave"",[_this]] call compile preprocessfilelinenumbers ""gui\scripts\vasscargo.sqf"";";
+			/*
+			onLoad = "[""onLoad"",_this] call compile preprocessfilelinenumbers ""gui\scripts\vasscargo.sqf"";";
+			attributeLoad="[""attributeLoad"",[_this,_value,true]] call compile preprocessfilelinenumbers ""gui\scripts\vasscargo.sqf"";";
+			attributeSave="[""attributeSave"",[_this]] call compile preprocessfilelinenumbers ""gui\scripts\vasscargo.sqf"";";
+			*/
 			// MOD
+			
 			onLoad = "[""onLoad"",_this] call TER_fnc_vasscargo;";
 			attributeLoad = "[""attributeLoad"",[_this,_value,true]] call TER_fnc_vasscargo;";
 			attributeSave = "[""attributeSave"",[_this]] call TER_fnc_vasscargo;";
+			
 			h = (17 * ATTRIBUTE_CONTENT_H + 1) * GRID_H;
 			class Controls: Controls
 			{

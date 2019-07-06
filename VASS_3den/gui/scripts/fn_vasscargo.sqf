@@ -140,6 +140,7 @@ switch _mode do {
 		if (_lasttext == _text) exitWith {};
 		_edCargoArray setVariable ["lasttext",_text];
 		["scaleEdit",[_edCargoArray]] call SELF;
+		false
 	};
 	case "filterChanged":{
 		params ["_toolFilter","_ind"];
@@ -290,6 +291,7 @@ switch _mode do {
 	};
 	case "keylnb":{
 		params ["_grp", "_display", "_key", "_shift", "_ctrl", "_alt"];
+		if (isnil "_grp") exitwith {false}; // Group is not focused, keep normal behaviour
 		_lnbCargo = _grp controlsGroupCtrl IDC_VASSCARGO_LNBCARGO;
 		_change = switch _key do {
 			case DIK_LEFTARROW: {-1};
@@ -299,6 +301,7 @@ switch _mode do {
 		if (_change == 0 OR !ctrlenabled _lnbCargo) exitWith {false};
 		if (_ctrl) then {_change = _change * 5};
 		["amount",[_grp, _change]] call SELF;
+		//--- Intercept engine behaviour
 		true
 	};
 	case "validate":{
@@ -387,7 +390,7 @@ switch _mode do {
 		_grpCargoArray = _grp controlsgroupctrl IDC_VASSCARGO_GRPCARGOARRAY;
 		_toolFilter = _grp controlsgroupctrl IDC_VASSCARGO_TOOLFILTER;
 		//_value = _value select [1, count _value -2];
-		_cargo = call compile _value;
+		_cargo = if (_cargo isEqualType "") then {call compile _value;} else {[]};
 		_text = format ["[%1", str (_cargo deleteat 0)];
 		{
 			if (_x isequaltype "") then {
