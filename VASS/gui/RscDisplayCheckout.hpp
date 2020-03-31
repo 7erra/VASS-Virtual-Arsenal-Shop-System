@@ -23,7 +23,7 @@ class TER_VASS_RscCheckout: VASS_RscControlsGroupNoScrollbars
 		};
 		class Title: VASS_RscText
 		{
-			text = "Confirm Purchase"; //--- ToDo: Localize;
+			text = "$STR_VSS_CHECKOUT_CONFIRM"; //--- ToDo: Localize;
 			colorBackground[]=
 			{
 				"(profilenamespace getvariable ['GUI_BCG_RGB_R',0.13])",
@@ -54,7 +54,7 @@ class TER_VASS_RscCheckout: VASS_RscControlsGroupNoScrollbars
 			y = -10.5 * GUI_GRID_H + 0.5 * safeZoneH;
 			w = 21 * GUI_GRID_W;
 			h = 1 * GUI_GRID_H;
-			strings[] = {"ADDED","REMOVED"};
+			strings[] = {"$STR_VSS_BTNADDED","$STR_VSS_BTNREMOVED"};
 		};
 		class LnbItemsAddedHeader: VASS_RscListNBox
 		{
@@ -80,7 +80,7 @@ class TER_VASS_RscCheckout: VASS_RscControlsGroupNoScrollbars
 		class BtnBuy: VASS_RscButtonMenu
 		{
 			idc = IDC_RSCDISPLAYCHECKOUT_BTNBUY;
-			text = "BUY"; //--- ToDo: Localize;
+			text = "$STR_VSS_BTNBUY"; //--- ToDo: Localize;
 			x = -10.5 * GUI_GRID_W + 0.5 * safeZoneW;
 			y = 9.6 * GUI_GRID_H + 0.5 * safeZoneH;
 			w = 9.5 * GUI_GRID_W;
@@ -89,7 +89,7 @@ class TER_VASS_RscCheckout: VASS_RscControlsGroupNoScrollbars
 		class BtnReturn: VASS_RscButtonMenu
 		{
 			idc = IDC_RSCDISPLAYCHECKOUT_BTNRETURN;
-			text = "RETURN"; //--- ToDo: Localize;
+			text = "$STR_VSS_BTNRETURN"; //--- ToDo: Localize;
 			x = 1 * GUI_GRID_W + 0.5 * safeZoneW;
 			y = 9.6 * GUI_GRID_H + 0.5 * safeZoneH;
 			w = 9.5 * GUI_GRID_W;

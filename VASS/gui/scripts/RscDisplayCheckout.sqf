@@ -20,7 +20,7 @@ switch _mode do {
 		}];
 		//--- LNB header line
 		_header = _grpCheckout controlsGroupCtrl IDC_RSCDISPLAYCHECKOUT_LNBHEADERITEMS;
-		_header lnbAddRow ["","#","Item","Price","Total"];
+		_header lnbAddRow ["",localize "STR_VSS_ROW_NUMBER",localize "STR_VSS_ROW_ITEM",localize "STR_VSS_ROW_PRICE",localize "STR_VSS_ROW_TOTAL"];
 		_header ctrlEnable false;
 		//--- LNB items
 		_lnbItemsAdded = _grpCheckout controlsGroupCtrl IDC_RSCDISPLAYCHECKOUT_LNBITEMSADDED;
@@ -102,15 +102,15 @@ switch _mode do {
 		_diff = _funds -_cost;
 		_diffText = [_diff, "right"] call _fncTparams;
 
-		_topLine = "<t align='left'>Current</t><t align='center'>Cost</t><t align='right'>Difference</t>";
+		_topLine = localize "STR_VSS_ROW_TOPLINE";
 		_stxtMoney ctrlSetStructuredText composeText [parsetext _topLine,lineBreak,parsetext _fundsText,parsetext _costText,parsetext _diffText];
 		//--- Button buy
 		_btnBuy = _grpCheckout controlsGroupCtrl IDC_RSCDISPLAYCHECKOUT_BTNBUY;
 		if (_funds >= _cost) then {
-			_btnBuy ctrlSetText "CONFIRM";
+			_btnBuy ctrlSetText localize "STR_VSS_CONFIRM_BTN";
 			_btnBuy ctrlEnable true;
 		} else {
-			_btnBuy ctrlSetText "Not enough money";
+			_btnBuy ctrlSetText localize "STR_VSS_NOMONEY";
 			_btnBuy ctrlEnable false;
 		};
 
