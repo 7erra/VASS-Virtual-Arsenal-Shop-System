@@ -235,7 +235,7 @@ switch _mode do {
 		} forEach [IDC_RSCDISPLAYARSENAL_CONTROLSBAR_BUTTONSAVE, IDC_RSCDISPLAYARSENAL_CONTROLSBAR_BUTTONLOAD, IDC_RSCDISPLAYARSENAL_CONTROLSBAR_BUTTONEXPORT, IDC_RSCDISPLAYARSENAL_CONTROLSBAR_BUTTONIMPORT, IDC_RSCDISPLAYARSENAL_CONTROLSBAR_BUTTONRANDOM];
 		//--- New "BUY" button
 		_ctrlButtonInterface = _display displayctrl IDC_RSCDISPLAYARSENAL_CONTROLSBAR_BUTTONINTERFACE;
-		_ctrlButtonInterface ctrlSetTooltip "Check purchases and leave shop";
+		_ctrlButtonInterface ctrlSetTooltip localize "STR_VSS_ACTION_SHOP";
 		_ctrlButtonInterface ctrlSetEventHandler ["buttonclick",format ["with uinamespace do {['buttonBuy',[ctrlparent (_this select 0),'init']] call %1;};",STRSELF]];
 		["costChange",[_display,[""]]] call SELF;
 		_ctrlButtonInterface ctrlAddEventHandler ["MouseEnter",{
@@ -298,7 +298,7 @@ switch _mode do {
 					_ctrlList lnbSetValue [[_row, COL_COUNT], 0];
 					_ctrlList lnbSetValue [[_row, COL_STARTCOUNT], _startAmount];*/
 					//_ctrlList lnbSetText [[_row, COL_COUNT], format ["%1/%2", _startAmount, _startAmount + _itemMax]];
-					_ctrlList lnbSetText [[_row, _newColumn], format ["%1$", [_itemCost] call BIS_fnc_numberText]];
+					_ctrlList lnbSetText [[_row, _newColumn], format [localize "STR_VSS_ITEMCOST", [_itemCost] call BIS_fnc_numberText]];
 					_ctrlList lnbSetColor [[_row,_newColumn], MONEYGREEN];
 				};
 			} else {
@@ -314,7 +314,7 @@ switch _mode do {
 						_curText = _ctrlList lbText _row;
 						_text = [format ["%2", _itemAmount, _curText], _curText] select (_itemAmount isEqualTo true);// TODO: Find way to display item amount
 						_ctrlList lbSettext [_row, _text];
-						_ctrlList lbSetTextRight [_row,format ["%1$", [_itemCost] call BIS_fnc_numberText]];
+						_ctrlList lbSetTextRight [_row,format [localize "STR_VSS_ITEMCOST", [_itemCost] call BIS_fnc_numberText]];
 						_ctrlList lbSetColorRight [_row, MONEYGREEN];
 						_ctrlList lbsetvalue [_row, _itemCost];
 					} else {
@@ -367,7 +367,7 @@ switch _mode do {
 		_item = _ctrlList lnbdata [_lbcursel,0];
 		if !(tolower _item in (TER_VASS_shopObject getVariable ["TER_VASS_cargo",[]])) exitWith {
 			playSound "addItemFailed";
-			["showMessage", [_display, "The shop does not have this item."]] call bis_fnc_arsenal;
+			["showMessage", [_display, localize "STR_VSS_SNOITEM"]] call bis_fnc_arsenal;
 		};
 		_load = 0;
 		_items = [uniformItems _center, vestItems _center, backpackitems _center] select (_selected - IDC_RSCDISPLAYARSENAL_TAB_UNIFORM);
@@ -1039,7 +1039,7 @@ switch _mode do {
 								_displayName = gettext (_cfgMag >> "displayName");
 								([TER_VASS_shopObject, _mag] call TER_fnc_getItemValues) params ["","_itemCost","_itemMax"];
 								_text = if (_itemMax isEqualType true) then {str _value} else { format ["%1|%2", _value, _itemMax - ([_mag] call _fncCurAdd)] };
-								_lbAdd = _ctrlList lnbaddrow ["", _displayName, _text, format ["%1$", [_itemCost] call BIS_fnc_numberText]];
+								_lbAdd = _ctrlList lnbaddrow ["", _displayName, _text, format [localize "STR_VSS_ITEMCOST", [_itemCost] call BIS_fnc_numberText]];
 								_ctrlList lnbSetColor [[_lbAdd,3],MONEYGREEN];
 								_ctrlList lnbsetdata [[_lbAdd,0],_mag];
 								_ctrlList lnbsetvalue [[_lbAdd,0],getnumber (_cfgMag >> "mass")];
@@ -1064,7 +1064,7 @@ switch _mode do {
 										_displayName = gettext (_cfgMag >> "displayName");
 										([TER_VASS_shopObject, _mag] call TER_fnc_getItemValues) params ["","_itemCost","_itemMax"];
 										_text = if (_itemMax isEqualType true) then {str _value} else { format ["%1|%2", _value, _itemMax - ([_mag] call _fncCurAdd)] };
-										_lbAdd = _ctrlList lnbaddrow ["", _displayName, _text, format ["%1$", [_itemCost] call BIS_fnc_numberText]];
+										_lbAdd = _ctrlList lnbaddrow ["", _displayName, _text, format [localize "STR_VSS_ITEMCOST", [_itemCost] call BIS_fnc_numberText]];
 										_ctrlList lnbSetColor [[_lbAdd,3],MONEYGREEN];
 										_ctrlList lnbsetdata [[_lbAdd,0],_mag];
 										_ctrlList lnbsetvalue [[_lbAdd,0],getnumber (_cfgMag >> "mass")];
@@ -1437,7 +1437,7 @@ switch _mode do {
 		_display = ctrlParent _ctrlButtonInterface;
 		_enter = _this#1 == 1;
 		if (_enter) then {
-			_ctrlButtonInterface ctrlSetText "CHECKOUT";
+			_ctrlButtonInterface ctrlSetText localize "STR_VSS_CHECKOUT_BTN";
 		} else {
 			["costChange", [_display, [""]]] call SELF;
 		};

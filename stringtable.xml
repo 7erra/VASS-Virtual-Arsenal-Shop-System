@@ -1,0 +1,90 @@
+<!-- Translation by Barman75, work in progress -->
+<?xml version="1.0" encoding="UTF-8"?><Project name="VASS">
+ <Package name="Vass">
+   <Key ID="STR_VSS_ACTION_SHOP">
+     <Original>Shop</Original>
+     <English>Shop</English>
+     <Russian>Магазин</Russian>
+   </Key>
+   <Key ID="STR_VSS_ACTION_SHOP">
+     <Original>Check purchases and leave shop</Original>
+     <English>Check purchases and leave shop</English>
+     <Russian>Подтвердить покупки и выйти из магазина</Russian>
+   </Key>
+   <Key ID="STR_VSS_ITEMCOST">
+     <Original>%1$</Original>
+     <English>%1$</English>
+     <Russian>%1 руб</Russian>
+   </Key>
+   <Key ID="STR_VSS_SNOITEM">
+     <Original>The shop does not have this item.</Original>
+     <English>The shop does not have this item.</English>
+     <Russian>Этого товара нет в магазине</Russian>
+   </Key>
+   <Key ID="STR_VSS_CHECKOUT_BTN">
+     <Original>CHECKOUT</Original>
+     <English>CHECKOUT</English>
+     <Russian>ОПЛАТА</Russian>
+   </Key>
+   <Key ID="STR_VSS_CONFIRM_BTN">
+     <Original>CONFIRM</Original>
+     <English>CONFIRM</English>
+     <Russian>ПОДТВЕРДИТЬ</Russian>
+   </Key>
+   <Key ID="STR_VSS_ROW_NUMBER">
+     <Original>#</Original>
+     <English>#</English>
+     <Russian>№</Russian>
+   </Key>
+   <Key ID="STR_VSS_NOMONEY">
+     <Original>Not enough money</Original>
+     <English>Not enough money</English>
+     <Russian>Не хватает денег</Russian>
+   </Key>
+   <Key ID="STR_VSS_ROW_ITEM">
+     <Original>Item</Original>
+     <English>Item</English>
+     <Russian>Предмет</Russian>
+   </Key>
+   <Key ID="STR_VSS_ROW_TOTAL">
+     <Original>Total</Original>
+     <English>Total</English>
+     <Russian>Итого</Russian>
+   </Key>
+   <Key ID="STR_VSS_ROW_PRICE">
+     <Original>Price</Original>
+     <English>Price</English>
+     <Russian>Цена</Russian>
+   </Key>
+   <Key ID="STR_VSS_ROW_TOPLINE">
+     <Original>&lt;t align='left'&gt;Current&lt;/t&gt;&lt;t align='center'&gt;Cost&lt;/t&gt;&lt;t align='right'&gt;Difference&lt;/t&gt;</Original>
+     <English>&lt;t align='left'&gt;Current&lt;/t&gt;&lt;t align='center'&gt;Cost&lt;/t&gt;&lt;t align='right'&gt;Difference&lt;/t&gt;</English>
+     <Russian>&lt;t align='left'&gt;Кошелек&lt;/t&gt;&lt;t align='center'&gt;Стоимость&lt;/t&gt;&lt;t align='right'&gt;Разница&lt;/t&gt;</Russian>
+   </Key>
+   <Key ID="STR_VSS_CHECKOUT_CONFIRM">
+     <Original>Confirm Purchase</Original>
+     <English>Confirm Purchase</English>
+     <Russian>Подтвердить покупку</Russian>
+   </Key>
+   <Key ID="STR_VSS_BTNBUY">
+     <Original>BUY</Original>
+     <English>BUY</English>
+     <Russian>КУПИТЬ</Russian>
+   </Key>
+   <Key ID="STR_VSS_BTNADDED">
+     <Original>ADDED</Original>
+     <English>ADDED</English>
+     <Russian>ПОКУПКА</Russian>
+   </Key>
+   <Key ID="STR_VSS_BTNREMOVED">
+     <Original>REMOVED</Original>
+     <English>REMOVED</English>
+     <Russian>ПРОДАЖА</Russian>
+   </Key>
+   <Key ID="STR_VSS_BTNRETURN">
+     <Original>RETURN</Original>
+     <English>RETURN</English>
+     <Russian>НАЗАД</Russian>
+   </Key>
+ </Package>
+</Project>
