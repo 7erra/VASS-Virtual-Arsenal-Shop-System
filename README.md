@@ -1,7 +1,4 @@
-<p align="center">
-	<h1>VASS - Virtual Arsenal Shop System </h1><br>
-	<img src="https://steamuserimages-a.akamaihd.net/ugc/781851522412288117/E784304A9D2A187524BFC5568D8CAF673584977F/" height="200">
-</p>
+<img src=".github/media/VASS.png" width="200" alt="VASS Logo"/>
 
 ## System  
 The system consists of several functions and configs which turn the Virtual Arsenal into a place where you can trade items for money and vice versa. A money system is not provided as of now. Instead you have the opportunity to implement your own one, like Ravage.<br/>
@@ -132,13 +129,13 @@ This are the currently available functions which can be used to influence the sy
 ```
 
 ## Screenshots
-<img src="https://i.imgur.com/8VnH0QC.jpg" height="500"><br>
+<img src=".github/media/screenshot1.jpg" height="500"><br>
 As you can see the prices of the items are listed right next to it in a green color. The lists are also sortable by either name, price from low to high and high to low.<br>
 <br>
-<img src="https://i.imgur.com/bAKbZYU.jpg" height="500"><br>
+<img src=".github/media/screenshot2.jpg" height="500"><br>
 When setting a maximum amount of items which can be added to one of the containers (uniform, vest, backpack) this maximum amount is also displayed next to the current amount. Items which are not part of the shop are set to a cost of 0.<br>
 <br>
-<img src="https://i.imgur.com/nHUipiq.jpg" height="500"><br>
+<img src=".github/media/screenshot3.jpg" height="500"><br>
 Before leaving the shop the player can see what they will buy or sell. When leaving the shop any other way than over this menu then the loadout will be reset to the one with which he entered the shop.
 
 # License
