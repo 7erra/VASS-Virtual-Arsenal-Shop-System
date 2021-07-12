@@ -140,3 +140,6 @@ When setting a maximum amount of items which can be added to one of the containe
 <br>
 <img src="https://i.imgur.com/nHUipiq.jpg" height="500"><br>
 Before leaving the shop the player can see what they will buy or sell. When leaving the shop any other way than over this menu then the loadout will be reset to the one with which he entered the shop.
+
+# License
+This project is licensed under the [GNU General Public License v3.0](https://choosealicense.com/licenses/gpl-3.0/).

@@ -1,0 +1,43 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Start Arma 3 (VASS)",
+			"command": "arma3diag_x64.exe",
+			"type": "shell",
+			"options": {
+				"cwd": "M:/SteamLibraryM/steamapps/common/Arma 3"
+			},
+			"args": [
+				"-name=Terra",
+				"${workspaceFolder}/Mission/mission.sqm",
+				"-skipIntro",
+				"-filePatching",
+				"-noSplash",
+				"-noSound",
+				"-showScriptErrors",
+				"-mod=!Workshop/@Arma 3 Profiling Branch Companion Mod;!Workshop/@3den Enhanced;!Workshop/@CBA_A3;!Workshop/@Pythia;!Workshop/@7erra's Editing Extensions;!Workshop/@Advanced Developer Tools;P:/VASS-Virtual-Arsenal-Shop-System/Mod",
+				"-window",
+				"-posX=-1795",
+				"-posY=146"
+			],
+			"problemMatcher": [],
+			"presentation": {},
+			"group": {
+				"kind": "test",
+				"isDefault": true
+			}
+		},
+		{
+			"label": "Build Addon",
+			"type": "shell",
+			"command": "hemtt build",
+			"options": {"cwd": "./Mod"},
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"problemMatcher": []
+		}
+	]
+}
