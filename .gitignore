@@ -1,2 +1,8 @@
-Mod/.hemtt/*
+
+## Added by HEMTT
+TER_VASS/releases/*
+*.biprivatekey
+TER_VASS/keys/*
+.hemtt/
+####
 *.pbo
