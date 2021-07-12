@@ -5,3 +5,15 @@ template = "cba"
 mainprefix = "z"
 folder_optionals = true
 sig_version = 3
+
+files = [
+	"mod.cpp",
+	"README.md",
+	"LICENSE.md"
+]
+
+include = [
+	"./include"
+]
+
+exclude = []

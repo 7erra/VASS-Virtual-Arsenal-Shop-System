@@ -10,13 +10,13 @@
 			},
 			"args": [
 				"-name=Terra",
-				"${workspaceFolder}/Mission/mission.sqm",
+				"${workspaceFolder}\\Mission.VR\\mission.sqm",
 				"-skipIntro",
 				"-filePatching",
 				"-noSplash",
 				"-noSound",
 				"-showScriptErrors",
-				"-mod=!Workshop/@Arma 3 Profiling Branch Companion Mod;!Workshop/@3den Enhanced;!Workshop/@CBA_A3;!Workshop/@Pythia;!Workshop/@7erra's Editing Extensions;!Workshop/@Advanced Developer Tools;P:/VASS-Virtual-Arsenal-Shop-System/Mod",
+				"-mod=!Workshop/@Arma 3 Profiling Branch Companion Mod;!Workshop/@CBA_A3;!Workshop/@Pythia;!Workshop/@7erra's Editing Extensions;!Workshop/@Advanced Developer Tools;P:/VASS-Virtual-Arsenal-Shop-System/TER_VASS",
 				"-window",
 				"-posX=-1795",
 				"-posY=146"
@@ -32,7 +32,7 @@
 			"label": "Build Addon",
 			"type": "shell",
 			"command": "hemtt build",
-			"options": {"cwd": "./Mod"},
+			"options": {"cwd": "./TER_VASS"},
 			"group": {
 				"kind": "build",
 				"isDefault": true
