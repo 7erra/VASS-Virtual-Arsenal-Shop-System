@@ -9,38 +9,6 @@ class ctrlControlsGroup;
 class ctrlStructuredText;
 class Cfg3den
 {
-	/*
-	class Mission
-	{
-		class Scenario
-		{
-			class AttributeCategories
-			{
-				class VASS_moneySystem
-				{
-					displayName = "VASS - Money System";
-					class Attributes
-					{
-						class VASS_mission_money
-						{
-							displayName = "Enable VASS Money System";
-							tooltip = "Enable or disable the use of the money system.";
-							property = "VASS_moneyEnable";
-							control = "Checkbox";
-							expression = "\
-								if (_value && !is3den) then {\
-									if (isnil 'vass_db') then {vass_db = []};\
-									[vass_db, ['settings', 'money', 'enable'], true] call BIS_fnc_dbValueSet;\
-								};\
-							";
-							defaultValue = "false";
-						};
-					};
-				};
-			};
-		};
-	};
-	*/
 	class Object
 	{
 		class AttributeCategories
@@ -61,7 +29,7 @@ class Cfg3den
 							_value = parseSimpleArray _value;\
 							if (_value#0 && !is3DEN) then {[_this,_value#1,parseNumber (_value#4),_value#2,parseNumber (_value#3)] call TER_fnc_addShop};\
 						";
-						defaultValue = "str[false,""Shop"",""alive _this && alive _target"",""5"",""1.5""]";
+						defaultValue = """[false,'Shop','alive _this && alive _target','5','1.5']""";
 					};
 					class cargo
 					{
@@ -372,27 +340,7 @@ class Cfg3den
 					y = 16 * ATTRIBUTE_CONTENT_H * GRID_H;
 					w = 25 * GRID_W;
 					h = ATTRIBUTE_CONTENT_H * GRID_H;
-				};/* _YADD(1)
-				
-				class TextFactionFilter: Title
-				{
-					text = "Filter by faction";
-					tooltip = "Only show items which the given faction uses.";
-					style = 1;
-					x = 0;
-					y = _Y * ATTRIBUTE_CONTENT_H * GRID_H;
-					w = ATTRIBUTE_TITLE_W * GRID_W;
-					h = ATTRIBUTE_CONTENT_H * GRID_H;
 				};
-				class FactionFilter: ctrlCombo
-				{
-					idc = IDC_VASSCARGO_COMBOPRESETS;
-					x = ATTRIBUTE_TITLE_W * GRID_W;
-					y = _Y * ATTRIBUTE_CONTENT_H * GRID_H;
-					w = ATTRIBUTE_CONTENT_W * GRID_W;
-					h = ATTRIBUTE_CONTENT_H * GRID_H;
-				};
-				*/
 				class ArrowLeft: ctrlButton
 				{
 					idc = IDC_VASSCARGO_BTNMINUS;
