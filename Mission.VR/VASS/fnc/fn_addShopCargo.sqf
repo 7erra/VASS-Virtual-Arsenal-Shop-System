@@ -24,23 +24,24 @@
 */
 
 params ["_object","_cargo", ["_overwrite", 1]];
-_global = param [3, _object getVariable ["TER_VASS_shared",true]];
+private _global = param [3, _object getVariable ["TER_VASS_shared",true]];
 
-_cargoClasses = _cargo select {_x isEqualType ""};
+private _cargoClasses = _cargo select {_x isEqualType ""};
 _cargoClasses = _cargoClasses apply {toLower _x};
 //--- Shop settings
-_newCargo = [];
+private _newCargo = [];
 if (_overwrite != 2) then {
 	_newCargo = _object getVariable ["TER_VASS_cargo",[]];
 };
 
 for "_i" from 0 to (count _cargo -3) step 3 do {
 	//--- Iterate through the classes
-	_class = tolower (_cargo#_i);
-	_price = _cargo#(_i+1);
-	_amount = _cargo#(_i+2);
+	(_cargo select [_i, 2]) params ["_class", "_price", "_amount"];
+	// private _class = tolower (_cargo#_i);
+	// private _price = _cargo#(_i+1);
+	// private _amount = _cargo#(_i+2);
 
-	_findInd = _newCargo findIf {_class isEqualTo _x};
+	private _findInd = _newCargo findIf {_class isEqualTo _x};
 	if (_findInd != -1 && (_overwrite == 1 || _overwrite == 4)) then {
 		//--- Overwrite current setting
 		if (_overwrite == 4) then {
@@ -58,7 +59,7 @@ for "_i" from 0 to (count _cargo -3) step 3 do {
 	};
 };
 
-_returnCargo = [];
+private _returnCargo = [];
 for "_i" from 2 to (count _newCargo -1) step 3 do {
 	// only items whith quantity not false
 	if !((_newCargo#_i) isEqualTo false) then {

@@ -19,14 +19,14 @@
 	NOTE: Theoretically the amount can also be false which means that the item will be removed next time the cargo us updated. This function shouldn't be able to return it though.
 */
 params ["_object","_class",["_return",-1]];
-_default = param [3,[_class,0,0]];
+private _default = param [3,[_class,0,0]];
 _default params [["_dClass",_class],["_dPrice",0],["_dAmount",0]];
 private _cargo = _object getVariable ["TER_VASS_cargo",[]];
 _class = toLower _class;
 
 _cargo = [_dPrice, _dAmount] +_cargo;
-_findInd = _cargo findIf {_x isEqualTo _class};
-_rArray = [_dClass, _cargo#(_findInd+1), _cargo#(_findInd+2)];
+private _findInd = _cargo findIf {_x isEqualTo _class};
+private _rArray = [_dClass, _cargo#(_findInd+1), _cargo#(_findInd+2)];
 if (_return < 0) then {
 	_rArray
 } else {

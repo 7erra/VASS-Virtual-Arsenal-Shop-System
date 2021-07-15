@@ -13,7 +13,7 @@
 	 See sub functions
 */
 
-params ["_mode",["_this",[]]];
+params ["_mode",["_params",[]]];
 
 switch _mode do {
 	case "getMoney":{
@@ -27,7 +27,7 @@ switch _mode do {
 			Has to return:
 			 NUMBER - Unit's money
 		*/
-		params ["_unit"];
+		_params params ["_unit"];
 		/* EXAMPLE */
 		rating _unit
 	};
@@ -43,7 +43,7 @@ switch _mode do {
 			Has to return:
 			 Nothing
 		*/
-		params ["_unit", "_change"];
+		_params params ["_unit", "_change"];
 		/* EXAMPLE */
 		_unit addRating _change;
 	};
