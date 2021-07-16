@@ -1,17 +1,18 @@
 /*
-	Author: 7erra <https://forums.bohemia.net/profile/1139559-7erra/>
+	Author: Terra
 
 	Description:
-	Add shop action to an object. Any previous actions of the same shop are
-	overwritten. It is possible to add mutliple shops to a single object.
-	VASS is only activated when the arsenal is opened via this function.
+		Adds a shop to an object. Requires a config class in "CfgShopsVASS".
 
 	Parameter(s):
-	0: OBJECT - Object to which the action is added.
-	1: STRING - Classname of a subclass from CfgShops. Will look in missionConfigFile first and then in global configFile.
+		0:	OBJECT - Object to attach the shop to
+		1:	STRING - Config subclass of "CfgShops" either from missionConfigFile or configFile
 
 	Returns:
-	NUMBER - ID of the action, also saved as "TER_VASS_actionID_%shopclass%" on the object, where shopclass is the passed second parameter.
+		NUMBER - addAction ID, also saved as TER_VASS_actionID_%shop% where %shop% is the second parameter
+
+	Example(s):
+		[cursorObject, "Weapons"] call TER_VASS_fnc_addShop; //-> 0
 */
 params ["_object", "_shop"];
 if (isNull _object) exitWith {["Object does not exist!", _object] call BIS_fnc_error};
@@ -22,7 +23,7 @@ private _cfg = {
 } forEach [missionConfigFile, configFile];
 if (isNull _cfg) exitWith {["Shop config ""%1"" does not exist!", _shop] call BIS_fnc_error};
 //--- Fill the shop with items
-private _cargoObject = "Logic" createVehicleLocal [0,0,0]; // placeholder object to allow for multiple shops
+private _cargoObject = createSimpleObject ["Static", [0, 0, 0], true]; // placeholder object to allow for multiple shops
 _cargoObject attachTo [_object, [0,0,0]];
 _object setVariable [["TER_VASS_cargoObject_%1", _shop], _cargoObject];
 _object addEventHandler ["Deleted", { // delete the placeholder together with the object
@@ -63,6 +64,7 @@ _object setVariable [format["TER_VASS_actionID_%1", _shop], _actionID];
 if (isNil "TER_VASS_allShops") then {
 	TER_VASS_allShops = [];
 };
-private _newInd = TER_VASS_allShops pushBackUnique _object;
-if (_newInd > -1) then {publicVariable "TER_VASS_allShops";};
+if (TER_VASS_allShops pushBackUnique _object > -1) then {
+	publicVariable "TER_VASS_allShops";
+};
 _actionID
