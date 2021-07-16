@@ -2,7 +2,8 @@
 	Author: 7erra <https://forums.bohemia.net/profile/1139559-7erra/>
 
 	Description:
-	Add shop action to an object. Any previous actions of this type are removed.
+	Add shop action to an object. Any previous actions of the same shop are
+	overwritten. It is possible to add mutliple shops to a single object.
 	VASS is only activated when the arsenal is opened via this function.
 
 	Parameter(s):
@@ -10,7 +11,7 @@
 	1: STRING - Classname of a subclass from CfgShops. Will look in missionConfigFile first and then in global configFile.
 
 	Returns:
-	NUMBER - ID of the action, alos saved as "TER_VASS_actionID_%shopclass%" on the object, where shopclass is the passed second parameter.
+	NUMBER - ID of the action, also saved as "TER_VASS_actionID_%shopclass%" on the object, where shopclass is the passed second parameter.
 */
 params ["_object", "_shop"];
 if (isNull _object) exitWith {["Object does not exist!", _object] call BIS_fnc_error};
