@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Dedicated mod folder
   - hemtt compatible
   - Stopped using branches for different parts like a cavemen
+- Private variables for performance
 
 ## [1.0.0] - 2017-06-20
 ### Added
