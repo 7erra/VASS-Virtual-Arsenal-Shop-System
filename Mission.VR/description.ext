@@ -1,9 +1,10 @@
 //! Include these lines in your description.ext:
 #include "VASS\gui\cfgGUI.hpp"
+#include "VASS\CfgShopsVASS.hpp"
 
 class CfgFunctions
 {
-	#include "VASS\cfgFunctions.hpp"
+	#include "VASS\CfgFunctions.hpp"
 };
 
 // Ignore these:
