@@ -32,7 +32,9 @@
 			"label": "Build Addon",
 			"type": "shell",
 			"command": "hemtt build",
-			"options": {"cwd": "./TER_VASS"},
+			"options": {
+				"cwd": "./TER_VASS"
+			},
 			"group": {
 				"kind": "build",
 				"isDefault": true
