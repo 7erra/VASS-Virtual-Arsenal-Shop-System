@@ -1,4 +1,4 @@
-#include "\A3\Ui_f\hpp\defineResinclDesign.inc"
+#include "\a3\ui_f\hpp\defineResinclDesign.inc"
 #include "idcs.inc"
 #define SELF (compile preprocessFileLineNumbers "VASS\gui\scripts\RscDisplayCheckout.sqf")
 #define MONEYGREEN [0.13,0.42,0.16,1]

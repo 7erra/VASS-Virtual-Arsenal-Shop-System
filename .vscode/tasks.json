@@ -6,7 +6,7 @@
 			"command": "arma3diag_x64.exe",
 			"type": "shell",
 			"options": {
-				"cwd": "M:/SteamLibraryM/steamapps/common/Arma 3"
+				"cwd": "D:/SteamLibraryM/steamapps/common/Arma 3"
 			},
 			"args": [
 				"-name=Terra",
@@ -21,6 +21,7 @@
 				"-posX=-1795",
 				"-posY=146"
 			],
+			"isBackground": true,
 			"problemMatcher": [],
 			"presentation": {},
 			"group": {

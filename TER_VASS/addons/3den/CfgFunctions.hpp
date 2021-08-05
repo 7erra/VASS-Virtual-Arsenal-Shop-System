@@ -4,7 +4,8 @@ class CfgFunctions
 	{
 		class 3den
 		{
-			//PATHTO_FNC(vasscargo);
+			PATHTO_FNC(vasscargo);
+			PATHTO_FNC(cargo);
 		};
 	};
 };

@@ -1,5 +1,5 @@
-#include "\A3\ui_f\hpp\defineDIKCodes.inc"
-#include "\A3\Ui_f\hpp\defineResinclDesign.inc"
+#include "\a3\ui_f\hpp\defineDIKCodes.inc"
+#include "\a3\ui_f\hpp\defineResinclDesign.inc"
 
 #define DEFAULT_MATERIAL "\a3\data_f\default.rvmat"
 #define DEFAULT_TEXTURE "#(rgb,8,8,3)color(0,0,0,0)"

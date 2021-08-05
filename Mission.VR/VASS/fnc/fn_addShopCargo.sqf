@@ -36,7 +36,7 @@ if (_overwrite != 2) then {
 
 for "_i" from 0 to (count _cargo -3) step 3 do {
 	//--- Iterate through the classes
-	(_cargo select [_i, 2]) params ["_class", "_price", "_amount"];
+	(_cargo select [_i, 3]) params ["_class", "_price", "_amount"];
 	// private _class = tolower (_cargo#_i);
 	// private _price = _cargo#(_i+1);
 	// private _amount = _cargo#(_i+2);

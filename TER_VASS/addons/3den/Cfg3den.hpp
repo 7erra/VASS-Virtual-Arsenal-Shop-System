@@ -7,6 +7,7 @@ class ctrlCheckboxBaseline;
 class ctrlCombo;
 class ctrlControlsGroup;
 class ctrlStructuredText;
+class ctrlCheckboxes;
 class Cfg3den
 {
 	class Object
@@ -19,22 +20,22 @@ class Cfg3den
 				collapsed = 1;
 				class Attributes
 				{
-					class addAction
-					{
-						displayName = "";
-						tooltip = "";
-						property = "VASS_addAction";
-						control = "VASS_addAction";
-						expression = "\
-							_value = parseSimpleArray _value;\
-							if (_value#0 && !is3DEN) then {[_this,_value#1,parseNumber (_value#4),_value#2,parseNumber (_value#3)] call TER_fnc_addShop};\
-						";
-						defaultValue = """[false,'Shop','alive _this && alive _target','5','1.5']""";
-					};
+					// class addAction
+					// {
+					// 	displayName = "";
+					// 	tooltip = "";
+					// 	property = "VASS_addAction";
+					// 	control = "VASS_addAction";
+					// 	expression = "\
+					// 		_value = parseSimpleArray _value;\
+					// 		if (_value#0 && !is3DEN) then {[_this,_value#1,parseNumber (_value#4),_value#2,parseNumber (_value#3)] call TER_fnc_addShop};\
+					// 	";
+					// 	defaultValue = """[false,'Shop','alive _this && alive _target','5','1.5']""";
+					// };
 					class cargo
 					{
 						property = "TER_VASS_cargo";
-						control = "VASS_AmmoBox";
+						control = "VASS_AmmoBox2";
 						displayName = "Shop Inventory";
 						tooltip = "Define the items which the trader can sell and buy.\n""-"" means the item is not part of the shop, so not buyable or sellable. Script: -2.\n""∞"" means that the item will never run out. Script: -1.\n""0"" means that the item is not sold by the shop but can be sold to the trader. Script: 0.\nAny other number restricts the amonut of sellable items to the specified amount. If all items are sold out it is treated just as ""0"". Script: N.";
 						expression = "if (_value isEqualType '') then {\
@@ -44,25 +45,25 @@ class Cfg3den
 							};\
 						";
 					};
-					class refresh
-					{
-						displayName = "Refresh";
-						tooltip = "Sets the time in seconds which the shop will take to add/remove the items that were removed/added during mission. -1 disables refreshing.";
-						property = "VASS_refesh";
-						control = "EditShort";
-						expression = "_this setVariable ['TER_VASS_refresh', _value];";
-						defaultValue = "-1";
-						validate = "number";
-					};
-					class shared
-					{
-						displayName = "Global";
-						tooltip = "If checked the inventory's shop will broadcast its changes over the network and make it the same for everyone.";
-						property = "VASS_shared";
-						control = "Checkbox";
-						expression = "_this setVariable ['TER_VASS_shared', _value];";
-						defaultValue = "true";
-					};
+					// class refresh
+					// {
+					// 	displayName = "Refresh";
+					// 	tooltip = "Sets the time in seconds which the shop will take to add/remove the items that were removed/added during mission. -1 disables refreshing.";
+					// 	property = "VASS_refesh";
+					// 	control = "EditShort";
+					// 	expression = "_this setVariable ['TER_VASS_refresh', _value];";
+					// 	defaultValue = "-1";
+					// 	validate = "number";
+					// };
+					// class shared
+					// {
+					// 	displayName = "Global";
+					// 	tooltip = "If checked the inventory's shop will broadcast its changes over the network and make it the same for everyone.";
+					// 	property = "VASS_shared";
+					// 	control = "Checkbox";
+					// 	expression = "_this setVariable ['TER_VASS_shared', _value];";
+					// 	defaultValue = "true";
+					// };
 				};
 			};
 		};
@@ -184,10 +185,10 @@ class Cfg3den
 			};
 		};
 		class VASS_AmmoBox: TitleWide
-		{			
-			onLoad = "[""onLoad"",_this] call TER_fnc_vasscargo;";
-			attributeLoad = "[""attributeLoad"",[_this,_value,true]] call TER_fnc_vasscargo;";
-			attributeSave = "[""attributeSave"",[_this]] call TER_fnc_vasscargo;";
+		{
+			onLoad = "[""onLoad"",_this] call TER_VASS_fnc_vasscargo;";
+			attributeLoad = "[""attributeLoad"",[_this,_value,true]] call TER_VASS_fnc_vasscargo;";
+			attributeSave = "[""attributeSave"",[_this]] call TER_VASS_fnc_vasscargo;";
 			
 			h = (17 * ATTRIBUTE_CONTENT_H + 1) * GRID_H;
 			class Controls: Controls
@@ -355,6 +356,31 @@ class Cfg3den
 				{
 					idc = IDC_VASSCARGO_BTNPLUS;
 					text = "+";
+				};
+			};
+		};
+		class VASS_AmmoBox2: TitleWide
+		{
+			INIT_CONTROL(TER_VASS_AmmoBox,TER_VASS_3den)
+			attributeLoad = "['attributeLoad',_this] call (uinamespace getvariable 'TER_VASS_AmmoBox_script');";
+			attributeSave = "['attributeSave',_this] call (uinamespace getvariable 'TER_VASS_AmmoBox_script');";
+			h = 100 * GRID_H;
+			class Controls: Controls
+			{
+				delete Title;
+				delete Value;
+				class FilterWeapons: ctrlCheckboxes
+				{
+					#define _WEAPON_CATEGORIES_COUNT 11
+					x = 5 * GRID_W;
+					w = (_WEAPON_CATEGORIES_COUNT + 1) * 10 * GRID_W;
+					h = 10 * GRID_H;
+					colorTextSelect[] = {0,0.5,0,1};
+					rows = 1;
+					columns = (_WEAPON_CATEGORIES_COUNT + 1);
+					strings[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"};
+					checked_strings[] = {"[0]", "[1]", "[2]", "[3]", "[4]", "[5]", "[6]", "[7]", "[8]", "[9]", "[10]", "[11]", "[12]"};
+					#undef _WEAPON_CATEGORIES_COUNT
 				};
 			};
 		};

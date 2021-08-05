@@ -13,5 +13,6 @@ class CfgPatches {
 };
 
 #include "\a3\3DEN\UI\macros.inc"
+#include "CfgScriptPaths.hpp"
 #include "CfgFunctions.hpp"
 #include "Cfg3den.hpp"
