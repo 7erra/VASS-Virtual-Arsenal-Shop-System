@@ -12,6 +12,7 @@
 #endif
 
 #include "\z\TER_VASS\addons\main\script_macros.hpp"
+#include "\a3\3den\UI\resincl.inc"
 
 //--- Display idcs
 #define IDC_VASSCARGO_TOOLFILTER 7100

@@ -1,13 +1,3 @@
-class ctrlButton;
-class ctrlListNBox;
-class ctrlStatic;
-class ctrlToolbox;
-class ctrlEdit;
-class ctrlCheckboxBaseline;
-class ctrlCombo;
-class ctrlControlsGroup;
-class ctrlStructuredText;
-class ctrlCheckboxes;
 class Cfg3den
 {
 	class Object
@@ -361,26 +351,18 @@ class Cfg3den
 		};
 		class VASS_AmmoBox2: TitleWide
 		{
-			INIT_CONTROL(TER_VASS_AmmoBox,TER_VASS_3den)
 			attributeLoad = "['attributeLoad',_this] call (uinamespace getvariable 'TER_VASS_AmmoBox_script');";
 			attributeSave = "['attributeSave',_this] call (uinamespace getvariable 'TER_VASS_AmmoBox_script');";
-			h = 100 * GRID_H;
+			h = 5 * GRID_H;
 			class Controls: Controls
 			{
-				delete Title;
-				delete Value;
-				class FilterWeapons: ctrlCheckboxes
+				class Edit: ctrlButton
 				{
-					#define _WEAPON_CATEGORIES_COUNT 11
+					text = "Edit VASS Inventory";
+					onButtonClick = (findDisplay 315) createDisplay "Display3DENVASS";
 					x = 5 * GRID_W;
-					w = (_WEAPON_CATEGORIES_COUNT + 1) * 10 * GRID_W;
-					h = 10 * GRID_H;
-					colorTextSelect[] = {0,0.5,0,1};
-					rows = 1;
-					columns = (_WEAPON_CATEGORIES_COUNT + 1);
-					strings[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"};
-					checked_strings[] = {"[0]", "[1]", "[2]", "[3]", "[4]", "[5]", "[6]", "[7]", "[8]", "[9]", "[10]", "[11]", "[12]"};
-					#undef _WEAPON_CATEGORIES_COUNT
+					w = (ATTRIBUTE_TITLE_W + ATTRIBUTE_CONTENT_W - 5) * GRID_W;
+					h = 5 * GRID_H;
 				};
 			};
 		};
