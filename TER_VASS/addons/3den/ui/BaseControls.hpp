@@ -11,3 +11,7 @@ class ctrlCheckboxes;
 class ctrlStaticBackgroundDisable;
 class ctrlStaticBackgroundDisableTiles;
 class ctrlStaticBackground;
+class ctrlStaticTitle;
+class ctrlButtonCancel;
+class ctrlStaticFooter;
+class ctrlButtonOK;

@@ -1,4 +1,3 @@
-class ctrlStaticTitle;
 #define GLUE_3(A,B,C) A##B##C
 #define ARSENAL_ICON(NAME) QUOTE(GLUE_3(\a3\ui_f\data\GUI\Rsc\RscDisplayArsenal\,NAME,_ca.paa))
 class Display3DENVASS
@@ -15,6 +14,13 @@ class Display3DENVASS
 			y = safeZoneY + 10 * GRID_H;
 			w = safeZoneW - 10 * GRID_W;
 			h = safeZoneH - 15 * GRID_H;
+		};
+		class BackgroundButtons: ctrlStaticFooter
+		{
+			x = safeZoneX + 5 * GRID_W;
+			y = safeZoneY + safeZoneH - 12 * GRID_H;
+			w = safeZoneW - 10 * GRID_W;
+			h = 7 * GRID_H;
 		};
 		class Title: ctrlStaticTitle
 		{
@@ -65,6 +71,20 @@ class Display3DENVASS
 			colorText[] = {0.5,0,0,1};
 			rows = 1;
 			columns = 23;
+		};
+		class Cancel: ctrlButtonCancel
+		{
+			x = safeZoneX + 6 * GRID_W;
+			y = safeZoneY + safeZoneH - 11 * GRID_H;
+			w = 25 * GRID_W;
+			h = 5 * GRID_H;
+		};
+		class Save: ctrlButtonOK
+		{
+			x = safeZoneX + safeZoneW - 31 * GRID_W;
+			y = safeZoneY + safeZoneH - 11 * GRID_H;
+			w = 25 * GRID_W;
+			h = 5 * GRID_H;
 		};
 	};
 };
