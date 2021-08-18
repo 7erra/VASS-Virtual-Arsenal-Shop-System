@@ -35,6 +35,7 @@ class Display3DENVASS
 	{
 		class Filter: ctrlCheckboxes
 		{
+			idc = IDC_DISPLAY3DENVASS_FILTER;
 			style = ST_PICTURE + ST_KEEP_ASPECT_RATIO;
 			x = safeZoneX + 6 * GRID_W;
 			y = safeZoneY + 11 * GRID_H;
