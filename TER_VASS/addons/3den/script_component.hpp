@@ -1,18 +1,30 @@
 #define COMPONENT 3den
 #include "\z\TER_VASS\addons\main\script_mod.hpp"
 
-// #define DEBUG_MODE_FULL
+#define DEBUG_MODE_FULL
 // #define DISABLE_COMPILE_CACHE
 
 #ifdef DEBUG_ENABLED_3den
     #define DEBUG_MODE_FULL
 #endif
-    #ifdef DEBUG_SETTINGS_OTHER
+#ifdef DEBUG_SETTINGS_OTHER
     #define DEBUG_SETTINGS DEBUG_SETTINGS_3den
 #endif
 
 #include "\z\TER_VASS\addons\main\script_macros.hpp"
+#include "\a3\3DEN\UI\macros.inc"
 #include "\a3\3den\UI\resincl.inc"
+#define CT_CONTROLS_TABLE 19
+
+#ifdef DEBUG_MODE_FULL
+    #define INIT_DISPLAY_FUNCTION (compile preprocessfilelinenumbers QUOTE(\p\TER_VASS\addons\3den\ui\scripts\NAME.sqf))
+
+    #define UISCRIPT(NAME) (compile preprocessfilelinenumbers QUOTE(\p\TER_VASS\addons\3den\ui\scripts\NAME.sqf))
+#else
+    #define UISCRIPT(NAME) NAME##_script
+#endif
+
+#define W_VASS_AMMOBOX2 (ATTRIBUTE_TITLE_W + ATTRIBUTE_CONTENT_W - 5)
 
 //--- Display idcs
 #define IDC_VASSCARGO_TOOLFILTER 7100
@@ -31,3 +43,7 @@
 #define IDC_VASSCARGO_GRPCARGOARRAY 7113
 #define IDC_VASSCARGO_TXTVALIDATE 7114
 #define IDC_VASSCARGO_BTNVALIDATE 7115
+
+//--- VASS Cargo v2
+#define IDD_DISPLAY3DENVASS 210806
+#define IDC_DISPLAY3DENVASS_FILTER 100
