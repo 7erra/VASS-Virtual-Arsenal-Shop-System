@@ -70,6 +70,7 @@ class Display3DENVASS
 			};
 			colorTextSelect[] = {0,0.5,0,1};
 			colorText[] = {0.5,0,0,1};
+			colorSelectedBg[] = {0,0,0,0};
 			rows = 1;
 			columns = 23;
 		};
