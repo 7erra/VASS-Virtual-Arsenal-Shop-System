@@ -3,7 +3,7 @@
 	"tasks": [
 		{
 			"label": "Start Arma 3 (VASS)",
-			"command": "arma3diag_x64.exe",
+			"command": "./arma3diag_x64.exe",
 			"type": "shell",
 			"options": {
 				"cwd": "D:/SteamLibraryM/steamapps/common/Arma 3"
@@ -16,7 +16,7 @@
 				"-noSplash",
 				"-noSound",
 				"-showScriptErrors",
-				"-mod=!Workshop/@Arma 3 Profiling Branch Companion Mod;!Workshop/@CBA_A3;!Workshop/@Pythia;!Workshop/@7erra's Editing Extensions;!Workshop/@Advanced Developer Tools;P:/VASS-Virtual-Arsenal-Shop-System/TER_VASS",
+				"-mod=\\\"!Workshop/@Arma 3 Profiling Branch Companion Mod;!Workshop/@CBA_A3;!Workshop/@Pythia;!Workshop/@7erra's Editing Extensions;!Workshop/@Advanced Developer Tools;P:/VASS-Virtual-Arsenal-Shop-System/TER_VASS\\\"",
 				"-window",
 				"-posX=-1795",
 				"-posY=146"
