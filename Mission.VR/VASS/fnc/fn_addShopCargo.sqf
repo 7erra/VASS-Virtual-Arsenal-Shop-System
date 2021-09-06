@@ -1,9 +1,7 @@
 /*
 	Author: 7erra <https://forums.bohemia.net/profile/1139559-7erra/>
-
 	Description:
 	Change the inventory of a shop.
-
 	Parameter(s):
 	0: OBJECT - The shop object whose inventory will be changed.
 	1: ARRAY - List of items, prices and amounts to add
@@ -18,30 +16,28 @@
 		3 - Overwrite old, don't add new entries, only modify old ones
 		4 - Amount diff, add/substract amounts
 	(optional) 3: BOOL - Change inventory for all players. If not specified, the _object's "TER_VASS_shared" variable is used. If this isn't set either it defaults to true.
-
 	Returns:
 	ARRAY - New inventory
 */
 
 params ["_object","_cargo", ["_overwrite", 1]];
-private _global = param [3, _object getVariable ["TER_VASS_shared",true]];
+_global = param [3, _object getVariable ["TER_VASS_shared",true]];
 
-private _cargoClasses = _cargo select {_x isEqualType ""};
+_cargoClasses = _cargo select {_x isEqualType ""};
 _cargoClasses = _cargoClasses apply {toLower _x};
 //--- Shop settings
-private _newCargo = [];
+_newCargo = [];
 if (_overwrite != 2) then {
 	_newCargo = _object getVariable ["TER_VASS_cargo",[]];
 };
 
 for "_i" from 0 to (count _cargo -3) step 3 do {
 	//--- Iterate through the classes
-	(_cargo select [_i, 3]) params ["_class", "_price", "_amount"];
-	// private _class = tolower (_cargo#_i);
-	// private _price = _cargo#(_i+1);
-	// private _amount = _cargo#(_i+2);
+	_class = tolower (_cargo#_i);
+	_price = _cargo#(_i+1);
+	_amount = _cargo#(_i+2);
 
-	private _findInd = _newCargo findIf {_class isEqualTo _x};
+	_findInd = _newCargo findIf {_class isEqualTo _x};
 	if (_findInd != -1 && (_overwrite == 1 || _overwrite == 4)) then {
 		//--- Overwrite current setting
 		if (_overwrite == 4) then {
@@ -59,7 +55,7 @@ for "_i" from 0 to (count _cargo -3) step 3 do {
 	};
 };
 
-private _returnCargo = [];
+_returnCargo = [];
 for "_i" from 2 to (count _newCargo -1) step 3 do {
 	// only items whith quantity not false
 	if !((_newCargo#_i) isEqualTo false) then {
