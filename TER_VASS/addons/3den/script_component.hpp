@@ -13,6 +13,7 @@
 #include "\z\TER_VASS\addons\main\script_macros.hpp"
 #include "\a3\3DEN\UI\macros.inc"
 #include "\a3\3den\UI\resincl.inc"
+#include "\a3\ui_f\hpp\defineResinclDesign.inc"
 #define CT_CONTROLS_TABLE 19
 
 #ifdef DEBUG_MODE_FULL

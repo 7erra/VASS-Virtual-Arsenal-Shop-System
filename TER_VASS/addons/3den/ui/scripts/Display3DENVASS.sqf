@@ -18,6 +18,10 @@ switch _mode do {
 		_ctrlSearch ctrlAddEventHandler ["KeyDown", {
 			with uiNamespace do {["search", _this] spawn SELF;};
 		}];
+		private _ctrlFilter = _display displayCtrl IDC_DISPLAY3DENVASS_FILTER;
+		_ctrlFilter ctrlAddEventHandler ["CheckBoxesSelChanged", {
+			with uiNamespace do {["checkboxesChanged", _this] call SELF;};
+		}];
 	};
 	case "fillList":{
 		_params params ["_display", "_list"];
@@ -93,27 +97,32 @@ switch _mode do {
 		_ctrlSearch setVariable ["lastSearch", ctrlText _ctrlSearch];
 		private _display = ctrlParent _ctrlSearch;
 		private _focCtrl = focusedCtrl _display;
-		diag_log [
-			_focCtrl,
-			ctrlClassName _focCtrl
-		];
 		["filter", ctrlParent _ctrlSearch] call SELF;
-		private _focCtrl = focusedCtrl _display;
-		diag_log [
-			_focCtrl,
-			ctrlClassName _focCtrl
-		];
+		ctrlSetFocus _ctrlSearch; // The above function call unfocuses the search bar
 	};
 	case "filter":{
 		_params params ["_display"];
 		private _ctrlSearch = _display displayCtrl IDC_DISPLAY3DENVASS_SEARCH;
+		private _ctrlFilter = _display displayCtrl IDC_DISPLAY3DENVASS_FILTER;
 		private _searchText = ctrlText _ctrlSearch;
 		private _y = 0;
 		{
-			private _filterApplies = 
-				toLower _searchText in toLower(_x getVariable "classname") ||
+			//--- Check filters:
+			private _class = _x getVariable "classname";
+			//--- Item types:
+			private _arsenalData = missionNamespace getVariable "bis_fnc_arsenal_data";
+			private _dataIndex = _arsenalData findIf {_class in _x};
+			private _excluded = for "_i" from 0 to (lnbSize _ctrlFilter select 1) do {
+				if (_ctrlFilter lbValue _i == _dataIndex) exitWith {
+					_ctrlFilter ctrlChecked _i
+				};
+				false
+			};
+			//--- Use search query:
+			private _filterSearch = 
+				toLower _searchText in toLower(_class) ||
 				toLower _searchText in toLower(_x getVariable "displayname");
-			if (_filterApplies) then {
+			if (_filterSearch && !_excluded) then {
 				_x ctrlShow true; // This is bugged. It forces focus to another control for some reason...
 				_x ctrlSetPositionY (_y * (H_ROW + 1) * GRID_H);
 				_y = _y + 1;
@@ -132,8 +141,10 @@ switch _mode do {
 		};
 		_controls
 	};
-	case "checkFilter":{
-		_params params ["_ctrlItem"];
+	case "checkboxesChanged":{
+		_params params ["_ctrlCheckboxes", "_ind", "_state"];
+		private _display = ctrlParent _ctrlCheckboxes;
+		["filter", _display] call SELF;
 	};
 	case "onUnload":{
 		_params params ["_display", "_exitCode"];
