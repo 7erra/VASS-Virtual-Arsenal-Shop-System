@@ -18,16 +18,17 @@ class VASS
 		// };
 		class cargo
 		{
-			property = "TER_VASS_cargo";
-			control = "VASS_AmmoBox2";
 			displayName = "Shop Inventory";
 			tooltip = "Define the items which the trader can sell and buy.\n""-"" means the item is not part of the shop, so not buyable or sellable. Script: -2.\n""∞"" means that the item will never run out. Script: -1.\n""0"" means that the item is not sold by the shop but can be sold to the trader. Script: 0.\nAny other number restricts the amonut of sellable items to the specified amount. If all items are sold out it is treated just as ""0"". Script: N.";
-			expression = "if (_value isEqualType '') then {\
-				_value = parseSimpleArray _value;\
-				_this setVariable ['TER_VASS_cargo', _value];\
-				_this setVariable ['TER_VASS_cargo_default', _value];\
-				};\
-			";
+			property = "TER_VASS_cargo";
+			control = "TER_VASS_AmmoBox2";
+			expression = "[_this, parseSimpleArray _value, 2] call TER_VASS_fnc_addShopCargo;";
+			// expression = "if (_value isEqualType '') then {\
+			// 	_value = parseSimpleArray _value;\
+			// 	_this setVariable ['TER_VASS_cargo', _value];\
+			// 	_this setVariable ['TER_VASS_cargo_default', _value];\
+			// 	};\
+			// ";
 		};
 		// class refresh
 		// {

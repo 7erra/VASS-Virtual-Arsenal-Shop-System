@@ -68,11 +68,37 @@ class Display3DENVASS
 				ARSENAL_ICON(cargoPut),
 				ARSENAL_ICON(cargoMisc)
 			};
-			colorTextSelect[] = {0,0.5,0,1};
-			colorText[] = {0.5,0,0,1};
+			colorTextSelect[] = {0.5,0,0,1};
+			colorText[] = {0,0.5,0,1};
 			colorSelectedBg[] = {0,0,0,0};
 			rows = 1;
 			columns = 23;
+		};
+		delete Sort;
+		class LabelSearch: ctrlStructuredText
+		{
+			text = "Search:";
+			x = safeZoneX + 6 * GRID_W;
+			y = safeZoneY + 22 * GRID_H;
+			w = 15 * GRID_W;
+			h = 5 * GRID_H;
+		};
+		class Search: ctrlEdit
+		{
+			idc = IDC_DISPLAY3DENVASS_SEARCH;
+			x = safeZoneX + 22 * GRID_W;
+			y = safeZoneY + 22 * GRID_H;
+			w = safeZoneW - 28 * GRID_W;
+			h = 5 * GRID_H;
+		};
+		class Cargo: ctrlControlsGroup
+		{
+			idc = IDC_DISPLAY3DENVASS_CARGO;
+			x = safeZoneX + 6 * GRID_W;
+			y = safeZoneY + 28 * GRID_H;
+			w = safeZoneW - 12 * GRID_W;
+			h = safeZoneH - 41 * GRID_H;
+			colorBackground[] = {1,0,0,0.5};
 		};
 		class Cancel: ctrlButtonCancel
 		{
