@@ -80,7 +80,7 @@ switch _mode do {
 			_ctrlClass ctrlSetPosition [
 				(H_ROW + 1) * GRID_W,
 				0,
-				safeZoneW - (12 - (H_ROW + 1)) * GRID_W,
+				100 * GRID_W,
 				H_ROW * GRID_H
 			];
 			_ctrlClass ctrlCommit 0;
@@ -90,6 +90,44 @@ switch _mode do {
 				_displayName,
 				_class
 			];
+			
+			private _ctrlLabelPrice = _display ctrlCreate ["ctrlStructuredText", -1, _ctrlItem];
+			_ctrlLabelPrice ctrlSetPosition [
+				(H_ROW + 102) * GRID_W,
+				2 * GRID_H,
+				15 * GRID_W,
+				5 * GRID_H
+			];
+			_ctrlLabelPrice ctrlCommit 0;
+			_ctrlLabelPrice ctrlSetText "Price:";
+			
+			private _ctrlPrice = _display ctrlCreate ["ctrlEdit", IDC_DISPLAY3DENVASS_ITEM_PRICE, _ctrlItem];
+			_ctrlPrice ctrlSetPosition [
+				(H_ROW + 117) * GRID_W,
+				2 * GRID_H,
+				50 * GRID_W,
+				5 * GRID_H
+			];
+			_ctrlPrice ctrlCommit 0;
+
+			private _ctrlLabelAmount = _display ctrlCreate ["ctrlStructuredText", -1, _ctrlItem];
+			_ctrlLabelAmount ctrlSetPosition [
+				(H_ROW + 102) * GRID_W,
+				(H_ROW - 7) * GRID_H,
+				15 * GRID_W,
+				5 * GRID_H
+			];
+			_ctrlLabelAmount ctrlCommit 0;
+			_ctrlLabelAmount ctrlSetText "Amount:";
+
+			private _ctrlAmount = _display ctrlCreate ["ctrlEdit", IDC_DISPLAY3DENVASS_ITEM_AMOUNT, _ctrlItem];
+			_ctrlAmount ctrlSetPosition [
+				(H_ROW + 117) * GRID_W,
+				(H_ROW - 7) * GRID_H,
+				50 * GRID_W,
+				5 * GRID_H
+			];
+			_ctrlAmount ctrlCommit 0;
 
 			_ctrlItem setVariable ["classname", _class];
 			_ctrlItem setVariable ["config", _itemConfig];
