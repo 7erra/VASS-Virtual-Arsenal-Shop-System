@@ -13,7 +13,10 @@ switch _mode do {
 			};
 			private _items = flatten (missionNamespace getVariable "bis_fnc_arsenal_data");
 			//--- Add acessories, since they are not included in the arsenal data
-			private _accessories = "getNumber(_x >> 'type') == 131072" configClasses (configFile >> "CfgWeapons") apply {
+			private _accessories = (
+				"getNumber(_x >> 'type') == 131072 &&"+
+				"getNumber(_x >> 'scope') == 2"
+			) configClasses (configFile >> "CfgWeapons") apply {
 				configName _x;
 			};
 			_items append _accessories;
@@ -48,6 +51,8 @@ switch _mode do {
 			[_displayName, _config, _x]
 		};
 		_list sort true;
+
+		//--- Iterate over all items and create the controls for each
 		private _ctrlCargo = _display displayCtrl IDC_DISPLAY3DENVASS_CARGO;
 		{
 			_x params ["_displayName", "_itemConfig", "_class"];
@@ -163,6 +168,17 @@ switch _mode do {
 			//--- Item types:
 			private _arsenalData = missionNamespace getVariable "bis_fnc_arsenal_data";
 			private _dataIndex = _arsenalData findIf {_class in _x};
+			if (_dataIndex == -1) then {
+				//--- Attachments do not have a data index as they are not part
+				//--- of the arsenal data
+				_dataIndex = switch (_class call BIS_fnc_itemType select 1) do {
+					case "AccessoryMuzzle": {IDC_RSCDISPLAYARSENAL_TAB_ITEMMUZZLE};
+					case "AccessoryPointer": {IDC_RSCDISPLAYARSENAL_TAB_ITEMACC};
+					case "AccessorySights": {IDC_RSCDISPLAYARSENAL_TAB_ITEMOPTIC};
+					case "AccessoryBipod": {IDC_RSCDISPLAYARSENAL_TAB_ITEMBIPOD};
+					default {-1};
+				};
+			};
 			private _excluded = for "_i" from 0 to (lnbSize _ctrlFilter select 1) do {
 				if (_ctrlFilter lbValue _i == _dataIndex) exitWith {
 					_ctrlFilter ctrlChecked _i
