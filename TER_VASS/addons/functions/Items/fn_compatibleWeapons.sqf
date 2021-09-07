@@ -2,19 +2,17 @@
 	Author: Terra
 
 	Description:
-		__DESCRIPTION___
+		Returns all weapons that can use the given attachment. Basically the
+		counterpart of BIS_fnc_compatibleItems.
 
 	Parameter(s):
-		0:	__TYPE__ - __EXPLANATION__
-		Optional:
-		N:	__TYPE___ - __EXPLANATION__
-			Default: __DEFAULT___
+		0:	STRING - Classname of the item
 
 	Returns:
-		__TYPE__ - __EXPLANATION___
+		ARRAY of STRINGs - Weapon classnames
 
 	Example(s):
-		__PARAMETER__ __EXECUTIONMETHOD__ __FUNCTION___; //-> __RETURN__
+		["bipod_01_F_blk"] call TER_VASS_fnc_compatibleWeapons; //-> ["srifle_DMR_01_F","srifle_EBR_F","LMG_Mk200_F",...
 */
 #include "..\script_component.hpp"
 params ["_item"];
