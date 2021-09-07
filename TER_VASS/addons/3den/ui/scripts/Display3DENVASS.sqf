@@ -21,8 +21,8 @@ switch _mode do {
 		};
 		//--- Set up the UI
 		private _ctrlSearch = _display displayCtrl IDC_DISPLAY3DENVASS_SEARCH;
-		_ctrlSearch ctrlAddEventHandler ["KeyDown", {
-			with uiNamespace do {["search", _this] spawn SELF;};
+		_ctrlSearch ctrlAddEventHandler ["KeyUp", {
+			with uiNamespace do {["search", _this] call SELF;};
 		}];
 		private _ctrlFilter = _display displayCtrl IDC_DISPLAY3DENVASS_FILTER;
 		_ctrlFilter ctrlAddEventHandler ["CheckBoxesSelChanged", {
@@ -139,10 +139,8 @@ switch _mode do {
 		_params params ["_ctrlSearch"];
 		if (ctrlText _ctrlSearch == _ctrlSearch getVariable ["lastSearch", ""]) exitWith {};
 		_ctrlSearch setVariable ["lastSearch", ctrlText _ctrlSearch];
-		isNil {
-			["filter", ctrlParent _ctrlSearch] call SELF;
-			ctrlSetFocus _ctrlSearch; // The above function call unfocuses the search bar
-		};
+		["filter", ctrlParent _ctrlSearch] call SELF;
+		ctrlSetFocus _ctrlSearch; // The above function call unfocuses the search bar
 	};
 	case "filter":{
 		_params params ["_display"];
