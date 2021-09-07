@@ -11,7 +11,13 @@ switch _mode do {
 			with missionNamespace do {
 				["Preload"] call BIS_fnc_arsenal;
 			};
-			["fillList", [_display, flatten (missionNamespace getVariable "bis_fnc_arsenal_data")]] call SELF;
+			private _items = flatten (missionNamespace getVariable "bis_fnc_arsenal_data");
+			//--- Add acessories, since they are not included in the arsenal data
+			private _accessories = "getNumber(_x >> 'type') == 131072" configClasses (configFile >> "CfgWeapons") apply {
+				configName _x;
+			};
+			_items append _accessories;
+			["fillList", [_display, _items]] call SELF;
 		};
 		//--- Set up the UI
 		private _ctrlSearch = _display displayCtrl IDC_DISPLAY3DENVASS_SEARCH;
@@ -65,7 +71,7 @@ switch _mode do {
 			];
 			_ctrlImage ctrlCommit 0;
 			private _image = getText(_itemConfig >> "picture");
-			if (_image == "") then {
+			if (!fileExists _image) then {
 				_image = "\a3\ui_f\data\Map\Markers\Military\unknown_CA.paa";
 			};
 			_ctrlImage ctrlSetText _image;
@@ -95,10 +101,10 @@ switch _mode do {
 		_params params ["_ctrlSearch"];
 		if (ctrlText _ctrlSearch == _ctrlSearch getVariable ["lastSearch", ""]) exitWith {};
 		_ctrlSearch setVariable ["lastSearch", ctrlText _ctrlSearch];
-		private _display = ctrlParent _ctrlSearch;
-		private _focCtrl = focusedCtrl _display;
-		["filter", ctrlParent _ctrlSearch] call SELF;
-		ctrlSetFocus _ctrlSearch; // The above function call unfocuses the search bar
+		isNil {
+			["filter", ctrlParent _ctrlSearch] call SELF;
+			ctrlSetFocus _ctrlSearch; // The above function call unfocuses the search bar
+		};
 	};
 	case "filter":{
 		_params params ["_display"];
