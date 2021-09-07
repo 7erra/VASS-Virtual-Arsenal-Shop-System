@@ -28,6 +28,15 @@ switch _mode do {
 		_ctrlFilter ctrlAddEventHandler ["CheckBoxesSelChanged", {
 			with uiNamespace do {["checkboxesChanged", _this] call SELF;};
 		}];
+		private _ctrlFilterAll = _display displayCtrl IDC_DISPLAY3DENVASS_FILTERALL;
+		_ctrlFilterAll ctrlAddEventHandler ["ButtonClick",{
+			with uiNamespace do {["filterToggle", [_this#0, false]] call SELF;};
+		}];
+		private _ctrlFilterNone = _display displayCtrl IDC_DISPLAY3DENVASS_FILTERNONE;
+		_ctrlFilterNone ctrlAddEventHandler ["ButtonClick",{
+			with uiNamespace do {["filterToggle", [_this#0, true]] call SELF;};
+		}];
+		diag_log [_ctrlFilterAll, _ctrlFilterNone];
 	};
 	case "fillList":{
 		_params params ["_display", "_list"];
@@ -185,7 +194,19 @@ switch _mode do {
 	};
 	case "checkboxesChanged":{
 		_params params ["_ctrlCheckboxes", "_ind", "_state"];
+		if (_ctrlCheckboxes getVariable ["noUpdate", false]) exitWith {};
 		private _display = ctrlParent _ctrlCheckboxes;
+		["filter", _display] call SELF;
+	};
+	case "filterToggle":{
+		_params params ["_ctrlFilterToggle", "_state"];
+		private _display = ctrlParent _ctrlFilterToggle;
+		_ctrlFilter = _display displayCtrl IDC_DISPLAY3DENVASS_FILTER;
+		_ctrlFilter setVariable ["noUpdate", true];
+		for "_i" from 0 to (lnbSize _ctrlFilter select 1) do {
+			_ctrlFilter ctrlSetChecked [_i, _state];
+		};
+		_ctrlFilter setVariable ["noUpdate", nil];
 		["filter", _display] call SELF;
 	};
 	case "onUnload":{

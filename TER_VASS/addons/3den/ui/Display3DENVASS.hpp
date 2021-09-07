@@ -39,7 +39,7 @@ class Display3DENVASS
 			style = ST_PICTURE + ST_KEEP_ASPECT_RATIO;
 			x = safeZoneX + 6 * GRID_W;
 			y = safeZoneY + 11 * GRID_H;
-			w = safeZoneW - 12 * GRID_W;
+			w = safeZoneW - 23 * GRID_W;
 			h = 10 * GRID_H;
 			strings[] = {
 				ARSENAL_ICON(primaryWeapon),
@@ -103,7 +103,22 @@ class Display3DENVASS
 			rows = 1;
 			columns = 23;
 		};
-		delete Sort;
+		class FilterAll: ctrlButton
+		{
+			idc = IDC_DISPLAY3DENVASS_FILTERALL;
+			text = "ALL";
+			x = safeZoneX + safeZoneW - 12 * GRID_W - 5 * GRID_W;
+			y = safeZoneY + 11 * GRID_H;
+			w = 10 * GRID_W;
+			h = 5 * GRID_H;
+			colorBackground[] = {0,0,0,0.5};
+		};
+		class FilterNone: FilterAll
+		{
+			idc = IDC_DISPLAY3DENVASS_FILTERNONE;
+			text = "NONE";
+			y = safeZoneY + 16 * GRID_H;
+		};
 		class LabelSearch: ctrlStructuredText
 		{
 			text = "Search:";
