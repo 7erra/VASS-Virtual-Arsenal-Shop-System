@@ -218,11 +218,13 @@ switch _mode do {
 		_params params ["_ctrlFilterToggle", "_state"];
 		private _display = ctrlParent _ctrlFilterToggle;
 		_ctrlFilter = _display displayCtrl IDC_DISPLAY3DENVASS_FILTER;
+		//--- Prevent the triggering of the CheckBoxesSelChanged for every category
 		_ctrlFilter setVariable ["noUpdate", true];
 		for "_i" from 0 to (lnbSize _ctrlFilter select 1) do {
 			_ctrlFilter ctrlSetChecked [_i, _state];
 		};
 		_ctrlFilter setVariable ["noUpdate", nil];
+		//--- Instead do it only once when all changes are applied
 		["filter", _display] call SELF;
 	};
 	case "onUnload":{
