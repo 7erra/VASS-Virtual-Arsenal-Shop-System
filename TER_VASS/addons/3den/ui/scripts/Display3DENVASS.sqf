@@ -167,7 +167,6 @@ switch _mode do {
 			_ctrlItem setVariable ["config", _itemConfig];
 			_ctrlItem setVariable ["displayname", _displayName];
 		} forEach _items;
-		_display setVariable ["HashmapClassControls", _hmapClassControls];
 		["filter", [_display]] call SELF;
 	};
 	case "search":{
