@@ -20,7 +20,6 @@ switch _mode do {
 				configName _x;
 			};
 			_items append _accessories;
-			["fillList", [_display, _items]] call SELF;
 		};
 		//--- Set up the UI
 		private _ctrlSearch = _display displayCtrl IDC_DISPLAY3DENVASS_SEARCH;
@@ -39,18 +38,30 @@ switch _mode do {
 		_ctrlFilterNone ctrlAddEventHandler ["ButtonClick",{
 			with uiNamespace do {["filterToggle", [_this#0, true]] call SELF;};
 		}];
-		diag_log [_ctrlFilterAll, _ctrlFilterNone];
 	};
 	case "fillList":{
-		_params params ["_display", "_list"];
+		_params params ["_display", ["_cargo", []]];
+		with missionNamespace do {
+			["Preload"] call BIS_fnc_arsenal;
+		};
+		private _items = flatten (missionNamespace getVariable "bis_fnc_arsenal_data");
+		//--- Add acessories, since they are not included in the arsenal data
+		private _accessories = (
+			"getNumber(_x >> 'type') == 131072 &&"+
+			"getNumber(_x >> 'scope') == 2"
+		) configClasses (configFile >> "CfgWeapons") apply {
+			configName _x;
+		};
+		_items append _accessories;
+		
 		//--- Sort the list by alphabet
-		_list = _list apply {
+		_items = _items apply {
 			private _config = [_x] call TER_VASS_fnc_itemConfig;
 			private _displayName = [_config] call BIS_fnc_displayName;
 
 			[_displayName, _config, _x]
 		};
-		_list sort true;
+		_items sort true;
 
 		//--- Iterate over all items and create the controls for each
 		private _ctrlCargo = _display displayCtrl IDC_DISPLAY3DENVASS_CARGO;
@@ -142,11 +153,21 @@ switch _mode do {
 				5 * GRID_H
 			];
 			_ctrlAmount ctrlCommit 0;
+			
+			//--- Get the item's price and amount
+			private _ind = _cargo find _class;
+			if (_ind > -1) then {
+				private _price = _cargo select (_ind + 1);
+				_ctrlPrice ctrlSetText str _price;
+				private _amount = _cargo select (_ind + 2);
+				_ctrlAmount ctrlSetText str _amount;
+			};
 
 			_ctrlItem setVariable ["classname", _class];
 			_ctrlItem setVariable ["config", _itemConfig];
 			_ctrlItem setVariable ["displayname", _displayName];
-		} forEach _list;
+		} forEach _items;
+		_display setVariable ["HashmapClassControls", _hmapClassControls];
 		["filter", [_display]] call SELF;
 	};
 	case "search":{

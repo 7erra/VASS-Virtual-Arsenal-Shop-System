@@ -7,13 +7,14 @@ class TER_VASS_AmmoBox2: TitleWide
 	#endif
 	attributeLoad = ["attributeLoad",[_this, _value]] call ATTRIBUTE_SCRIPT;
 	attributeSave = ["attributeSave",[_this]] call ATTRIBUTE_SCRIPT;
+	INIT_CONTROL(VASS_AmmoBox2,TER_VASS_3den)
 	#undef ATTRIBUTE_SCRIPT
 	h = 11 * GRID_H;
 	class Controls: Controls
 	{
 		class List: ctrlEdit
 		{
-			idc = 100;
+			idc = IDC_VASS_AMMOBOX2_LIST;
 			x = 5 * GRID_W;
 			y = 1 * GRID_W;
 			w = (ATTRIBUTE_TITLE_W + ATTRIBUTE_CONTENT_W - 5) * GRID_W;
@@ -21,9 +22,8 @@ class TER_VASS_AmmoBox2: TitleWide
 		};
 		class Edit: ctrlButton
 		{
-			idc = 101;
+			idc = IDC_VASS_AMMOBOX2_EDIT;
 			text = "Edit VASS Inventory";
-			onButtonClick = (findDisplay 315) createDisplay "Display3DENVASS";
 			x = 5 * GRID_W;
 			y = 6 * GRID_H;
 			w = (ATTRIBUTE_TITLE_W + ATTRIBUTE_CONTENT_W - 5) * GRID_W;
