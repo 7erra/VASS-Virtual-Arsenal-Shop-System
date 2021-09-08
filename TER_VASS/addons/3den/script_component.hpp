@@ -17,9 +17,8 @@
 #define CT_CONTROLS_TABLE 19
 
 #ifdef DEBUG_MODE_FULL
-    #define INIT_DISPLAY_FUNCTION (compile preprocessfilelinenumbers QUOTE(\p\TER_VASS\addons\3den\ui\scripts\NAME.sqf))
-
-    #define UISCRIPT(NAME) (compile preprocessfilelinenumbers QUOTE(\p\TER_VASS\addons\3den\ui\scripts\NAME.sqf))
+    #define INIT_DISPLAY_FUNCTION (compileScript [QUOTE(\p\TER_VASS\addons\3den\ui\scripts\NAME.sqf)])
+    #define UISCRIPT(NAME) (compileScript [QUOTE(\p\TER_VASS\addons\3den\ui\scripts\NAME.sqf)])
 #else
     #define UISCRIPT(NAME) NAME##_script
 #endif
@@ -43,6 +42,10 @@
 #define IDC_VASSCARGO_GRPCARGOARRAY 7113
 #define IDC_VASSCARGO_TXTVALIDATE 7114
 #define IDC_VASSCARGO_BTNVALIDATE 7115
+
+//--- 3den Attribute
+#define IDC_VASS_AMMOBOX2_LIST 100
+#define IDC_VASS_AMMOBOX2_EDIT 101
 
 //--- VASS Cargo v2
 #define IDD_DISPLAY3DENVASS 210806
