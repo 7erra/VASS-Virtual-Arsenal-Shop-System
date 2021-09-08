@@ -1,4 +1,4 @@
-class TER_VASS
+class TER
 {
 	class VASS
 	{
