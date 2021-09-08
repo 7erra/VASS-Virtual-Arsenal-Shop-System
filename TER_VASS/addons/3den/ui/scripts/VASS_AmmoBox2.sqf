@@ -25,6 +25,7 @@ switch _mode do {
 		//_display setVariable ["TER_VASS_cargo", _cargo];
 		private _display3denVass = _display createDisplay "Display3DENVASS";
 		["fillList", [_display3denVass, _cargo]] spawn UISCRIPT(Display3DENVASS);
+		_display3denVass setVariable ["ctrlList", _ctrlList];
 	};
 
 	//--- Eden related

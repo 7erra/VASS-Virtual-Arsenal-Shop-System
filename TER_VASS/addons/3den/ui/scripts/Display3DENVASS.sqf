@@ -249,13 +249,26 @@ switch _mode do {
 	};
 	case "onUnload":{
 		_params params ["_display", "_exitCode"];
-		if (_exitCode == 1) then {
-			get3DENSelected "object" apply {
-				_x set3DENAttribute ["TER_VASS_cargo", str [
-					"class0", 100, 1,
-					"class1", 200, 2
-				]];
+		if (_exitCode != 1) exitWith {};
+		//--- Changes confirmed, set to 3den attribute display
+		private _ctrlList = _display getVariable "ctrlList";
+		private _list = [];
+		{
+			private _class = _x getVariable "classname";
+			private _ctrlPrice = _x controlsGroupCtrl IDC_DISPLAY3DENVASS_ITEM_PRICE;
+			private _ctrlAmount = _x controlsGroupCtrl IDC_DISPLAY3DENVASS_ITEM_AMOUNT;
+			private _amount = ctrlText _ctrlAmount;
+			if (_amount == "true" || {parseNumber _amount > 0}) then {
+				if (_amount != "true") then {
+					_amount = parseNumber _amount;
+				} else {
+					_amount = _amount == "true";
+				};
+				//--- Valid, add
+				private _price = parseNumber ctrlText _ctrlPrice;
+				_list append [_class, _price, _amount];
 			};
-		};
+		} forEach (["getItemControls", [_display]] call SELF);
+		_ctrlList ctrlSetText str _list;
 	};
 };
