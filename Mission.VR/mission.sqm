@@ -8,14 +8,14 @@ class EditorData
 	toggles=5;
 	class ItemIDProvider
 	{
-		nextID=6;
+		nextID=12;
 	};
 	class Camera
 	{
-		pos[]={4086.4688,9.8005409,4103.6851};
-		dir[]={-0.66481823,-0.4439272,0.60081613};
-		up[]={-0.32936731,0.89605778,0.29765826};
-		aside[]={0.67050302,2.9680086e-007,0.74192983};
+		pos[]={4080,30,4083};
+		dir[]={0,-0.70710683,0.70710683};
+		up[]={0,0.70710677,0.70710677};
+		aside[]={0.99999994,0,0};
 	};
 };
 binarizationWanted=0;
@@ -23,7 +23,7 @@ sourceName="VASS";
 addons[]=
 {
 	"A3_Characters_F",
-	"A3_Structures_F_Furniture"
+	"A3_Missions_F_Oldman"
 };
 class AddonsMetaData
 {
@@ -39,8 +39,8 @@ class AddonsMetaData
 		};
 		class Item1
 		{
-			className="A3_Structures_F";
-			name="Arma 3 - Buildings and Structures";
+			className="A3_Missions_F_Oldman";
+			name="Arma 3 Old Man - Playable Content";
 			author="Bohemia Interactive";
 			url="https://www.arma3.com";
 		};
@@ -93,52 +93,29 @@ class Mission
 					{
 						isPlayer=1;
 					};
-					id=4;
+					id=7;
 					type="B_Soldier_A_F";
 				};
 			};
 			class Attributes
 			{
 			};
-			id=3;
+			id=6;
 		};
 		class Item1
 		{
 			dataType="Object";
 			class PositionInfo
 			{
-				position[]={4080,5.6222448,4112};
+				position[]={4080,5.7898083,4112};
 			};
 			side="Empty";
 			flags=4;
 			class Attributes
 			{
 			};
-			id=5;
-			type="Land_Icebox_F";
-			class CustomAttributes
-			{
-				class Attribute0
-				{
-					property="TER_VASS_cargo";
-					expression="_this setVariable ['cargo', _value];";
-					class Value
-					{
-						class data
-						{
-							class type
-							{
-								type[]=
-								{
-									"BOOL"
-								};
-							};
-							value=1;
-						};
-					};
-				};
-				nAttributes=1;
-			};
+			id=8;
+			type="VirtualReammoBox_F";
 		};
 	};
 };
