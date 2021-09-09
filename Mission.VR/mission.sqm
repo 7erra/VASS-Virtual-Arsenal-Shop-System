@@ -13,9 +13,9 @@ class EditorData
 	class Camera
 	{
 		pos[]={4080,30,4083};
-		dir[]={0,-0.70710683,0.70710683};
-		up[]={0,0.70710677,0.70710677};
-		aside[]={0.99999994,0,0};
+		dir[]={-1.2363449e-007,-0.70710683,0.70710683};
+		up[]={-1.2363449e-007,0.70710671,0.70710683};
+		aside[]={1,0,1.7484557e-007};
 	};
 };
 binarizationWanted=0;
@@ -23,13 +23,15 @@ sourceName="VASS";
 addons[]=
 {
 	"A3_Characters_F",
+	"A3_Weapons_F_Mark_LongRangeRifles_DMR_02",
+	"A3_Weapons_F_Mark",
 	"A3_Missions_F_Oldman"
 };
 class AddonsMetaData
 {
 	class List
 	{
-		items=2;
+		items=3;
 		class Item0
 		{
 			className="A3_Characters_F";
@@ -39,12 +41,23 @@ class AddonsMetaData
 		};
 		class Item1
 		{
+			className="A3_Weapons_F_Mark";
+			name="Arma 3 Marksmen - Weapons and Accessories";
+			author="Bohemia Interactive";
+			url="https://www.arma3.com";
+		};
+		class Item2
+		{
 			className="A3_Missions_F_Oldman";
 			name="Arma 3 Old Man - Playable Content";
 			author="Bohemia Interactive";
 			url="https://www.arma3.com";
 		};
 	};
+};
+dlcs[]=
+{
+	"Mark"
 };
 randomSeed=26735;
 class ScenarioData
@@ -92,6 +105,23 @@ class Mission
 					class Attributes
 					{
 						isPlayer=1;
+						class Inventory
+						{
+							class primaryWeapon
+							{
+								name="srifle_DMR_02_F";
+								class primaryMuzzleMag
+								{
+									name="10Rnd_338_Mag";
+									ammoLeft=10;
+								};
+							};
+							class uniform
+							{
+								typeName="U_B_Protagonist_VR";
+								isBackpack=0;
+							};
+						};
 					};
 					id=7;
 					type="B_Soldier_A_F";
