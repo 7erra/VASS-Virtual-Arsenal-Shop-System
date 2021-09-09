@@ -1,21 +1,8 @@
 class VASS_addAction: Title
 {
 	h = 5.4 * ATTRIBUTE_CONTENT_H * GRID_H;
-	// Format: [Enable, Title, condition, radius, priority]
-	attributeLoad = "\
-		_value = parseSimpleArray _value;\
-		(_this controlsGroupCtrl 100) cbSetChecked (_value#0);\
-		for ""_i"" from 1 to 4 do {(_this controlsGroupCtrl (100 + _i)) ctrlSetText (_value#_i);};\
-	";
-	attributeSave = "\
-		str[\
-			cbChecked (_this controlsGroupCtrl 100),\
-			ctrlText (_this controlsGroupCtrl 101),\
-			ctrlText (_this controlsGroupCtrl 102),\
-			str parseNumber ctrlText (_this controlsGroupCtrl 103),\
-			str parseNumber ctrlText (_this controlsGroupCtrl 104)\
-		]\
-	";
+	attributeLoad = ["attributeLoad", [_this,_value]] call ATTRIBUTE_SCRIPT(VASS_addAction);
+	attributeSave = ["attributeSave", [_this]] call ATTRIBUTE_SCRIPT(VASS_addAction);
 	class Controls: Controls
 	{
 		class Title1: Title
@@ -25,7 +12,7 @@ class VASS_addAction: Title
 		};
 		class enable: ctrlCheckboxBaseline
 		{
-			idc = 100;
+			idc = IDC_VASS_ADDACTION_ENABLE;
 			x = ATTRIBUTE_TITLE_W * GRID_W;
 			y = 0 * ATTRIBUTE_CONTENT_H * GRID_H;
 			w = ATTRIBUTE_CONTENT_H * GRID_W;
@@ -39,7 +26,7 @@ class VASS_addAction: Title
 		};
 		class addTitle: ctrlEdit
 		{
-			idc = 101;
+			idc = IDC_VASS_ADDACTION_TITLE;
 			x = ATTRIBUTE_TITLE_W * GRID_W;
 			y = 1.1 * ATTRIBUTE_CONTENT_H * GRID_H;
 			w = ATTRIBUTE_CONTENT_W * GRID_W;
@@ -53,7 +40,7 @@ class VASS_addAction: Title
 		};
 		class addCondition: addTitle
 		{
-			idc = 102;
+			idc = IDC_VASS_ADDACTION_CONDITION;
 			autocomplete = "scripting";
 			font = "EtelkaMonospacePro";
 			sizeEx = "3.41 * (1 / (getResolution select 3)) * pixelGrid * 0.5";
@@ -67,7 +54,7 @@ class VASS_addAction: Title
 		};
 		class radius: addTitle
 		{
-			idc = 103;
+			idc = IDC_VASS_ADDACTION_RADIUS;
 			y = 3.3 * ATTRIBUTE_CONTENT_H * GRID_H;
 			w = round(ATTRIBUTE_CONTENT_W / 3) * GRID_W;
 		};
@@ -79,7 +66,7 @@ class VASS_addAction: Title
 		};
 		class priority: radius
 		{
-			idc = 104;
+			idc = IDC_VASS_ADDACTION_PRIORITY;
 			y = 4.4 * ATTRIBUTE_CONTENT_H * GRID_H;
 		};
 	};
