@@ -1,15 +1,10 @@
 class TER_VASS_AmmoBox2: TitleWide
 {
-	#ifdef DEBUG_MODE_FULL
-		#define ATTRIBUTE_SCRIPT UISCRIPT(VASS_AmmoBox2)
-	#else
-		#define ATTRIBUTE_SCRIPT (uinamespace getVariable QUOTE(UISCRIPT(VASS_AmmoBox2)))
-	#endif
-	attributeLoad = ["attributeLoad",[_this, _value]] call ATTRIBUTE_SCRIPT;
-	attributeSave = ["attributeSave",[_this]] call ATTRIBUTE_SCRIPT;
+	attributeLoad = ["attributeLoad",[_this, _value]] call ATTRIBUTE_SCRIPT(VASS_AmmoBox2);
+	attributeSave = ["attributeSave",[_this]] call ATTRIBUTE_SCRIPT(VASS_AmmoBox2);
 	INIT_CONTROL(VASS_AmmoBox2,TER_VASS_3den)
 	#undef ATTRIBUTE_SCRIPT
-	h = 11 * GRID_H;
+	h = 12 * GRID_H;
 	class Controls: Controls
 	{
 		class List: ctrlEdit
