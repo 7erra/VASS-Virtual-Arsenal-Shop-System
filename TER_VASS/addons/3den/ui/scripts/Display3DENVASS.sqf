@@ -59,115 +59,124 @@ switch _mode do {
 			private _config = [_x] call TER_VASS_fnc_itemConfig;
 			private _displayName = [_config] call BIS_fnc_displayName;
 
-			[_displayName, _config, _x]
+			[_displayName, _config]
 		};
 		_items sort true;
+		_items = _items apply {_x#1};
 
 		//--- Iterate over all items and create the controls for each
 		private _ctrlCargo = _display displayCtrl IDC_DISPLAY3DENVASS_CARGO;
 		{
-			_x params ["_displayName", "_itemConfig", "_class"];
-
-			private _ctrlItem = _display ctrlCreate ["ctrlControlsGroupNoScrollbars", -1, _ctrlCargo];
-			_ctrlItem ctrlSetPosition [
-				0,
-				_forEachIndex * (H_ROW + 1) * GRID_H,
-				safeZoneW - 12 * GRID_W,
-				H_ROW * GRID_H
-			];
-			_ctrlItem ctrlCommit 0;
-
-			private _ctrlBackground = _display ctrlCreate ["ctrlStatic", -1, _ctrlItem];
-			_ctrlBackground ctrlSetPosition [
-				0,
-				0,
-				safeZoneW - 12 * GRID_W,
-				H_ROW * GRID_H
-			];
-			_ctrlBackground ctrlCommit 0;
-			_ctrlBackground ctrlSetBackgroundColor [0.3,0.3,0.3,1];
-
-			private _ctrlImage = _display ctrlCreate ["RscPictureKeepAspect", IDC_DISPLAY3DENVASS_ITEM_PICTURE, _ctrlItem];
-			_ctrlImage ctrlSetPosition [
-				0,
-				0,
-				H_ROW * GRID_W,
-				H_ROW * GRID_H
-			];
-			_ctrlImage ctrlCommit 0;
-			private _image = getText(_itemConfig >> "picture");
-			if (!fileExists _image) then {
-				_image = "\a3\ui_f\data\Map\Markers\Military\unknown_CA.paa";
-			};
-			_ctrlImage ctrlSetText _image;
-
-			_ctrlClass = _display ctrlCreate ["RscStructuredText", IDC_DISPLAY3DENVASS_ITEM_CLASS, _ctrlItem];
-			_ctrlClass ctrlSetPosition [
-				(H_ROW + 1) * GRID_W,
-				0,
-				100 * GRID_W,
-				H_ROW * GRID_H
-			];
-			_ctrlClass ctrlCommit 0;
-			private _displayName = [_itemConfig] call BIS_fnc_displayName;
-			_ctrlClass ctrlSetStructuredText parseText format [
-				"%1<br/><t font='EtelkaMonospaceProBold' size='0.6'>%2</t>",
-				_displayName,
-				_class
-			];
-			
-			private _ctrlLabelPrice = _display ctrlCreate ["ctrlStructuredText", -1, _ctrlItem];
-			_ctrlLabelPrice ctrlSetPosition [
-				(H_ROW + 102) * GRID_W,
-				2 * GRID_H,
-				15 * GRID_W,
-				5 * GRID_H
-			];
-			_ctrlLabelPrice ctrlCommit 0;
-			_ctrlLabelPrice ctrlSetText "Price:";
-			
-			private _ctrlPrice = _display ctrlCreate ["ctrlEdit", IDC_DISPLAY3DENVASS_ITEM_PRICE, _ctrlItem];
-			_ctrlPrice ctrlSetPosition [
-				(H_ROW + 117) * GRID_W,
-				2 * GRID_H,
-				50 * GRID_W,
-				5 * GRID_H
-			];
-			_ctrlPrice ctrlCommit 0;
-
-			private _ctrlLabelAmount = _display ctrlCreate ["ctrlStructuredText", -1, _ctrlItem];
-			_ctrlLabelAmount ctrlSetPosition [
-				(H_ROW + 102) * GRID_W,
-				(H_ROW - 7) * GRID_H,
-				15 * GRID_W,
-				5 * GRID_H
-			];
-			_ctrlLabelAmount ctrlCommit 0;
-			_ctrlLabelAmount ctrlSetText "Amount:";
-
-			private _ctrlAmount = _display ctrlCreate ["ctrlEdit", IDC_DISPLAY3DENVASS_ITEM_AMOUNT, _ctrlItem];
-			_ctrlAmount ctrlSetPosition [
-				(H_ROW + 117) * GRID_W,
-				(H_ROW - 7) * GRID_H,
-				50 * GRID_W,
-				5 * GRID_H
-			];
-			_ctrlAmount ctrlCommit 0;
-			
-			//--- Get the item's price and amount
-			private _ind = _cargo find _class;
-			if (_ind > -1) then {
-				private _price = _cargo select (_ind + 1);
-				_ctrlPrice ctrlSetText str _price;
-				private _amount = _cargo select (_ind + 2);
-				_ctrlAmount ctrlSetText str _amount;
-			};
-
-			_ctrlItem setVariable ["classname", _class];
-			_ctrlItem setVariable ["config", _itemConfig];
-			_ctrlItem setVariable ["displayname", _displayName];
+			["createItemControls", [_display, _x, _forEachIndex]] call SELF;
 		} forEach _items;
 		["filter", [_display]] call SELF;
+	};
+	case "createItemControls":{
+		_params params ["_display", "_config", "_ind"];
+		private _class = configName _config;
+		private _name = [_config] call BIS_fnc_displayName;
+		private _ctrlCargo = _display displayCtrl IDC_DISPLAY3DENVASS_CARGO;
+		
+		private _ctrlItem = _display ctrlCreate ["ctrlControlsGroupNoScrollbars", -1, _ctrlCargo];
+		_ctrlItem ctrlSetPosition [
+			0,
+			_ind * (H_ROW + 1) * GRID_H,
+			safeZoneW - 12 * GRID_W,
+			H_ROW * GRID_H
+		];
+		_ctrlItem ctrlCommit 0;
+		_ctrlItem setVariable ["classname", _class];
+		_ctrlItem setVariable ["config", _config];
+		_ctrlItem setVariable ["displayname", _name];
+
+		private _ctrlBackground = _display ctrlCreate ["ctrlStatic", -1, _ctrlItem];
+		_ctrlBackground ctrlSetPosition [
+			0,
+			0,
+			safeZoneW - 12 * GRID_W,
+			H_ROW * GRID_H
+		];
+		_ctrlBackground ctrlCommit 0;
+		_ctrlBackground ctrlSetBackgroundColor [0.3,0.3,0.3,1];
+
+		private _curX = 0;
+		private _ctrlImage = _display ctrlCreate ["RscPictureKeepAspect", IDC_DISPLAY3DENVASS_ITEM_PICTURE, _ctrlItem];
+		_ctrlImage ctrlSetPosition [
+			_curX,
+			0,
+			H_ROW * GRID_W,
+			H_ROW * GRID_H
+		];
+		_curX = _curX + (H_ROW + 1) * GRID_W;
+		_ctrlImage ctrlCommit 0;
+		private _image = getText(_config >> "picture");
+		if (!fileExists _image) then {
+			_image = "\a3\ui_f\data\Map\Markers\Military\unknown_CA.paa";
+		};
+		_ctrlImage ctrlSetText _image;
+
+		_ctrlClass = _display ctrlCreate ["RscStructuredText", IDC_DISPLAY3DENVASS_ITEM_CLASS, _ctrlItem];
+		_ctrlClass ctrlSetPosition [
+			_curX,
+			0,
+			100 * GRID_W,
+			H_ROW * GRID_H
+		];
+		_curX = _curX + 101 * GRID_W;
+		_ctrlClass ctrlCommit 0;
+		_ctrlClass ctrlSetStructuredText parseText format [
+			"%1<br/><t font='EtelkaMonospaceProBold' size='0.6'>%2</t>",
+			_name,
+			_class
+		];
+		
+		private _ctrlLabelPrice = _display ctrlCreate ["ctrlStructuredText", -1, _ctrlItem];
+		_ctrlLabelPrice ctrlSetPosition [
+			_curX,
+			2 * GRID_H,
+			15 * GRID_W,
+			5 * GRID_H
+		];
+		_ctrlLabelPrice ctrlCommit 0;
+		_ctrlLabelPrice ctrlSetText "Price:";
+
+		private _ctrlLabelAmount = _display ctrlCreate ["ctrlStructuredText", -1, _ctrlItem];
+		_ctrlLabelAmount ctrlSetPosition [
+			(H_ROW + 102) * GRID_W,
+			(H_ROW - 7) * GRID_H,
+			15 * GRID_W,
+			5 * GRID_H
+		];
+		_curX = _curX + 16 * GRID_W;
+		_ctrlLabelAmount ctrlCommit 0;
+		_ctrlLabelAmount ctrlSetText "Amount:";
+		
+		private _ctrlPrice = _display ctrlCreate ["ctrlEdit", IDC_DISPLAY3DENVASS_ITEM_PRICE, _ctrlItem];
+		_ctrlPrice ctrlSetPosition [
+			_curX,
+			2 * GRID_H,
+			50 * GRID_W,
+			5 * GRID_H
+		];
+		_ctrlPrice ctrlCommit 0;
+
+		private _ctrlAmount = _display ctrlCreate ["ctrlEdit", IDC_DISPLAY3DENVASS_ITEM_AMOUNT, _ctrlItem];
+		_ctrlAmount ctrlSetPosition [
+			_curX,
+			(H_ROW - 7) * GRID_H,
+			50 * GRID_W,
+			5 * GRID_H
+		];
+		_ctrlAmount ctrlCommit 0;
+
+		//--- Get the item's price and amount
+		private _ind = _cargo find _class;
+		if (_ind > -1) then {
+			private _price = _cargo select (_ind + 1);
+			_ctrlPrice ctrlSetText str _price;
+			private _amount = _cargo select (_ind + 2);
+			_ctrlAmount ctrlSetText str _amount;
+		};
 	};
 	case "search":{
 		_params params ["_ctrlSearch"];
