@@ -32,7 +32,9 @@ switch _mode do {
 	case "attributeLoad": {
 		_params params ["_ctrlGroup", "_value"];
 		_ctrlList = _ctrlGroup controlsGroupCtrl 100;
-		_ctrlList ctrlSetText _value;
+		if (_value isEqualType "") then {
+			_ctrlList ctrlSetText _value;
+		};
 	};
 	case "attributeSave": {
 		_params params ["_ctrlGroup"];
