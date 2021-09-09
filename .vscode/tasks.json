@@ -41,6 +41,12 @@
 				"isDefault": true
 			},
 			"problemMatcher": []
+		},
+		{
+			"label": "Revert mission.sqm",
+			"type": "shell",
+			"command": "git checkout Mission.VR/mission.sqm",
+			"problemMatcher": []
 		}
 	]
 }
