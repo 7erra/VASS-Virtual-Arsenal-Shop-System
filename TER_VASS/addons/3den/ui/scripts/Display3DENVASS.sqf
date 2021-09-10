@@ -5,22 +5,6 @@ params ["_mode", "_params"];
 switch _mode do {
 	case "onLoad":{
 		_params params ["_display"];
-		//--- Load the arsenal data to missionNamespace
-		_params spawn {
-			params ["_display"];
-			with missionNamespace do {
-				["Preload"] call BIS_fnc_arsenal;
-			};
-			private _items = flatten (missionNamespace getVariable "bis_fnc_arsenal_data");
-			//--- Add acessories, since they are not included in the arsenal data
-			private _accessories = (
-				"getNumber(_x >> 'type') == 131072 &&"+
-				"getNumber(_x >> 'scope') == 2"
-			) configClasses (configFile >> "CfgWeapons") apply {
-				configName _x;
-			};
-			_items append _accessories;
-		};
 		//--- Set up the UI
 		private _ctrlSearch = _display displayCtrl IDC_DISPLAY3DENVASS_SEARCH;
 		_ctrlSearch ctrlAddEventHandler ["KeyUp", {
