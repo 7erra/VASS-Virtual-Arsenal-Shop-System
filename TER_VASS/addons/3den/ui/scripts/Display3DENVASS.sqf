@@ -126,7 +126,6 @@ switch _mode do {
 			_name,
 			_class
 		];
-		_ctrlClass ctrlSetBackgroundColor [1,0,0,0.5];
 		
 		_curX = _wGroup - 69 * GRID_W;
 		private _ctrlLabelPrice = _display ctrlCreate ["ctrlStructuredText", -1, _ctrlItem];
