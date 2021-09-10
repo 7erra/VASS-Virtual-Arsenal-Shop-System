@@ -1,19 +1,29 @@
 /*
-	Author: 7erra <https://forums.bohemia.net/profile/1139559-7erra/>
+	Author: Terra
+
 	Description:
-	Add shop action to an object. Any previous actions of this type are removed. VASS is only activated when the arsenal is opened via this function.
+		Add shop action to an object. Any previous actions of this type are
+		removed. VASS is only activated when the arsenal is opened via this
+		function.
+
 	Parameter(s):
-	0: OBJECT - Object to which the action is added.
-	(optional) 1: STRING - Title of the action
-		default: "Shop"
-	(optional) 2: NUMBER - Priority of the action, see BIKI: addAction
-		default: 1.5
-	(optional) 3: STRING - Condition which has to be fullfilled for shop to be accessible, see BIKI: addAction
-		default: "alive _this && alive _object"
-	(optional) 4: NUMBER - Distance from which the action is activatable
-		default: 5
+		0:	OBJECT - Object to which the action is attached
+		Optional:
+		1:	STRING - Title of the action
+			Default: "Shop"
+		2:	NUMBER - Priority of the action, higher values mean the entry will appear first in the scroll wheel menu
+			Default: 1.5
+		3:	STRING - Condition for the addAction to show
+			Default: "alive _this && alive _target"
+		4:	NUMBER - Radius of the addAction
+			Default: 5
+
 	Returns:
-	NUMBER - ID of the action, alos saved as "TER_VASS_actionID" on the object.
+		NUMBER - ID of the action, also saved as "TER_VASS_actionID" on the object
+
+	Example(s):
+		[cursorObject] call TER_fnc_addShop; //-> 0
+		[cursorObject, "BLUFOR Weapon Shop", 999, "playerSide == west", 15] call TER_fnc_addShop; //-> 1
 */
 
 params [ "_object", ["_title","Shop"], ["_priority",1.5], ["_condition","alive _this && alive _target"], ["_radius",5] ];

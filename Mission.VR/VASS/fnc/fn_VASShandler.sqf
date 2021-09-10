@@ -12,37 +12,51 @@
 	Returns:
 	 See sub functions
 */
+/*
+	Author: Terra
+
+	Description:
+		This is meant as an "API" of sorts. The following modes are available:
+		"getMoney":
+			Description:
+				Get the money of the given unit
+			Parameter(s):
+				0:	OBJECT - The unit whose money is checked
+			Returns:
+				NUMBER - Money of the unit
+		"setMoney":
+			Description:
+				Set the money of the given unit
+			Parameter(s):
+				0:	OBJECT - The unit whose money is modified
+				1:	NUMBER - Change (not final amount, that is up to this function!)
+			Returns:
+				NOTHING - No return expected
+
+
+	Parameter(s):
+		0:	STRING - Mode
+		Optional:
+		1:	ARRAY - Parameters passed to the different modes
+			Default: []
+
+	Returns:
+		ANY - Whatever the mode returns
+
+	Example(s):
+		["getMoney", [player]] call TER_fnc_VASShandler; //-> 0
+		["setMoney", [player, -5900]] call TER_fnc_VASShandler; //-> nil
+*/
 
 params ["_mode",["_params",[]]];
 
 switch _mode do {
 	case "getMoney":{
-		/*
-			Description:
-			 VASS wants to know how much money the unit has
-
-			Parameter(s):
-			 0: OBJECT - Unit whose money is requested
-
-			Has to return:
-			 NUMBER - Unit's money
-		*/
 		_params params ["_unit"];
 		/* EXAMPLE */
 		rating _unit
 	};
 	case "setMoney":{
-		/*
-			Description:
-			 VASS changes the amount of money the player has
-
-			Parameter(s):
-			 1: OBJECT - Unit whose money will be changed
-			 0: NUMBER - Amount of money changed (can be positive or negative)
-
-			Has to return:
-			 Nothing
-		*/
 		_params params ["_unit", "_change"];
 		/* EXAMPLE */
 		_unit addRating _change;

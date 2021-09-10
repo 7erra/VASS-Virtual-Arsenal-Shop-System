@@ -1,3 +1,24 @@
+/*
+	Author: Terra
+
+	Description:
+		NO TOUCHY. This is already complicated enough so that I struggle to keep
+		it working. This is basically a modifier for BIS_fnc_arsenal, changing some parts
+		and adding others.
+
+	Parameter(s):
+		Optional:
+		0:	STRING - Mode, executes one of the subfunctions
+			Default: "Open"
+		1:	ARRAY - Parameters for the subfunction, will take _this variable so params works in unary mode
+			Default: []
+
+	Returns:
+		ANY - Whatever the subfunction returns
+
+	Example(s):
+		["mode", [1234, "test"]] call TER_fnc_shop; //-> ANY
+*/
 #include "\a3\ui_f\hpp\defineDIKCodes.inc"
 #include "\a3\ui_f\hpp\defineResinclDesign.inc"
 

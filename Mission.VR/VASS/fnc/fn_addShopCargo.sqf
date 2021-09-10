@@ -1,25 +1,33 @@
 /*
-	Author: 7erra <https://forums.bohemia.net/profile/1139559-7erra/>
-	Description:
-	Change the inventory of a shop.
-	Parameter(s):
-	0: OBJECT - The shop object whose inventory will be changed.
-	1: ARRAY - List of items, prices and amounts to add
-		Format: ["class0", price, amount, "class1", price, amount,..., "classN", price, amount]
-			Class: STRING - Class name of the item
-			Price: NUMBER - The cost of the item
-			Amount: NUMBER or BOOL - How many items the trader has. True means unlimited, false removes it from the inventory.
-	(optional) 2: NUMBER - Overwrite mode:
-		0 - Don't overwrite, only add new things
-		1 - (default) Overwrite soft, only adjust prices and add new things
-		2 - Hard overwrite, the passed array becomes the new inventory
-		3 - Overwrite old, don't add new entries, only modify old ones
-		4 - Amount diff, add/substract amounts
-	(optional) 3: BOOL - Change inventory for all players. If not specified, the _object's "TER_VASS_shared" variable is used. If this isn't set either it defaults to true.
-	Returns:
-	ARRAY - New inventory
-*/
+	Author: Terra
 
+	Description:
+		Change the inventory of a shop.
+
+	Parameter(s):
+		0:	OBJECT - The object whose shop inventory will be changed
+		1:	ARRAY - List of items, prices and amounts to add
+				Format: ["class0", price, amount, "class1", price, amount,..., "classN", price, amount]
+					Class: STRING - Class name of the item
+					Price: NUMBER - The cost of the item
+					Amount: NUMBER or BOOL - How many items the trader has. True means unlimited, false removes it from the inventory.
+		Optional:
+		2:	NUMBER - Overwrite mode:
+				0 - Don't overwrite, only add new things
+				1 - (default) Overwrite soft, only adjust prices and add new things
+				2 - Hard overwrite, the passed array becomes the new inventory
+				3 - Overwrite old, don't add new entries, only modify old ones
+				4 - Amount diff, add/substract amounts
+		3:	BOOL - BOOL - Change inventory for all players. If not specified, the _object's "TER_VASS_shared" variable is used. If this isn't set either it defaults to true.
+
+	Returns:
+		ARRAY - New shop cargo array
+
+	Example(s):
+		[cursorObject, ["50Rnd_570x28_SMG_03",50,40,"SMG_03_black",1000,5] call TER_fnc_addShopCargo; //-> ["50Rnd_570x28_SMG_03",50,40,"SMG_03_black",1000,5]
+		[cursorObject, ["10Rnd_338_Mag",1000,5], 0, true] call TER_fnc_addShopCargo; //-> ["50Rnd_570x28_SMG_03",50,40,"SMG_03_black",1000,5,"10Rnd_338_Mag",1000,5]
+		[cursorObject, ["10Rnd_338_Mag",1000,5], 2, true] call TER_fnc_addShopCargo; //-> ["10Rnd_338_Mag",1000,5]
+*/
 params ["_object","_cargo", ["_overwrite", 1]];
 _global = param [3, _object getVariable ["TER_VASS_shared",true]];
 

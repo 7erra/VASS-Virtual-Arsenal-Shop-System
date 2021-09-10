@@ -1,22 +1,29 @@
 /*
-	Author: 7erra <https://forums.bohemia.net/profile/1139559-7erra/>
+	Author: Terra
 
 	Description:
-	Function searches the cargo array of an object for the specified item class name and returns it's values as they are used in the shop.
+		Get the price and amount of an item in a shop.
 
 	Parameter(s):
-	0: OBJECT - Shop object
-	1: STRING - Class name of the requested item
-	2: (optional) NUMBER - Type of return: class (0), price (1), amount (2) or array of those (-1)
-		Default: -1, returns all values
-	3: (optional) ARRAY - Returned array when item is not part of the shop
-		Default: [param1, 0, -1]
+		0:	OBJECT - Shop object
+		1:	STRING - Classname of the item
+		Optional:
+		2:	NUMBER - Type of return:
+				0: class
+				1: price
+				2: amount
+				-1: array of [class, price, amount]
+			Default: -1
+		3:	ARRAY - Default return when item is not in the shop
+			Default: [parameter 0, 0, -1]
 
 	Returns:
-	ARRAY - ["class", price, amount]
-	amount can be either a number (negative, 0 and positive) or a boolean: true - unlimited items
+		ARRAY or STRING or NUMBER - Depending on param 2, the requested value
 
-	NOTE: Theoretically the amount can also be false which means that the item will be removed next time the cargo us updated. This function shouldn't be able to return it though.
+	Example(s):
+		[cursorObject, "SMG_03_black"] call TER_fnc_getItemValues; //-> ["SMG_03_black", 1000, 5]
+		[cursorObject, "SMG_03_black", 1] call TER_fnc_getItemValues; //-> 1000
+		[cursorObject, "bogus", nil, ["bogus", 1234, 56]] call TER_fnc_getItemValues; //-> ["bogus", 1234, 56]
 */
 params ["_object","_class",["_return",-1]];
 private _default = param [3,[_class,0,0]];
