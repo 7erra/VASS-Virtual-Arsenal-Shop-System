@@ -24,15 +24,20 @@ switch _mode do {
 		}];
 	};
 	case "fillList":{
+		#undef DEBUG_MODE_FULL
 		_params params ["_display", ["_cargo", []]];
 		with missionNamespace do {
 			["Preload"] call BIS_fnc_arsenal;
 		};
+		#ifndef DEBUG_MODE_FULL
+		["Display3DENVASS"] call BIS_fnc_startLoadingScreen;
+		#endif
 		private _items = flatten (missionNamespace getVariable "bis_fnc_arsenal_data");
 		//--- Add acessories, since they are not included in the arsenal data
 		private _accessories = (
-			"getNumber(_x >> 'type') == 131072 &&"+
-			"getNumber(_x >> 'scope') == 2"
+			"getNumber(_x >> 'type') == 131072 && "+
+			"getNumber(_x >> 'scope') == 2 && "+
+			"!(configName _x in _items)"
 		) configClasses (configFile >> "CfgWeapons") apply {
 			configName _x;
 		};
@@ -48,11 +53,7 @@ switch _mode do {
 		_items sort true;
 		_items = _items apply {_x#1};
 
-		#undef DEBUG_MODE_FULL
 		//--- Iterate over all items and create the controls for each
-		#ifndef DEBUG_MODE_FULL
-		["Display3DENVASS"] call BIS_fnc_startLoadingScreen;
-		#endif
 		private _ctrlCargo = _display displayCtrl IDC_DISPLAY3DENVASS_CARGO;
 		{
 			["createItemControls", [_display, _x, _forEachIndex]] call SELF;
