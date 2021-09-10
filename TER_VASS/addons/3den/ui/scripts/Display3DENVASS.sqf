@@ -64,27 +64,37 @@ switch _mode do {
 		_items sort true;
 		_items = _items apply {_x#1};
 
+		#undef DEBUG_MODE_FULL
 		//--- Iterate over all items and create the controls for each
+		#ifndef DEBUG_MODE_FULL
 		["Display3DENVASS"] call BIS_fnc_startLoadingScreen;
+		#endif
 		private _ctrlCargo = _display displayCtrl IDC_DISPLAY3DENVASS_CARGO;
 		{
 			["createItemControls", [_display, _x, _forEachIndex]] call SELF;
+			#ifndef DEBUG_MODE_FULL
 			[_forEachIndex/(count _items)] call BIS_fnc_progressLoadingScreen;
+			#else
+			if (_forEachIndex > 10) exitWith {};
+			#endif
 		} forEach _items;
 		["filter", [_display]] call SELF;
+		#ifndef DEBUG_MODE_FULL
 		["Display3DENVASS"] call BIS_fnc_endLoadingScreen;
+		#endif
 	};
 	case "createItemControls":{
 		_params params ["_display", "_config", "_ind"];
 		private _class = configName _config;
 		private _name = [_config] call BIS_fnc_displayName;
 		private _ctrlCargo = _display displayCtrl IDC_DISPLAY3DENVASS_CARGO;
+		private _wGroup = ctrlPosition _ctrlCargo select 2;
 		
 		private _ctrlItem = _display ctrlCreate ["ctrlControlsGroupNoScrollbars", -1, _ctrlCargo];
 		_ctrlItem ctrlSetPosition [
 			0,
 			_ind * (H_ROW + 1) * GRID_H,
-			safeZoneW - 12 * GRID_W,
+			_wGroup,
 			H_ROW * GRID_H
 		];
 		_ctrlItem ctrlCommit 0;
@@ -96,7 +106,7 @@ switch _mode do {
 		_ctrlBackground ctrlSetPosition [
 			0,
 			0,
-			safeZoneW - 12 * GRID_W,
+			_wGroup,
 			H_ROW * GRID_H
 		];
 		_ctrlBackground ctrlCommit 0;
@@ -110,8 +120,8 @@ switch _mode do {
 			H_ROW * GRID_W,
 			H_ROW * GRID_H
 		];
-		_curX = _curX + (H_ROW + 1) * GRID_W;
 		_ctrlImage ctrlCommit 0;
+		_curX = _curX + (ctrlPosition _ctrlImage select 2);
 		private _image = getText(_config >> "picture");
 		if (!fileExists _image) then {
 			_image = "\a3\ui_f\data\Map\Markers\Military\unknown_CA.paa";
@@ -122,17 +132,18 @@ switch _mode do {
 		_ctrlClass ctrlSetPosition [
 			_curX,
 			0,
-			100 * GRID_W,
+			_wGroup - (H_ROW + 15 + 50 + 4) * GRID_W,
 			H_ROW * GRID_H
 		];
-		_curX = _curX + 101 * GRID_W;
 		_ctrlClass ctrlCommit 0;
 		_ctrlClass ctrlSetStructuredText parseText format [
 			"%1<br/><t font='EtelkaMonospaceProBold' size='0.6'>%2</t>",
 			_name,
 			_class
 		];
+		_ctrlClass ctrlSetBackgroundColor [1,0,0,0.5];
 		
+		_curX = _wGroup - 69 * GRID_W;
 		private _ctrlLabelPrice = _display ctrlCreate ["ctrlStructuredText", -1, _ctrlItem];
 		_ctrlLabelPrice ctrlSetPosition [
 			_curX,
@@ -145,15 +156,15 @@ switch _mode do {
 
 		private _ctrlLabelAmount = _display ctrlCreate ["ctrlStructuredText", -1, _ctrlItem];
 		_ctrlLabelAmount ctrlSetPosition [
-			(H_ROW + 102) * GRID_W,
+			_curX,
 			(H_ROW - 7) * GRID_H,
 			15 * GRID_W,
 			5 * GRID_H
 		];
-		_curX = _curX + 16 * GRID_W;
 		_ctrlLabelAmount ctrlCommit 0;
 		_ctrlLabelAmount ctrlSetText "Amount:";
 		
+		_curX = _wGroup - 54 * GRID_W;
 		private _ctrlPrice = _display ctrlCreate ["ctrlEdit", IDC_DISPLAY3DENVASS_ITEM_PRICE, _ctrlItem];
 		_ctrlPrice ctrlSetPosition [
 			_curX,
