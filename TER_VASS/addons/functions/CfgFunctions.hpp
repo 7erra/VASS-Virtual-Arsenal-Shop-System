@@ -12,5 +12,10 @@ class CfgFunctions
 			file = QPATHTOF(Items);
 			class compatibleWeapons;
 		};
+		class Strings
+		{
+			file = QPATHTOF(Strings);
+			class validNumber;
+		};
 	};
 };
