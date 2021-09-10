@@ -65,11 +65,14 @@ switch _mode do {
 		_items = _items apply {_x#1};
 
 		//--- Iterate over all items and create the controls for each
+		["Display3DENVASS"] call BIS_fnc_startLoadingScreen;
 		private _ctrlCargo = _display displayCtrl IDC_DISPLAY3DENVASS_CARGO;
 		{
 			["createItemControls", [_display, _x, _forEachIndex]] call SELF;
+			[_forEachIndex/(count _items)] call BIS_fnc_progressLoadingScreen;
 		} forEach _items;
 		["filter", [_display]] call SELF;
+		["Display3DENVASS"] call BIS_fnc_endLoadingScreen;
 	};
 	case "createItemControls":{
 		_params params ["_display", "_config", "_ind"];
