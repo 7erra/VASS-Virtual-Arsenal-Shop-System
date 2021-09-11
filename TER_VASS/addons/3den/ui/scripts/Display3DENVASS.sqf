@@ -56,7 +56,7 @@ switch _mode do {
 		//--- Iterate over all items and create the controls for each
 		private _ctrlCargo = _display displayCtrl IDC_DISPLAY3DENVASS_CARGO;
 		{
-			["createItemControls", [_display, _x, _forEachIndex]] call SELF;
+			["createItemControls", [_display, _x, _forEachIndex, _cargo]] call SELF;
 			#ifndef DEBUG_MODE_FULL
 			[_forEachIndex/(count _items)] call BIS_fnc_progressLoadingScreen;
 			#else
@@ -69,7 +69,7 @@ switch _mode do {
 		#endif
 	};
 	case "createItemControls":{
-		_params params ["_display", "_config", "_ind"];
+		_params params ["_display", "_config", "_ind", "_cargo"];
 		private _class = configName _config;
 		private _name = [_config] call BIS_fnc_displayName;
 		private _ctrlCargo = _display displayCtrl IDC_DISPLAY3DENVASS_CARGO;
