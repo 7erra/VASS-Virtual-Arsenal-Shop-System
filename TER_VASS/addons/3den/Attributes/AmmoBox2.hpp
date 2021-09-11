@@ -1,4 +1,4 @@
-class TER_VASS_AmmoBox2: TitleWide
+class TER_VASS_AmmoBox2: Title
 {
 	attributeLoad = ["attributeLoad",[_this, _value]] call ATTRIBUTE_SCRIPT(VASS_AmmoBox2);
 	attributeSave = ["attributeSave",[_this]] call ATTRIBUTE_SCRIPT(VASS_AmmoBox2);
@@ -7,22 +7,22 @@ class TER_VASS_AmmoBox2: TitleWide
 	h = 12 * GRID_H;
 	class Controls: Controls
 	{
+		class Title: Title {};
 		class List: ctrlEdit
 		{
 			idc = IDC_VASS_AMMOBOX2_LIST;
-			x = 5 * GRID_W;
-			y = 1 * GRID_W;
-			w = (ATTRIBUTE_TITLE_W + ATTRIBUTE_CONTENT_W - 5) * GRID_W;
-			h = 5 * GRID_H;
+			x = ATTRIBUTE_TITLE_W * GRID_W;
+			w = ATTRIBUTE_CONTENT_W * GRID_W;
+			h = ATTRIBUTE_CONTENT_H * GRID_H;
 		};
 		class Edit: ctrlButton
 		{
 			idc = IDC_VASS_AMMOBOX2_EDIT;
 			text = "Edit VASS Inventory";
-			x = 5 * GRID_W;
+			x = ATTRIBUTE_TITLE_W * GRID_W;
 			y = 6 * GRID_H;
-			w = (ATTRIBUTE_TITLE_W + ATTRIBUTE_CONTENT_W - 5) * GRID_W;
-			h = 5 * GRID_H;
+			w = ATTRIBUTE_CONTENT_W * GRID_W;
+			h = ATTRIBUTE_CONTENT_H * GRID_H;
 		};
 	};
 };
