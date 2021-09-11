@@ -3,6 +3,7 @@ class VASS_addAction: Title
 	h = 5.4 * ATTRIBUTE_CONTENT_H * GRID_H;
 	attributeLoad = ["attributeLoad", [_this,_value]] call ATTRIBUTE_SCRIPT(VASS_addAction);
 	attributeSave = ["attributeSave", [_this]] call ATTRIBUTE_SCRIPT(VASS_addAction);
+	INIT_CONTROL(VASS_addAction,TER_VASS_3den)
 	class Controls: Controls
 	{
 		class Title1: Title
