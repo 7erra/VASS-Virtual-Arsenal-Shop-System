@@ -13,7 +13,6 @@ class CfgPatches {
 };
 
 #include "CfgScriptPaths.hpp"
-#include "CfgFunctions.hpp"
 #include "ui\BaseControls.hpp"
 #include "ui\Display3DENVASS.hpp"
 #include "Cfg3den.hpp"

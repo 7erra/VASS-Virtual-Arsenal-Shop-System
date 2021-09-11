@@ -11,7 +11,6 @@ class Cfg3den
 	{
 		#include "Attributes\Base.hpp"
 		#include "Attributes\addAction.hpp"
-		#include "Attributes\AmmoBox.hpp"
 		#include "Attributes\AmmoBox2.hpp"
 	};
 };
