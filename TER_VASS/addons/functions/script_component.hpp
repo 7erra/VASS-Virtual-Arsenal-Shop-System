@@ -1,7 +1,7 @@
 #define COMPONENT functions
 #include "\z\TER_VASS\addons\main\script_mod.hpp"
 
-#define DEBUG_ENABLED_functions
+// #define DEBUG_ENABLED_functions
 
 #ifdef DEBUG_ENABLED_functions
     #define DEBUG_MODE_FULL
