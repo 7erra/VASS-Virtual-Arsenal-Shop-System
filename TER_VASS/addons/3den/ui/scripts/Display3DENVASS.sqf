@@ -147,6 +147,11 @@ switch _mode do {
 		];
 		_ctrlLabelAmount ctrlCommit 0;
 		_ctrlLabelAmount ctrlSetText "Amount:";
+		_ctrlLabelAmount ctrlSetTooltip ([
+			"Possible values:",
+			" - Number: Player can only buy this many items of this type",
+			" - true: Unlimited supply"
+		] joinString endl);
 		
 		_curX = _wGroup - 54 * GRID_W;
 		private _ctrlPrice = _display ctrlCreate ["ctrlEdit", IDC_DISPLAY3DENVASS_ITEM_PRICE, _ctrlItem];
