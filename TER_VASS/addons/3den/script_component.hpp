@@ -22,7 +22,7 @@
     #define ATTRIBUTE_SCRIPT(ATT) UISCRIPT(ATT)
 #else
     #define UISCRIPT(NAME) NAME##_script
-    #define ATTRIBUTE_SCRIPT(ATT) (uinamespace getVariable QUOTE(UISCRIPT(ATTATT)))
+    #define ATTRIBUTE_SCRIPT(ATT) (uinamespace getVariable QUOTE(UISCRIPT(ATT)))
 #endif
 
 #define W_VASS_AMMOBOX2 (ATTRIBUTE_TITLE_W + ATTRIBUTE_CONTENT_W - 5)
