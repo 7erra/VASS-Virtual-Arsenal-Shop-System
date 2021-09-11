@@ -108,9 +108,6 @@ switch _mode do {
 		_ctrlImage ctrlCommit 0;
 		_curX = _curX + (ctrlPosition _ctrlImage select 2);
 		private _image = getText(_config >> "picture");
-		if (!fileExists _image) then {
-			_image = "\a3\ui_f\data\Map\Markers\Military\unknown_CA.paa";
-		};
 		_ctrlImage ctrlSetText _image;
 
 		_ctrlClass = _display ctrlCreate ["RscStructuredText", IDC_DISPLAY3DENVASS_ITEM_CLASS, _ctrlItem];
