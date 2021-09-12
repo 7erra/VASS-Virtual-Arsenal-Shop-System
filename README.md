@@ -20,115 +20,162 @@ This are the currently available functions which can be used to influence the sy
 ### TER_fnc_addShop
 ```
 /*
-	Author: 7erra <https://forums.bohemia.net/profile/1139559-7erra/>
+	Author: Terra
 
 	Description:
-	Add shop action to an object. Any previous actions of this type are removed. VASS is only activated when the arsenal is opened via this function.
+		Add shop action to an object. Any previous actions of this type are
+		removed. VASS is only activated when the arsenal is opened via this
+		function.
 
 	Parameter(s):
-	0: OBJECT - Object to which the action is added.
-	(optional) 1: STRING - Title of the action
-		default: "Shop"
-	(optional) 2: NUMBER - Priority of the action, see BIKI: addAction
-		default: 1.5
-	(optional) 3: STRING - Condition which has to be fullfilled for shop to be accessible, see BIKI: addAction
-		default: "alive _this && alive _object"
-	(optional) 4: NUMBER - Distance from which the action is activatable
-		default: 5
+		0:	OBJECT - Object to which the action is attached
+		Optional:
+		1:	STRING - Title of the action
+			Default: "Shop"
+		2:	NUMBER - Priority of the action, higher values mean the entry will appear first in the scroll wheel menu
+			Default: 1.5
+		3:	STRING - Condition for the addAction to show
+			Default: "alive _this && alive _target"
+		4:	NUMBER - Radius of the addAction
+			Default: 5
 
 	Returns:
-	NUMBER - ID of the action, alos saved as "TER_VASS_actionID" on the object.
+		NUMBER - ID of the action, also saved as "TER_VASS_actionID" on the object
+
+	Example(s):
+		[cursorObject] call TER_fnc_addShop; //-> 0
+		[cursorObject, "BLUFOR Weapon Shop", 999, "playerSide == west", 15] call TER_fnc_addShop; //-> 1
 */
 ```
 ### TER_fnc_addShopCargo
 ```
 /*
-	Author: 7erra <https://forums.bohemia.net/profile/1139559-7erra/>
+	Author: Terra
 
 	Description:
-	Change the inventory of a shop.
+		Change the inventory of a shop.
 
 	Parameter(s):
-	0: OBJECT - The shop object whose inventory will be changed.
-	1: ARRAY - List of items, prices and amounts to add
-		Format: ["class0", price, amount, "class1", price, amount,..., "classN", price, amount]
-			Class: STRING - Class name of the item
-			Price: NUMBER - The cost of the item
-			Amount: NUMBER or BOOL - How many items the trader has. True means unlimited, false removes it from the inventory.
-	(optional) 2: NUMBER - Overwrite mode:
-		0 - Don't overwrite, only add new things
-		1 - (default) Overwrite soft, only adjust prices and add new things
-		2 - Hard overwrite, the passed array becomes the new inventory
-		3 - Overwrite old, don't add new entries, only modify old ones
-		4 - Amount diff, add/substract amounts
-	(optional) 3: BOOL - Change inventory for all players. If not specified, the _object's "TER_VASS_shared" variable is used. If this isn't set either it defaults to true.
+		0:	OBJECT - The object whose shop inventory will be changed
+		1:	ARRAY - List of items, prices and amounts to add
+				Format: ["class0", price, amount, "class1", price, amount,..., "classN", price, amount]
+					Class: STRING - Class name of the item
+					Price: NUMBER - The cost of the item
+					Amount: NUMBER or BOOL - How many items the trader has. True means unlimited, false removes it from the inventory.
+		Optional:
+		2:	NUMBER - Overwrite mode:
+				0 - Don't overwrite, only add new things
+				1 - (default) Overwrite soft, only adjust prices and add new things
+				2 - Hard overwrite, the passed array becomes the new inventory
+				3 - Overwrite old, don't add new entries, only modify old ones
+				4 - Amount diff, add/substract amounts
+		3:	BOOL - BOOL - Change inventory for all players. If not specified, the _object's "TER_VASS_shared" variable is used. If this isn't set either it defaults to true.
 
 	Returns:
-	ARRAY - New inventory
+		ARRAY - New shop cargo array
+
+	Example(s):
+		[cursorObject, ["50Rnd_570x28_SMG_03",50,40,"SMG_03_black",1000,5] call TER_fnc_addShopCargo; //-> ["50Rnd_570x28_SMG_03",50,40,"SMG_03_black",1000,5]
+		[cursorObject, ["10Rnd_338_Mag",1000,5], 0, true] call TER_fnc_addShopCargo; //-> ["50Rnd_570x28_SMG_03",50,40,"SMG_03_black",1000,5,"10Rnd_338_Mag",1000,5]
+		[cursorObject, ["10Rnd_338_Mag",1000,5], 2, true] call TER_fnc_addShopCargo; //-> ["10Rnd_338_Mag",1000,5]
 */
 ```
 ### TER_fnc_getItemValues
 ```
 /*
-	Author: 7erra <https://forums.bohemia.net/profile/1139559-7erra/>
+	Author: Terra
 
 	Description:
-	Function searches the cargo array of an object for the specified item class name and returns it's values as they are used in the shop.
+		Get the price and amount of an item in a shop.
 
 	Parameter(s):
-	0: OBJECT - Shop object
-	1: STRING - Class name of the requested item
-	2: (optional) NUMBER - Type of return: class (0), price (1), amount (2) or array of those (-1)
-		Default: -1, returns all values
-	3: (optional) ARRAY - Returned array when item is not part of the shop
-		Default: [param1, 0, -1]
+		0:	OBJECT - Shop object
+		1:	STRING - Classname of the item
+		Optional:
+		2:	NUMBER - Type of return:
+				0: class
+				1: price
+				2: amount
+				-1: array of [class, price, amount]
+			Default: -1
+		3:	ARRAY - Default return when item is not in the shop
+			Default: [parameter 0, 0, -1]
 
 	Returns:
-	ARRAY - ["class", price, amount]
-	amount can be either a number (negative, 0 and positive) or a boolean: true - unlimited items
+		ARRAY or STRING or NUMBER - Depending on param 2, the requested value
 
-	NOTE: Theoretically the amount can also be false which means that the item will be removed next time the cargo us updated. This function shouldn't be able to return it though.
+	Example(s):
+		[cursorObject, "SMG_03_black"] call TER_fnc_getItemValues; //-> ["SMG_03_black", 1000, 5]
+		[cursorObject, "SMG_03_black", 1] call TER_fnc_getItemValues; //-> 1000
+		[cursorObject, "bogus", nil, ["bogus", 1234, 56]] call TER_fnc_getItemValues; //-> ["bogus", 1234, 56]
 */
 ```
 ### TER_fnc_resetTimer
 ```
 /*
-	Author: 7erra <https://forums.bohemia.net/profile/1139559-7erra/>
+	Author: Terra
 
 	Description:
-	Function to change the items of a shop after a certain amount of time.
+		Change the items of a shop after a certain time.
 
 	Parameter(s):
-	0: OBJECT - Shop object.
-	1: ARRAY or TRUE - List of items to readd/remove OR true to reset the inventory to default.
-	(optional) 2: NUMBER - Time until reset. Negative values will use the "TER_VASS_refresh" variable from the object.
-		default: -1
-	(optional) 3: BOOL - Passed items will become the only ones after reset. If items is true then it is automatically set to reset.
-		default: false
+		0:	OBJECT - Shop object
+		1:	ARRAY or BOOL - List of items to readd/remove or true to reset the inventory to default
+		Optional:
+		2:	NUMBER - Time until reset. Negative values will use the "TER_VASS_refresh" variable from the object.
+			Default: -1
+		3:	BOOL - Passed items will become the only ones after reset. If items is true then it is automatically set to reset.
+			Default: false
 
 	Returns:
-	Bool - True when done
+		BOOL - true when done
+
+	Example(s):
+		[cursorObject, ["10Rnd_338_Mag",1000,5,"50Rnd_570x28_SMG_03",50,40,"SMG_03_black",1000,5]] spawn TER_fnc_resetTimer; //-> Script handle
+		[cursorObject, ["10Rnd_338_Mag",1000,5,"50Rnd_570x28_SMG_03",50,40,"SMG_03_black",1000,5], 59, true] spawn TER_fnc_resetTimer; //-> Script handle
 */
 ```
 ### TER_fnc_VASShandler
 ```
 /*
-	Author: 7erra <https://forums.bohemia.net/profile/1139559-7erra/>
+	Author: Terra
 
 	Description:
-	 VASS calls this function when certain events happen. Add your own code to change behaviour.
-	 (Similar to BIS_fnc_callScriptedEventHandler)
+		This is meant as an "API" of sorts. The following modes are available:
+		"getMoney":
+			Description:
+				Get the money of the given unit
+			Parameter(s):
+				0:	OBJECT - The unit whose money is checked
+			Returns:
+				NUMBER - Money of the unit
+		"setMoney":
+			Description:
+				Set the money of the given unit
+			Parameter(s):
+				0:	OBJECT - The unit whose money is modified
+				1:	NUMBER - Change (not final amount, that is up to this function!)
+			Returns:
+				NOTHING - No return expected
+
 
 	Parameter(s):
-	 0: STRING - Mode in which the functions is called
-	 1: ARRAY - Passed arguments
+		0:	STRING - Mode
+		Optional:
+		1:	ARRAY - Parameters passed to the different modes
+			Default: []
 
 	Returns:
-	 See sub functions
+		ANY - Whatever the mode returns
+
+	Example(s):
+		["getMoney", [player]] call TER_fnc_VASShandler; //-> 0
+		["setMoney", [player, -5900]] call TER_fnc_VASShandler; //-> nil
 */
 ```
 
 ## Screenshots
+### Ingame
 <img src=".github/media/screenshot1.jpg" height="500"><br>
 As you can see the prices of the items are listed right next to it in a green color. The lists are also sortable by either name, price from low to high and high to low.<br>
 <br>
