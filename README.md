@@ -185,5 +185,18 @@ When setting a maximum amount of items which can be added to one of the containe
 <img src=".github/media/screenshot3.jpg" height="500"><br>
 Before leaving the shop the player can see what they will buy or sell. When leaving the shop any other way than over this menu then the loadout will be reset to the one with which he entered the shop.
 
+### 3den Editor
+<img src=".github/media/3denAttributes.jpg" height="500"><br>
+The 3den mod adds a new section to the attributes in 3den. You can set
+- Title
+- Condition
+- Radius
+- Priority
+
+of the addAction. Additionaly you can copy and paste the shop's inventory or edit it in the UI by clicking the "EDIT VASS INVENTORY" button. You can also set the time the shop takes to refresh (see [TER_fnc_resetTimer](#TER_fnc_resetTimer)) and the [locality](https://community.bistudio.com/wiki/Multiplayer_Scripting) of the whole shop.
+
+<img src=".github/media/3denCargo.jpg" height="500"><br>
+You can use the VASS Inventory UI to edit the shop's cargo array. You can include or exclude item types in your search by toggling them in the toolbox at the top. To apply your changes you have to confirm by clicking the OK button on the UI and then the OK button on the Attributes window in 3den.
+
 # License
 This project is licensed under the [GNU General Public License v3.0](https://choosealicense.com/licenses/gpl-3.0/).
