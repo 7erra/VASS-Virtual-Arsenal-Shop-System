@@ -1,18 +1,4 @@
 /*
-	Author: 7erra <https://forums.bohemia.net/profile/1139559-7erra/>
-
-	Description:
-	 VASS calls this function when certain events happen. Add your own code to change behaviour.
-	 (Similar to BIS_fnc_callScriptedEventHandler)
-
-	Parameter(s):
-	 0: STRING - Mode in which the functions is called
-	 1: ARRAY - Passed arguments
-
-	Returns:
-	 See sub functions
-*/
-/*
 	Author: Terra
 
 	Description:
