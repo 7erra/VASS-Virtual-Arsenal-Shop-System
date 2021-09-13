@@ -17,7 +17,7 @@ class VASS
 		class cargo
 		{
 			displayName = "Shop Inventory";
-			tooltip = "Define the items which the trader can sell and buy.\n""-"" means the item is not part of the shop, so not buyable or sellable. Script: -2.\n""∞"" means that the item will never run out. Script: -1.\n""0"" means that the item is not sold by the shop but can be sold to the trader. Script: 0.\nAny other number restricts the amonut of sellable items to the specified amount. If all items are sold out it is treated just as ""0"". Script: N.";
+			tooltip = "Array in format [""class0"", price, amount, ""class1"", price, amount, ...].";
 			property = "VASS_cargo";
 			control = "TER_VASS_AmmoBox2";
 			expression = "\
