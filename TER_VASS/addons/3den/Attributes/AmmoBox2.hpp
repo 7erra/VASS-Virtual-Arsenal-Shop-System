@@ -11,6 +11,8 @@ class TER_VASS_AmmoBox2: Title
 		class List: ctrlEdit
 		{
 			idc = IDC_VASS_AMMOBOX2_LIST;
+			font = "EtelkaMonospacePro";
+			sizeEx = "3.41 * (1 / (getResolution select 3)) * pixelGrid * 0.5";
 			x = ATTRIBUTE_TITLE_W * GRID_W;
 			w = ATTRIBUTE_CONTENT_W * GRID_W;
 			h = ATTRIBUTE_CONTENT_H * GRID_H;
