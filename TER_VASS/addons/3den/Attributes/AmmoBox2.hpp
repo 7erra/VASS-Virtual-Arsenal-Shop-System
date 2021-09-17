@@ -20,7 +20,7 @@ class TER_VASS_AmmoBox2: Title
 		class Edit: ctrlButton
 		{
 			idc = IDC_VASS_AMMOBOX2_EDIT;
-			text = "Edit VASS Inventory";
+			text = "$STR_TER_VASS_3den_Attributes_AmmoBox2_Edit_text";
 			x = ATTRIBUTE_TITLE_W * GRID_W;
 			y = 6 * GRID_H;
 			w = ATTRIBUTE_CONTENT_W * GRID_W;

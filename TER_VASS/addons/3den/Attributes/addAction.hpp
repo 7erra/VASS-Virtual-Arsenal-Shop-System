@@ -8,8 +8,8 @@ class VASS_addAction: Title
 	{
 		class Title1: Title
 		{
-			text = "Add Shop";
-			tooltip = "Enable access to the modified arsenal on this object.";
+			text = "$STR_TER_VASS_3den_Attributes_addAction_Title1_text";
+			tooltip = "$STR_TER_VASS_3den_Attributes_addAction_Title1_tooltip";
 		};
 		class enable: ctrlCheckboxBaseline
 		{
@@ -21,8 +21,8 @@ class VASS_addAction: Title
 		};
 		class Title2: Title
 		{
-			text = "addAction Title";
-			tooltip = "Text shown in the scroll menu. Supports formatted text.";
+			text = "$STR_TER_VASS_3den_Attributes_addAction_Title2_text";
+			tooltip = "$STR_TER_VASS_3den_Attributes_addAction_Title2_tooltip";
 			y = 1.1 * ATTRIBUTE_CONTENT_H * GRID_H;
 		};
 		class addTitle: ctrlEdit
@@ -35,8 +35,8 @@ class VASS_addAction: Title
 		};
 		class Title3: Title
 		{
-			text = "Condition";
-			tooltip = "Determine when the shop is accessible. Go to the addAction BIKI page for more information.";
+			text = "$STR_TER_VASS_3den_Attributes_addAction_Title3_text";
+			tooltip = "$STR_TER_VASS_3den_Attributes_addAction_Title3_tooltip";
 			y = 2.2 * ATTRIBUTE_CONTENT_H * GRID_H;
 		};
 		class addCondition: addTitle
@@ -49,8 +49,8 @@ class VASS_addAction: Title
 		};
 		class Title4: Title
 		{
-			text = "Radius";
-			tooltip = "Sets from how far the player can access the shop.";
+			text = "$STR_TER_VASS_3den_Attributes_addAction_Title4_text";
+			tooltip = "$STR_TER_VASS_3den_Attributes_addAction_Title4_tooltip";
 			y = 3.3 * ATTRIBUTE_CONTENT_H * GRID_H;
 		};
 		class radius: addTitle
@@ -61,8 +61,8 @@ class VASS_addAction: Title
 		};
 		class Title5: Title
 		{
-			text = "Priority";
-			tooltip = "Higher values will place the scroll menu entry higher.";
+			text = "$STR_TER_VASS_3den_Attributes_addAction_Title5_text";
+			tooltip = "$STR_TER_VASS_3den_Attributes_addAction_Title5_tooltip";
 			y = 4.4 * ATTRIBUTE_CONTENT_H * GRID_H;
 		};
 		class priority: radius

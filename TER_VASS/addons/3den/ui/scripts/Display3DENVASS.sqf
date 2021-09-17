@@ -133,7 +133,7 @@ switch _mode do {
 			5 * GRID_H
 		];
 		_ctrlLabelPrice ctrlCommit 0;
-		_ctrlLabelPrice ctrlSetText "Price:";
+		_ctrlLabelPrice ctrlSetText localize "STR_TER_VASS_Display3DENVASS_LabelPrice_text";
 
 		private _ctrlLabelAmount = _display ctrlCreate ["ctrlStructuredText", -1, _ctrlItem];
 		_ctrlLabelAmount ctrlSetPosition [
@@ -143,12 +143,8 @@ switch _mode do {
 			5 * GRID_H
 		];
 		_ctrlLabelAmount ctrlCommit 0;
-		_ctrlLabelAmount ctrlSetText "Amount:";
-		_ctrlLabelAmount ctrlSetTooltip ([
-			"Possible values:",
-			" - Number: Player can only buy this many items of this type",
-			" - true: Unlimited supply"
-		] joinString endl);
+		_ctrlLabelAmount ctrlSetText localize "STR_TER_VASS_Display3DENVASS_LabelAmount_text";
+		_ctrlLabelAmount ctrlSetTooltip localize "STR_TER_VASS_Display3DENVASS_LabelAmount_tooltip";
 		
 		_curX = _wGroup - 54 * GRID_W;
 		private _ctrlPrice = _display ctrlCreate ["ctrlEdit", IDC_DISPLAY3DENVASS_ITEM_PRICE, _ctrlItem];

@@ -24,7 +24,7 @@ class Display3DENVASS
 		};
 		class Title: ctrlStaticTitle
 		{
-			text = "VASS Inventory";
+			text = "$STR_TER_VASS_Display3DENVASS_Title_text";
 			x = safeZoneX + 5 * GRID_W;
 			y = safeZoneY + 5 * GRID_H;
 			w = safeZoneW - 10 * GRID_W;
@@ -106,7 +106,7 @@ class Display3DENVASS
 		class FilterAll: ctrlButton
 		{
 			idc = IDC_DISPLAY3DENVASS_FILTERALL;
-			text = "ALL";
+			text = "$STR_TER_VASS_Display3DENVASS_FilterAll_text";
 			x = safeZoneX + safeZoneW - 12 * GRID_W - 5 * GRID_W;
 			y = safeZoneY + 11 * GRID_H;
 			w = 10 * GRID_W;
@@ -116,12 +116,12 @@ class Display3DENVASS
 		class FilterNone: FilterAll
 		{
 			idc = IDC_DISPLAY3DENVASS_FILTERNONE;
-			text = "NONE";
+			text = "$STR_TER_VASS_Display3DENVASS_FilterNone_text";
 			y = safeZoneY + 16 * GRID_H;
 		};
 		class LabelSearch: ctrlStructuredText
 		{
-			text = "Search:";
+			text = "$STR_TER_VASS_Display3DENVASS_LabelSearch_text";
 			x = safeZoneX + 6 * GRID_W;
 			y = safeZoneY + 22 * GRID_H;
 			w = 15 * GRID_W;

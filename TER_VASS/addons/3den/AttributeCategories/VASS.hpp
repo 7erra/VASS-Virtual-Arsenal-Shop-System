@@ -16,8 +16,8 @@ class VASS
 		};
 		class cargo
 		{
-			displayName = "Shop Inventory";
-			tooltip = "Array in format [""class0"", price, amount, ""class1"", price, amount, ...].";
+			displayName = "$STR_TER_VASS_3den_AttributeCategories_cargo_displayName";
+			tooltip = "$STR_TER_VASS_3den_AttributeCategories_cargo_tooltip";
 			property = "VASS_cargo";
 			control = "TER_VASS_AmmoBox2";
 			expression = "\
@@ -30,8 +30,8 @@ class VASS
 		};
 		class refresh
 		{
-			displayName = "Refresh";
-			tooltip = "Sets the time in seconds which the shop will take to add/remove the items that were removed/added during mission. -1 disables refreshing.";
+			displayName = "$STR_TER_VASS_3den_AttributeCategories_refresh_displayName";
+			tooltip = "$STR_TER_VASS_3den_AttributeCategories_refresh_tooltip";
 			property = "VASS_refesh";
 			control = "EditShort";
 			expression = "_this setVariable ['TER_VASS_refresh', _value];";
@@ -40,8 +40,8 @@ class VASS
 		};
 		class shared
 		{
-			displayName = "Global";
-			tooltip = "If checked the inventory's shop will broadcast its changes over the network and make it the same for everyone.";
+			displayName = "$STR_TER_VASS_3den_AttributeCategories_shared_displayName";
+			tooltip = "$STR_TER_VASS_3den_AttributeCategories_shared_tooltip";
 			property = "VASS_shared";
 			control = "Checkbox";
 			expression = "_this setVariable ['TER_VASS_shared', _value];";
