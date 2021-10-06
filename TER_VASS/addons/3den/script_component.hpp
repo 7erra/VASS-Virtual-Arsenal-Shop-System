@@ -1,7 +1,7 @@
 #define COMPONENT 3den
 #include "\z\TER_VASS\addons\main\script_mod.hpp"
 
-#define DEBUG_ENABLED_3den
+// #define DEBUG_ENABLED_3den
 
 #ifdef DEBUG_ENABLED_3den
     #define DEBUG_MODE_FULL
