@@ -1,0 +1,54 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Start Arma 3 (VASS)",
+			"command": "START",
+			"type": "shell",
+			"options": {
+				"cwd": "D:/SteamLibraryM/steamapps/common/Arma 3"
+			},
+			"args": [
+				"Arma 3 Diag",
+				"arma3diag_x64.exe",
+				"-name=Terra",
+				"${workspaceFolder}\\Mission.VR\\mission.sqm",
+				"-skipIntro",
+				"-filePatching",
+				"-noSplash",
+				"-noSound",
+				"-showScriptErrors",
+				"-mod=\"!Workshop\\@Arma 3 Profiling Branch Companion Mod;!Workshop\\@CBA_A3;!Workshop\\@Pythia;!Workshop\\@7erra's Editing Extensions;!Workshop\\@Advanced Developer Tools;P:\\VASS-Virtual-Arsenal-Shop-System\\TER_VASS\"",
+				"-window",
+				"-posX=-1795",
+				"-posY=146"
+			],
+			"isBackground": true,
+			"problemMatcher": [],
+			"presentation": {},
+			"group": {
+				"kind": "test",
+				"isDefault": true
+			}
+		},
+		{
+			"label": "Build Addon",
+			"type": "shell",
+			"command": "hemtt build",
+			"options": {
+				"cwd": "./TER_VASS"
+			},
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "Revert mission.sqm",
+			"type": "shell",
+			"command": "git checkout Mission.VR/mission.sqm",
+			"problemMatcher": []
+		}
+	]
+}

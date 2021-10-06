@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project name="VASS">
+  <Package name="3DEN">
+    <Container name="Display3DENVASS">
+      <Key ID="STR_TER_VASS_Display3DENVASS_Title_text">
+        <Original>VASS Cargo</Original>
+        <English>VASS Cargo</English>
+        <German>VASS Inventar</German>
+      </Key>
+      <Key ID="STR_TER_VASS_Display3DENVASS_FilterAll_text">
+        <Original>ALL</Original>
+        <English>ALL</English>
+        <German>ALLES</German>
+      </Key>
+      <Key ID="STR_TER_VASS_Display3DENVASS_FilterNone_text">
+        <Original>NONE</Original>
+        <English>NONE</English>
+        <German>NICHTS</German>
+      </Key>
+      <Key ID="STR_TER_VASS_Display3DENVASS_LabelSearch_text">
+        <Original>Search:</Original>
+        <English>Search:</English>
+        <German>Suche:</German>
+      </Key>
+      <Key ID="STR_TER_VASS_Display3DENVASS_LabelPrice_text">
+        <Original>Price:</Original>
+        <English>Price:</English>
+        <Czech>Price:</Czech>
+        <French>Price:</French>
+        <Spanish>Price:</Spanish>
+        <Italian>Price:</Italian>
+        <Polish>Price:</Polish>
+        <Portuguese>Price:</Portuguese>
+        <Russian>Price:</Russian>
+        <German>Preis:</German>
+      </Key>
+      <Key ID="STR_TER_VASS_Display3DENVASS_LabelAmount_text">
+        <Original>Amount:</Original>
+        <English>Amount:</English>
+        <Czech>Amount:</Czech>
+        <French>Amount:</French>
+        <Spanish>Amount:</Spanish>
+        <Italian>Amount:</Italian>
+        <Polish>Amount:</Polish>
+        <Portuguese>Amount:</Portuguese>
+        <Russian>Amount:</Russian>
+        <German>Anzahl:</German>
+      </Key>
+      <Key ID="STR_TER_VASS_Display3DENVASS_LabelAmount_tooltip">
+        <Original>Possible values:\n - Number: Player can only buy this many items of this type\n - true: Unlimited supply</Original>
+        <English>Possible values:\n - Number: Player can only buy this many items of this type\n - true: Unlimited supply</English>
+        <Czech>Possible values:\n - Number: Player can only buy this many items of this type\n - true: Unlimited supply</Czech>
+        <French>Possible values:\n - Number: Player can only buy this many items of this type\n - true: Unlimited supply</French>
+        <Spanish>Possible values:\n - Number: Player can only buy this many items of this type\n - true: Unlimited supply</Spanish>
+        <Italian>Possible values:\n - Number: Player can only buy this many items of this type\n - true: Unlimited supply</Italian>
+        <Polish>Possible values:\n - Number: Player can only buy this many items of this type\n - true: Unlimited supply</Polish>
+        <Portuguese>Possible values:\n - Number: Player can only buy this many items of this type\n - true: Unlimited supply</Portuguese>
+        <Russian>Possible values:\n - Number: Player can only buy this many items of this type\n - true: Unlimited supply</Russian>
+        <German>Mögliche Werte:\n - Zahl: Anzahl an Gegenständen, die gekauft werden können\n - true: Unbeschränkte Verfügbarkeit</German>
+      </Key>
+    </Container>
+    <Container name="Attributes">
+      <Key ID="STR_TER_VASS_3den_Attributes_addAction_Title1_text">
+        <Original>Add Shop</Original>
+        <English>Add Shop</English>
+        <Czech>Add Shop</Czech>
+        <French>Add Shop</French>
+        <Spanish>Add Shop</Spanish>
+        <Italian>Add Shop</Italian>
+        <Polish>Add Shop</Polish>
+        <Portuguese>Add Shop</Portuguese>
+        <Russian>Add Shop</Russian>
+        <German>Geschäft hinzufügen</German>
+      </Key>
+      <Key ID="STR_TER_VASS_3den_Attributes_addAction_Title1_tooltip">
+        <Original>Enable access to the modified arsenal on this object</Original>
+        <English>Enable access to the modified arsenal on this object</English>
+        <Czech>Enable access to the modified arsenal on this object</Czech>
+        <French>Enable access to the modified arsenal on this object</French>
+        <Spanish>Enable access to the modified arsenal on this object</Spanish>
+        <Italian>Enable access to the modified arsenal on this object</Italian>
+        <Polish>Enable access to the modified arsenal on this object</Polish>
+        <Portuguese>Enable access to the modified arsenal on this object</Portuguese>
+        <Russian>Enable access to the modified arsenal on this object</Russian>
+        <German>Ermöglicht den Zugriff auf das modifizierte Arsenal über dieses Object</German>
+      </Key>
+      <Key ID="STR_TER_VASS_3den_Attributes_addAction_Title2_text">
+        <Original>addAction title</Original>
+        <English>addAction title</English>
+        <Czech>addAction title</Czech>
+        <French>addAction title</French>
+        <Spanish>addAction title</Spanish>
+        <Italian>addAction title</Italian>
+        <Polish>addAction title</Polish>
+        <Portuguese>addAction title</Portuguese>
+        <Russian>addAction title</Russian>
+        <German>addAction Titel</German>
+      </Key>
+      <Key ID="STR_TER_VASS_3den_Attributes_addAction_Title2_tooltip">
+        <Original>Text shown in the scroll menu</Original>
+        <English>addAction title</English>
+        <Czech>addAction title</Czech>
+        <French>addAction title</French>
+        <Spanish>addAction title</Spanish>
+        <Italian>addAction title</Italian>
+        <Polish>addAction title</Polish>
+        <Portuguese>addAction title</Portuguese>
+        <Russian>addAction title</Russian>
+        <German>Der im Mausradmenü angezeigte Text</German>
+      </Key>
+      <Key ID="STR_TER_VASS_3den_Attributes_addAction_Title3_text">
+        <Original>Condition</Original>
+        <English>Condition</English>
+        <Czech>Condition</Czech>
+        <French>Condition</French>
+        <Spanish>Condition</Spanish>
+        <Italian>Condition</Italian>
+        <Polish>Condition</Polish>
+        <Portuguese>Condition</Portuguese>
+        <Russian>Condition</Russian>
+        <German>Bedingung</German>
+      </Key>
+      <Key ID="STR_TER_VASS_3den_Attributes_addAction_Title3_tooltip">
+        <Original>Condition has to return "true" for the shop to be accessible, see BIKI: addAction</Original>
+        <English>Condition has to return "true" for the shop to be accessible, see BIKI: addAction</English>
+        <Czech>Condition has to return "true" for the shop to be accessible, see BIKI: addAction</Czech>
+        <French>Condition has to return "true" for the shop to be accessible, see BIKI: addAction</French>
+        <Spanish>Condition has to return "true" for the shop to be accessible, see BIKI: addAction</Spanish>
+        <Italian>Condition has to return "true" for the shop to be accessible, see BIKI: addAction</Italian>
+        <Polish>Condition has to return "true" for the shop to be accessible, see BIKI: addAction</Polish>
+        <Portuguese>Condition has to return "true" for the shop to be accessible, see BIKI: addAction</Portuguese>
+        <Russian>Condition has to return "true" for the shop to be accessible, see BIKI: addAction</Russian>
+        <German>Bedingung muss "true" zurückgeben um auf das Geschäft zugreifen zu können, siehe BIKI: addAction</German>
+      </Key>
+      <Key ID="STR_TER_VASS_3den_Attributes_addAction_Title4_text">
+        <Original>Radius</Original>
+        <English>Radius</English>
+        <Czech>Radius</Czech>
+        <French>Radius</French>
+        <Spanish>Radius</Spanish>
+        <Italian>Radius</Italian>
+        <Polish>Radius</Polish>
+        <Portuguese>Radius</Portuguese>
+        <Russian>Radius</Russian>
+        <German>Radius</German>
+      </Key>
+      <Key ID="STR_TER_VASS_3den_Attributes_addAction_Title4_tooltip">
+        <Original>Sets from how far the player can access the shop in meters</Original>
+        <English>Sets from how far the player can access the shop in meters</English>
+        <Czech>Sets from how far the player can access the shop in meters</Czech>
+        <French>Sets from how far the player can access the shop in meters</French>
+        <Spanish>Sets from how far the player can access the shop in meters</Spanish>
+        <Italian>Sets from how far the player can access the shop in meters</Italian>
+        <Polish>Sets from how far the player can access the shop in meters</Polish>
+        <Portuguese>Sets from how far the player can access the shop in meters</Portuguese>
+        <Russian>Sets from how far the player can access the shop in meters</Russian>
+        <German>Gibt an aus welcher Entfernung in Metern der Spieler auf das Geschäft zugreifen kann</German>
+      </Key>
+      <Key ID="STR_TER_VASS_3den_Attributes_addAction_Title5_text">
+        <Original>Priority</Original>
+        <English>Priority</English>
+        <Czech>Priority</Czech>
+        <French>Priority</French>
+        <Spanish>Priority</Spanish>
+        <Italian>Priority</Italian>
+        <Polish>Priority</Polish>
+        <Portuguese>Priority</Portuguese>
+        <Russian>Priority</Russian>
+        <German>Priorität</German>
+      </Key>
+      <Key ID="STR_TER_VASS_3den_Attributes_addAction_Title5_tooltip">
+        <Original>Larger values will make the addAction appear first in the scroll whell menu</Original>
+        <English>Larger values will make the addAction appear first in the scroll whell menu</English>
+        <Czech>Larger values will make the addAction appear first in the scroll whell menu</Czech>
+        <French>Larger values will make the addAction appear first in the scroll whell menu</French>
+        <Spanish>Larger values will make the addAction appear first in the scroll whell menu</Spanish>
+        <Italian>Larger values will make the addAction appear first in the scroll whell menu</Italian>
+        <Polish>Larger values will make the addAction appear first in the scroll whell menu</Polish>
+        <Portuguese>Larger values will make the addAction appear first in the scroll whell menu</Portuguese>
+        <Russian>Larger values will make the addAction appear first in the scroll whell menu</Russian>
+        <German>Größere Werte lassen die addAction zuerst im Mausradmenü erscheinen</German>
+      </Key>
+      <Key ID="STR_TER_VASS_3den_Attributes_AmmoBox2_Edit_text">
+        <Original>Edit VASS Inventory</Original>
+        <English>Edit VASS Inventory</English>
+        <Czech>Edit VASS Inventory</Czech>
+        <French>Edit VASS Inventory</French>
+        <Spanish>Edit VASS Inventory</Spanish>
+        <Italian>Edit VASS Inventory</Italian>
+        <Polish>Edit VASS Inventory</Polish>
+        <Portuguese>Edit VASS Inventory</Portuguese>
+        <Russian>Edit VASS Inventory</Russian>
+        <German>VASS Inventar bearbeiten</German>
+      </Key>
+    </Container>
+    <Container name="AttributeCategories">
+      <Key ID="STR_TER_VASS_3den_AttributeCategories_cargo_displayName">
+        <Original>Shop Inventory</Original>
+        <English>Shop Inventory</English>
+        <Czech>Shop Inventory</Czech>
+        <French>Shop Inventory</French>
+        <Spanish>Shop Inventory</Spanish>
+        <Italian>Shop Inventory</Italian>
+        <Polish>Shop Inventory</Polish>
+        <Portuguese>Shop Inventory</Portuguese>
+        <Russian>Shop Inventory</Russian>
+        <German>Geschäftsinventar</German>
+      </Key>
+      <Key ID="STR_TER_VASS_3den_AttributeCategories_cargo_tooltip">
+        <Original>Array in format ["class0", price, amount, "class1", price, amount, ...]</Original>
+        <English>Array in format ["class0", price, amount, "class1", price, amount, ...]</English>
+        <Czech>Array in format ["class0", price, amount, "class1", price, amount, ...]</Czech>
+        <French>Array in format ["class0", price, amount, "class1", price, amount, ...]</French>
+        <Spanish>Array in format ["class0", price, amount, "class1", price, amount, ...]</Spanish>
+        <Italian>Array in format ["class0", price, amount, "class1", price, amount, ...]</Italian>
+        <Polish>Array in format ["class0", price, amount, "class1", price, amount, ...]</Polish>
+        <Portuguese>Array in format ["class0", price, amount, "class1", price, amount, ...]</Portuguese>
+        <Russian>Array in format ["class0", price, amount, "class1", price, amount, ...]</Russian>
+        <German>Array mit Format ["class0", price, amount, "class1", price, amount, ...]</German>
+      </Key>
+      <Key ID="STR_TER_VASS_3den_AttributeCategories_refresh_displayName">
+        <Original>Refresh</Original>
+        <English>Refresh</English>
+        <Czech>Refresh</Czech>
+        <French>Refresh</French>
+        <Spanish>Refresh</Spanish>
+        <Italian>Refresh</Italian>
+        <Polish>Refresh</Polish>
+        <Portuguese>Refresh</Portuguese>
+        <Russian>Refresh</Russian>
+        <German>Zurücksetzen</German>
+      </Key>
+      <Key ID="STR_TER_VASS_3den_AttributeCategories_refresh_tooltip">
+        <Original>Sets the time in seconds which the shop will take to add/remove the items that were removed/added during mission, -1 disables refreshing</Original>
+        <English>Sets the time in seconds which the shop will take to add/remove the items that were removed/added during mission, -1 disables refreshing</English>
+        <Czech>Sets the time in seconds which the shop will take to add/remove the items that were removed/added during mission, -1 disables refreshing</Czech>
+        <French>Sets the time in seconds which the shop will take to add/remove the items that were removed/added during mission, -1 disables refreshing</French>
+        <Spanish>Sets the time in seconds which the shop will take to add/remove the items that were removed/added during mission, -1 disables refreshing</Spanish>
+        <Italian>Sets the time in seconds which the shop will take to add/remove the items that were removed/added during mission, -1 disables refreshing</Italian>
+        <Polish>Sets the time in seconds which the shop will take to add/remove the items that were removed/added during mission, -1 disables refreshing</Polish>
+        <Portuguese>Sets the time in seconds which the shop will take to add/remove the items that were removed/added during mission, -1 disables refreshing</Portuguese>
+        <Russian>Sets the time in seconds which the shop will take to add/remove the items that were removed/added during mission, -1 disables refreshing</Russian>
+        <German>Zeit in Sekunden, die es braucht um das Inventar wieder auf den vorherigen Status zurückzusetzen, -1 schaltet diese Funktion aus</German>
+      </Key>
+      <Key ID="STR_TER_VASS_3den_AttributeCategories_shared_displayName">
+        <Original>Global</Original>
+        <English>Global</English>
+        <Czech>Global</Czech>
+        <French>Global</French>
+        <Spanish>Global</Spanish>
+        <Italian>Global</Italian>
+        <Polish>Global</Polish>
+        <Portuguese>Global</Portuguese>
+        <Russian>Global</Russian>
+        <German>Global</German>
+      </Key>
+      <Key ID="STR_TER_VASS_3den_AttributeCategories_shared_tooltip">
+        <Original>The cargo will be synchronized for all players</Original>
+        <English>The cargo will be synchronized for all players</English>
+        <Czech>The cargo will be synchronized for all players</Czech>
+        <French>The cargo will be synchronized for all players</French>
+        <Spanish>The cargo will be synchronized for all players</Spanish>
+        <Italian>The cargo will be synchronized for all players</Italian>
+        <Polish>The cargo will be synchronized for all players</Polish>
+        <Portuguese>The cargo will be synchronized for all players</Portuguese>
+        <Russian>The cargo will be synchronized for all players</Russian>
+        <German>Das Inventar wird für alle Spieler synchronisiert</German>
+      </Key>
+    </Container>
+  </Package>
+</Project>

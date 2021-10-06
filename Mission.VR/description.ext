@@ -1,0 +1,11 @@
+//! Include these lines in your description.ext:
+#include "VASS\gui\cfgGUI.hpp"
+
+class CfgFunctions
+{
+	#include "VASS\CfgFunctions.hpp"
+};
+
+// Ignore these:
+allowFunctionsRecompile = 1;
+allowFunctionsLog = 1;
