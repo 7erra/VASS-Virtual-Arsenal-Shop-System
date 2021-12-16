@@ -176,9 +176,6 @@ This are the currently available functions which can be used to influence the sy
 ### TER_fnc_getCurrency
 ```
 /*
-	Author: Terra
-
-	/*
 	Author: M1keSK
 
 	Description:
