@@ -11,5 +11,7 @@ class TER
 		class addShopCargo {};
 		class addShop {};
 		class resetTimer {};
+		class getCurrency {};
+		class setCurrency {};
 	};
 };

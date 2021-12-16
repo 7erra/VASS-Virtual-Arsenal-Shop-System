@@ -319,7 +319,7 @@ switch _mode do {
 					_ctrlList lnbSetValue [[_row, COL_COUNT], 0];
 					_ctrlList lnbSetValue [[_row, COL_STARTCOUNT], _startAmount];*/
 					//_ctrlList lnbSetText [[_row, COL_COUNT], format ["%1/%2", _startAmount, _startAmount + _itemMax]];
-					_ctrlList lnbSetText [[_row, _newColumn], format ["%1$", [_itemCost] call BIS_fnc_numberText]];
+					_ctrlList lnbSetText [[_row, _newColumn], format ["%1%2", [_itemCost] call BIS_fnc_numberText, [TER_VASS_shopObject] call TER_fnc_getCurrency]];
 					_ctrlList lnbSetColor [[_row,_newColumn], MONEYGREEN];
 				};
 			} else {
@@ -335,7 +335,7 @@ switch _mode do {
 						private _curText = _ctrlList lbText _row;
 						private _text = [format ["%2", _itemAmount, _curText], _curText] select (_itemAmount isEqualTo true);// TODO: Find way to display item amount
 						_ctrlList lbSettext [_row, _text];
-						_ctrlList lbSetTextRight [_row,format ["%1$", [_itemCost] call BIS_fnc_numberText]];
+						_ctrlList lbSetTextRight [_row,format ["%1%2", [_itemCost] call BIS_fnc_numberText, [TER_VASS_shopObject] call TER_fnc_getCurrency]];
 						_ctrlList lbSetColorRight [_row, MONEYGREEN];
 						_ctrlList lbsetvalue [_row, _itemCost];
 					} else {
@@ -1060,7 +1060,7 @@ switch _mode do {
 								private _displayName = gettext (_cfgMag >> "displayName");
 								([TER_VASS_shopObject, _mag] call TER_fnc_getItemValues) params ["","_itemCost","_itemMax"];
 								private _text = if (_itemMax isEqualType true) then {str _value} else { format ["%1|%2", _value, _itemMax - ([_mag] call _fncCurAdd)] };
-								private _lbAdd = _ctrlList lnbaddrow ["", _displayName, _text, format ["%1$", [_itemCost] call BIS_fnc_numberText]];
+								private _lbAdd = _ctrlList lnbaddrow ["", _displayName, _text, format ["%1%2", [_itemCost] call BIS_fnc_numberText, [TER_VASS_shopObject] call TER_fnc_getCurrency]];
 								_ctrlList lnbSetColor [[_lbAdd,3],MONEYGREEN];
 								_ctrlList lnbsetdata [[_lbAdd,0],_mag];
 								_ctrlList lnbsetvalue [[_lbAdd,0],getnumber (_cfgMag >> "mass")];
@@ -1085,7 +1085,7 @@ switch _mode do {
 										private _displayName = gettext (_cfgMag >> "displayName");
 										([TER_VASS_shopObject, _mag] call TER_fnc_getItemValues) params ["","_itemCost","_itemMax"];
 										private _text = if (_itemMax isEqualType true) then {str _value} else { format ["%1|%2", _value, _itemMax - ([_mag] call _fncCurAdd)] };
-										private _lbAdd = _ctrlList lnbaddrow ["", _displayName, _text, format ["%1$", [_itemCost] call BIS_fnc_numberText]];
+										private _lbAdd = _ctrlList lnbaddrow ["", _displayName, _text, format ["%1%2", [_itemCost] call BIS_fnc_numberText, [TER_VASS_shopObject] call TER_fnc_getCurrency]];
 										_ctrlList lnbSetColor [[_lbAdd,3],MONEYGREEN];
 										_ctrlList lnbsetdata [[_lbAdd,0],_mag];
 										_ctrlList lnbsetvalue [[_lbAdd,0],getnumber (_cfgMag >> "mass")];
@@ -1175,7 +1175,7 @@ switch _mode do {
 					if (_ctrlList lbPictureRight _lbAdd == "") then {
 						_ctrlList lbSetPictureRight [_lbAdd,"\a3\ui_f\data\igui\cfg\targeting\empty_ca.paa"];
 					};
-					_ctrlList lbSetTextRight [_lbAdd,format ["%1$", [_itemCost] call BIS_fnc_numberText]];
+					_ctrlList lbSetTextRight [_lbAdd,format ["%1%2", [_itemCost] call BIS_fnc_numberText, [TER_VASS_shopObject] call TER_fnc_getCurrency]];
 					_ctrlList lbSetColorRight [_lbAdd, MONEYGREEN];
 					// MODDED*/
 				};
@@ -1480,7 +1480,7 @@ switch _mode do {
 			private _tColor = [_tGreen, _tRed] select _tCond;
 			private _tSign = ["+","-"] select _tCond;
 			if (_money == 0) then {_tColor = _tWhite; _tSign = "";};
-			private _tReturn = format ["<t align='%1' color='%2'>%3%4$</t>", _align, _tColor, _tSign, _tMoney];
+			private _tReturn = format ["<t align='%1' color='%2'>%3%4%5</t>", _align, _tColor, _tSign, _tMoney, [TER_VASS_shopObject] call TER_fnc_getCurrency];
 			_tReturn
 		};
 		//--- Funds
