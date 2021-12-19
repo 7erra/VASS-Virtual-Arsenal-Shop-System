@@ -173,6 +173,45 @@ This are the currently available functions which can be used to influence the sy
 		["setMoney", [player, -5900]] call TER_fnc_VASShandler; //-> nil
 */
 ```
+### TER_fnc_getCurrency
+```
+/*
+	Author: M1keSK
+
+	Description:
+		Get currency of shop.
+
+	Parameter(s):
+		0:	OBJECT - Shop object
+
+	Returns:
+		STRING - return currency symbol for shop
+
+	Example(s):
+		[cursorObject] call TER_fnc_getCurrency; //-> $
+*/
+```
+### TER_fnc_setCurrency
+```
+/*
+	Author: M1keSK
+
+	Description:
+		Set currency of shop.
+
+	Parameter(s):
+		0:	OBJECT - Shop object
+		1:	STRING - currency symbol
+
+	Returns:
+		nothing
+
+	Example(s):
+		[cursorObject, "€"] call TER_fnc_setCurrency;
+		[cursorObject, "£"] call TER_fnc_setCurrency;
+		[cursorObject, "Ұ"] call TER_fnc_setCurrency;
+*/
+```
 
 ## Screenshots
 ### Ingame

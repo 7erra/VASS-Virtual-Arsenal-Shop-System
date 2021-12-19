@@ -65,8 +65,8 @@ switch _mode do {
 				"",
 				format ["%1x", abs _amount],
 				_itemName,
-				format ["%1$",[_itemPrice] call BIS_fnc_numberText],
-				format ["%1$",[_itemPrice * abs _amount] call BIS_fnc_numberText]
+				format ["%1%2",[_itemPrice] call BIS_fnc_numberText, [TER_VASS_shopObject] call TER_fnc_getCurrency],
+				format ["%1%2",[_itemPrice * abs _amount] call BIS_fnc_numberText, [TER_VASS_shopObject] call TER_fnc_getCurrency]
 			];
 			_ctrl lbsettooltip [_ind * _columns, _itemName];
 			_ctrl lnbSetPicture [[_ind,0],_itemPicture];
@@ -90,7 +90,7 @@ switch _mode do {
 			_tSign = "";
 			if (_money == 0) then {_tColor = _tWhite; _tSign = "";};
 			//if (_money > 0) then {_tSign = "+"};
-			format ["<t align='%1' color='%2'>%3%4$</t>", _align, _tColor, _tSign, _tMoney]
+			format ["<t align='%1' color='%2'>%3%4%5</t>", _align, _tColor, _tSign, _tMoney, [TER_VASS_shopObject] call TER_fnc_getCurrency]
 		};
 		//--- Funds
 		_funds = with missionnamespace do {["getMoney",[_center]] call TER_fnc_VASShandler};
