@@ -100,6 +100,7 @@ def build_include_structure(files: typing.List[Path]) -> typing.Tuple[dict, dict
         includes[f] = []
         for match in re.finditer(RE_INCLUDE, content):
             included_file = Path(match['included_file'])
+            # TODO: Prevent paths like "..\..\file.ext" to appear
             if not included_file.root:  # Relative include, absolute ones start with a slash
                 included_file = f.parent / included_file
             elif included_file.parts[1:4] == ('z', 'TER_VASS', 'addons'):
