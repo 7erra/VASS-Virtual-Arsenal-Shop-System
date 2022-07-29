@@ -1,3 +1,8 @@
+/*
+Description:
+	Main config for Eden.
+	https://community.bohemia.net/wiki/Eden_Editor:_Configuring_Attributes
+*/
 class Cfg3den
 {
 	class Object
