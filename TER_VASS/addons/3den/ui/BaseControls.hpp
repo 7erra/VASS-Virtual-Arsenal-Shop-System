@@ -1,3 +1,18 @@
+/*
+	Header: BaseControls.hpp
+
+	Description:
+		Base classes for 3den controls.
+
+	Authors:
+		Terra
+
+	Includes:
+		None
+
+	Included by:
+		- 3den\config.cpp
+*/
 class ctrlDefault;
 class ctrlButton;
 class ctrlListNBox;

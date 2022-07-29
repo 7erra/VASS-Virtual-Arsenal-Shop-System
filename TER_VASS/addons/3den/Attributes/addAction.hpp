@@ -1,3 +1,18 @@
+/*
+	Header: addAction.hpp
+
+	Description:
+		Config for control that configures the addAction of VASS on an object.
+
+	Authors:
+		Terra
+
+	Includes:
+		None
+
+	Included by:
+		- 3den\Cfg3den.hpp
+*/
 class VASS_addAction: Title
 {
 	h = 5.4 * ATTRIBUTE_CONTENT_H * GRID_H;

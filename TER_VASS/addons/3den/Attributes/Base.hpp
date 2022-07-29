@@ -1,3 +1,18 @@
+/*
+	Header: Base.hpp
+
+	Description:
+		Common 3den controls used as base classes for 3den attributes.
+
+	Authors:
+		Terra
+
+	Includes:
+		None
+
+	Included by:
+		- 3den\Cfg3den.hpp
+*/
 class Default;
 class Title: Default
 {

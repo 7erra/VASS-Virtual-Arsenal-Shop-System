@@ -1,3 +1,19 @@
+/*
+	Header: script_component.hpp
+
+	Description:
+		Common macros used across different files in the addon.
+
+	Authors:
+		Terra
+
+	Includes:
+		- main\script_mod.hpp
+		- main\script_macros.hpp
+
+	Included by:
+		- functions\config.cpp
+*/
 #define COMPONENT functions
 #include "\z\TER_VASS\addons\main\script_mod.hpp"
 

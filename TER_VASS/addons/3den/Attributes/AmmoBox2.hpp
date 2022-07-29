@@ -1,3 +1,18 @@
+/*
+	Header: AmmoBox2.hpp
+
+	Description:
+		Button to edit the content of VASS on an object.
+
+	Authors:
+		Terra
+
+	Includes:
+		None
+
+	Included by:
+		- 3den\Cfg3den.hpp
+*/
 class TER_VASS_AmmoBox2: Title
 {
 	attributeLoad = ["attributeLoad",[_this, _value]] call ATTRIBUTE_SCRIPT(VASS_AmmoBox2);

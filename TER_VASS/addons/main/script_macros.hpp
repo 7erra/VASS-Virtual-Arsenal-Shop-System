@@ -1,3 +1,22 @@
+/*
+	Header: script_macros.hpp
+
+	Description:
+		TODO
+
+	Authors:
+		Terra
+
+	Includes:
+		- main\script_macros_common.hpp
+
+	Included by:
+		- 3den\script_component.hpp
+		- functions\script_component.hpp
+		- language\script_component.hpp
+		- main\script_component.hpp
+		- main\script_macros_common.hpp
+*/
 #include "script_macros_common.hpp"
 
 #define DFUNC(var1) TRIPLES(ADDON,fnc,var1)

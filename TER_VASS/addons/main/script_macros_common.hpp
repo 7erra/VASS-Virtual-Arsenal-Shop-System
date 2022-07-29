@@ -1,4 +1,22 @@
 /*
+	Header: script_macros_common.hpp
+
+	Description:
+		Common macros from CBA.
+
+	Authors:
+		CBA Team
+
+	Includes:
+		- main\script_component.hpp
+		- main\script_macros.hpp
+		- \x\cba\addons\main\script_macros_common.hpp
+		- main\script_components.hpp
+
+	Included by:
+		- main\script_macros.hpp
+*/
+/*
     Header: script_macros_common.hpp
 
     Description:
