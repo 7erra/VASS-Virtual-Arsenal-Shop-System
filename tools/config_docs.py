@@ -5,16 +5,20 @@ import typing
 ROOT = Path(__file__).parent.parent  # Assumed location is: root/tools/__file__
 ADDONS = ROOT / 'TER_VASS' / 'addons'
 RE_INCLUDE = re.compile(r'#include \"(?P<included_file>.*)\"')
-RE_HEADER = re.compile(r'/\*.*\*/', flags=re.DOTALL | re.MULTILINE)
+RE_HEADER = re.compile(r"""
+    ^ # Start of string/file (MULTILINE off)
+    /\* # Comment open /*
+    .*? # Everything until next...
+    \*/ # Comment close */
+    \n # Include linebreak afterwards
+    """, flags=re.DOTALL | re.VERBOSE)
 RE_SECTION_DESCRIPTION = re.compile(r"""
-	Description:\n # Start of section
+	\tDescription:\n # Start of section
 	(?P<content> # Capture this part
-	    (?:^\t.*\n)+ # All following lines starting with tab
+	    (?:^\t\t.*\n)+ # All following lines starting with tab
     )
 	""", flags=re.MULTILINE | re.VERBOSE)
-RE_SECTION_INCLUDES = re.compile(r'^Includes:$')
-RE_SECTION_INCLUDED_BY = re.compile(r'^Included by:$')
-
+RE_SECTION_AUTHORS = re.compile(r'Authors:\s*(?P<authors>.*)')
 
 def generate_config_documentation():
     """
@@ -26,39 +30,54 @@ def generate_config_documentation():
         '**/*.*') if x.is_file() and not x.match('*.pbo')]
     includes, included_by = build_include_structure(all_files)
     for f in ADDONS.glob('**/*.hpp'):
-        header = ['/*', 'Description:']
+        header = ['/*']
+        header.append(f'\tHeader: {f.name}')
+        header.append('')
+        header.append('\tDescription:')
+        file_content = f.read_text()
+        # Try to extract old description
         try:
             description = re.search(
-                RE_SECTION_DESCRIPTION, f.read_text())['content']
+                RE_SECTION_DESCRIPTION, file_content)['content']
         except TypeError:
-            description = "\tTODO\n"
+            description = "\t\tTODO\n"
         header.append(description)
-        header.append('Includes:')
+        # Try to extract authors
+        try:
+            authors = re.search(RE_SECTION_AUTHORS, file_content)['authors']
+        except TypeError:
+            authors = 'Unknown'
+        header.append('\tAuthors:')
+        header.append(f'\t\t{authors}')
+        header.append('')
+        header.append('\tIncludes:')
         included_by_f = includes[f]  # Files that are included by file f
         if included_by_f == []:
-            header.append('\tNone')
+            header.append('\t\tNone')
         else:
             for x in included_by_f:
                 try:
-                    header.append(f"\t- {x.relative_to(ADDONS)}")
+                    header.append(f"\t\t- {x.relative_to(ADDONS)}")
                 except ValueError:
-                    header.append(f'\t- {x}')
+                    header.append(f'\t\t- {x}')
         header.append('')
-        header.append('Included by:')
+        header.append('\tIncluded by:')
         try:
             includes_f = included_by[f]  # Files that include file f
             if includes_f == []:
-                header.append('\tNone')
+                header.append('\t\tNone')
             else:
                 header.extend(
-                    f"\t- {x.relative_to(ADDONS)}" for x in includes_f)
+                    f"\t\t- {x.relative_to(ADDONS)}" for x in includes_f)
         except KeyError:
             pass
-        header.append('*/')
+        header.append('*/\n')
         header = '\n'.join(header)
-        print(f'\n{f}') # TODO: Replace header in file
-        print(header)
-
+        if re.match(RE_HEADER, file_content):
+            # Has header, remove old one
+            file_content = re.sub(RE_HEADER, '', file_content)
+        # print(header + file_content)
+        f.write_text(header + file_content)
     return
 
 
