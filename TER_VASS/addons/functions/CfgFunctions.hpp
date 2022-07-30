@@ -1,3 +1,18 @@
+/*
+	Header: CfgFunctions.hpp
+
+	Description:
+		https://community.bistudio.com/wiki/Arma_3:_Functions_Library
+
+	Authors:
+		Terra
+
+	Includes:
+		None
+
+	Included by:
+		- functions\config.cpp
+*/
 class CfgFunctions
 {
 	class TER_VASS

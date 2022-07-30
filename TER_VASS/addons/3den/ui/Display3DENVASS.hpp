@@ -1,3 +1,18 @@
+/*
+	Header: Display3DENVASS.hpp
+
+	Description:
+		UI to configure the content of VASS.
+
+	Authors:
+		Terra
+
+	Includes:
+		None
+
+	Included by:
+		- 3den\config.cpp
+*/
 #define GLUE_3(A,B,C) A##B##C
 #define ARSENAL_ICON(NAME) QUOTE(GLUE_3(\a3\ui_f\data\GUI\Rsc\RscDisplayArsenal\,NAME,_ca.paa))
 class Display3DENVASS

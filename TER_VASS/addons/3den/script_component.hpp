@@ -1,3 +1,23 @@
+/*
+	Header: script_component.hpp
+
+	Description:
+		Common macros used across the addon.
+
+	Authors:
+		Terra
+
+	Includes:
+		- main\script_mod.hpp
+		- main\script_macros.hpp
+		- \a3\3DEN\UI\macros.inc
+		- \a3\3den\UI\resincl.inc
+		- \a3\ui_f\hpp\defineResinclDesign.inc
+
+	Included by:
+		- 3den\config.cpp
+		- 3den\ui\scripts\script_component.hpp
+*/
 #define COMPONENT 3den
 #include "\z\TER_VASS\addons\main\script_mod.hpp"
 

@@ -1,3 +1,20 @@
+/*
+	Header: VASS.hpp
+
+	Description:
+		Subclass of config/Cfg3den/Object/AttributeCategories. Adds a section to
+		all objects to allow adding of VASS.
+		https://community.bistudio.com/wiki/Eden_Editor:_Configuring_Attributes#Entity
+
+	Authors:
+		Terra
+
+	Includes:
+		None
+
+	Included by:
+		- 3den\Cfg3den.hpp
+*/
 class VASS
 {
 	displayName = "VASS";
