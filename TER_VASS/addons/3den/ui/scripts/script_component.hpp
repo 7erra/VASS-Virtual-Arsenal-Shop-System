@@ -8,7 +8,7 @@
 		Terra
 
 	Includes:
-		- 3den\ui\scripts\..\..\script_component.hpp
+		- 3den\script_component.hpp
 
 	Included by:
 		- 3den\ui\scripts\Display3DENVASS.sqf

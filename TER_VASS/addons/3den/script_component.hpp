@@ -16,6 +16,7 @@
 
 	Included by:
 		- 3den\config.cpp
+		- 3den\ui\scripts\script_component.hpp
 */
 #define COMPONENT 3den
 #include "\z\TER_VASS\addons\main\script_mod.hpp"

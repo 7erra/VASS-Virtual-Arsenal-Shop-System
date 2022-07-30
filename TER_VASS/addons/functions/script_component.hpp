@@ -13,6 +13,7 @@
 
 	Included by:
 		- functions\config.cpp
+		- functions\Items\fn_compatibleWeapons.sqf
 */
 #define COMPONENT functions
 #include "\z\TER_VASS\addons\main\script_mod.hpp"
