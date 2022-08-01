@@ -1,0 +1,8 @@
+#include "logs\dir.hpp"
+#define STR(x) #x
+-mod=STR(!Workshop\@3den Enhanced;!Workshop\@Pythia;!Workshop\@CBA_A3;VASS_DIR\TER_VASS)
+-skipIntro
+-noSplash
+-filePatching
+-noSound
+-noLand

@@ -1,0 +1,2 @@
+#include "base.params"
+STR(VASS_DIR\Mission.VR\mission.sqm)
