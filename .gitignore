@@ -9,3 +9,4 @@ TER_VASS/keys/*
 ~mission.vr/
 test.sqf
 .vscode/*
+tools/logs/*
