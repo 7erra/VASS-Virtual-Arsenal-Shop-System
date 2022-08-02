@@ -1,2 +1,3 @@
 #include "base.params"
+-mod=STR(!Workshop\@Pythia;!Workshop\@CBA_A3;VASS_DIR\TER_VASS)
 STR(VASS_DIR\Mission.VR\mission.sqm)
