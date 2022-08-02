@@ -1,6 +1,9 @@
 //! Include these lines in your description.ext:
 #include "VASS\gui\cfgGUI.hpp"
 
+// Choose a money system (may have to be installed seperately). One of: "rating",
+// "default", "GRAD_moneyMenu", "HG_SimpleShops", "Ravage"
+VASS_moneySystem = "rating";
 class CfgFunctions
 {
 	#include "VASS\CfgFunctions.hpp"
